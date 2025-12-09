@@ -74,6 +74,11 @@
     "invalid_value_error": "❌ 無効な値",
     "unexpected_error": "❌ 予期しないエラー",
     "press_enter": "Enterキーを押して続行...",
+    "invalid_prefix": "無効なThingプレフィックス: {}。文字で始まり、英数字、ハイフン、アンダースコアのみを含む必要があります。",
+    "tag_applied": "ワークショップタグを{}に適用しました",
+    "tag_failed": "{}のタグ付けに失敗しました: {}",
+    "tag_failures_summary": "警告: {}個のリソースのタグ付けに失敗しました",
+    "tag_failures_note": "リソースは正常に作成されましたが、クリーンアップスクリプトで識別されない可能性があります。",
     "learning_moments": {
         "hierarchy": {
             "title": "📚 学習ポイント: AWS IoTリソース階層",

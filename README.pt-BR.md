@@ -248,21 +248,187 @@ python scripts/setup_sample_data.py
 
 **⚠️ IMPORTANTE**: Sempre execute a limpeza quando terminar de aprender para evitar custos contínuos da AWS.
 
+### Uso Básico
+
 ```bash
+# Limpeza padrão - remove todos os recursos do workshop
 python scripts/cleanup_sample_data.py
+
+# Visualizar o que será excluído (etapa recomendada primeiro)
+python scripts/cleanup_sample_data.py --dry-run
+
+# Limpeza com prefixo personalizado
+python scripts/cleanup_sample_data.py --things-prefix "MyDevice-"
+
+# Ativar modo debug para registro detalhado de API
+python scripts/cleanup_sample_data.py --debug
 ```
 
-**O que é limpo:**
-- ✅ Things de exemplo (Vehicle-VIN-001, Vehicle-VIN-002, etc.)
-- ✅ Certificados e políticas associados
-- ✅ Thing Types e Thing Groups
-- ✅ Arquivos de certificados locais
-- ✅ Regras IoT (se alguma foi criada)
+### Parâmetros de Linha de Comando
 
-**O que é protegido:**
-- ❌ Recursos IoT de produção existentes
-- ❌ Certificados e políticas não-exemplo
-- ❌ Recursos não criados pelos scripts de aprendizagem
+| Parâmetro | Descrição | Padrão | Exemplo |
+|-----------|-------------|---------|---------|
+| `--things-prefix` | Prefixo personalizado para nomes de things | `Vehicle-VIN-` | `--things-prefix "TestDevice-"` |
+| `--dry-run` | Visualizar limpeza sem excluir | `False` | `--dry-run` |
+| `--debug` | Ativar registro detalhado de API | `False` | `--debug` |
+
+### Como Funciona a Identificação de Recursos
+
+O script de limpeza usa um **sistema de identificação dupla** para identificar com segurança os recursos do workshop:
+
+**1. Identificação Baseada em Tags (Método Principal)**
+- Recursos criados por scripts de configuração são automaticamente marcados com:
+  - `workshop-resource: true` - Identifica recursos criados pelo workshop
+  - `created-by: setup-script` - Rastreia qual script criou o recurso
+  - `workshop-name: iot-core-basics` - Agrupa recursos por workshop
+- **Vantagem**: Método mais confiável, funciona independentemente da nomenclatura
+
+**2. Convenção de Nomenclatura de Fallback (Método Secundário)**
+- Se as tags não estiverem presentes, o script identifica recursos por padrões de nomenclatura:
+  - Things: Correspondem ao padrão `--things-prefix` (padrão: `Vehicle-VIN-`)
+  - Thing Types: `SedanVehicle`, `SUVVehicle`, `TruckVehicle`
+  - Thing Groups: `CustomerFleet`, `TestFleet`, `MaintenanceFleet`, `DealerFleet`
+  - Regras IoT: Correspondem aos padrões `*Rule`, `rule_*`, ou `*_workshop_*`
+- **Vantagem**: Funciona com recursos criados antes da implementação de tags
+
+### Modo Dry-Run (Etapa Recomendada Primeiro)
+
+**Sempre visualize as operações de limpeza antes de executá-las:**
+
+```bash
+python scripts/cleanup_sample_data.py --dry-run
+```
+
+**O modo dry-run:**
+- ✅ Identifica todos os recursos do workshop que seriam excluídos
+- ✅ Exibe uma lista detalhada de recursos por tipo
+- ✅ Mostra a ordem de exclusão (respeita dependências)
+- ✅ Gera um relatório resumido
+- ❌ **NÃO exclui nenhum recurso**
+
+**Exemplo de saída dry-run:**
+```
+🔍 MODO DRY RUN - Nenhum recurso será excluído
+
+Recursos Identificados:
+  Things: 20 recursos
+    - Vehicle-VIN-001
+    - Vehicle-VIN-002
+    ...
+  Certificados: 20 recursos
+  Thing Groups: 4 recursos
+  Thing Types: 3 recursos
+  Regras IoT: 1 recurso
+
+Total: 48 recursos seriam excluídos
+```
+
+### Uso de Prefixo Personalizado
+
+Se você criou recursos com um prefixo personalizado durante a configuração, use o mesmo prefixo para limpeza:
+
+```bash
+# Configuração com prefixo personalizado
+python scripts/setup_sample_data.py --things-prefix "MyDevice-"
+
+# Limpeza com prefixo correspondente
+python scripts/cleanup_sample_data.py --things-prefix "MyDevice-"
+```
+
+**Importante**: O prefixo deve corresponder exatamente entre configuração e limpeza para que a identificação baseada em nomenclatura funcione corretamente.
+
+### O Que é Limpo
+
+**Recursos Excluídos (em ordem de dependência):**
+1. ✅ Thing Shadows (dados de estado do dispositivo)
+2. ✅ Certificados (desanexados de things primeiro)
+3. ✅ Things (dispositivos IoT)
+4. ✅ Regras IoT (regras de roteamento de mensagens)
+5. ✅ Thing Groups (coleções de dispositivos)
+6. ✅ Thing Types (modelos de dispositivos)
+7. ✅ Políticas (políticas de segurança)
+8. ✅ Arquivos de certificados locais (do diretório `certs/`)
+
+**Recursos Protegidos:**
+- ❌ Recursos IoT de produção (sem tags de workshop)
+- ❌ Recursos com padrões de nomenclatura diferentes
+- ❌ Certificados e políticas não associados a things do workshop
+- ❌ Recursos criados fora dos scripts do workshop
+
+### Exclusão com Reconhecimento de Dependências
+
+O script de limpeza trata automaticamente as dependências de recursos do AWS IoT:
+
+**Ordem de Exclusão:**
+```
+Thing Shadows → Certificados → Things → Regras IoT → Thing Groups → Thing Types → Políticas
+```
+
+**Por que esta ordem importa:**
+- Thing Shadows devem ser excluídos antes dos certificados
+- Certificados devem ser desanexados antes que things possam ser excluídos
+- Things devem ser removidos de grupos antes que grupos possam ser excluídos
+- Políticas devem ser desanexadas antes da exclusão
+
+**O script trata disso automaticamente** - você não precisa se preocupar com conflitos de dependências.
+
+### Entendendo o Relatório Resumido
+
+Após a conclusão da limpeza, você verá um relatório resumido:
+
+```
+📊 Resumo da Limpeza
+
+Tipo de Recurso | Identificados | Excluídos | Falhados
+----------------|---------------|-----------|----------
+Things          |            20 |        20 |        0
+Certificados    |            20 |        20 |        0
+Thing Groups    |             4 |         4 |        0
+Thing Types     |             3 |         3 |        0
+Regras IoT      |             1 |         1 |        0
+Políticas       |            20 |        20 |        0
+----------------|---------------|-----------|----------
+Total           |            68 |        68 |        0
+
+✅ Limpeza concluída com sucesso!
+```
+
+**Campos do Relatório:**
+- **Identificados**: Recursos encontrados correspondendo aos critérios do workshop
+- **Excluídos**: Recursos removidos com sucesso
+- **Falhados**: Recursos que não puderam ser excluídos (com detalhes de erro)
+
+### Solução de Problemas de Limpeza
+
+**Problema: "Nenhum recurso encontrado"**
+- **Causa**: Recursos podem não ter tags de workshop ou não correspondem ao prefixo
+- **Solução**: 
+  - Verifique se você usou um prefixo personalizado durante a configuração
+  - Use `--things-prefix` com o prefixo correto
+  - Verifique se os recursos existem no Console AWS
+
+**Problema: Erros de "Permissão negada"**
+- **Causa**: Credenciais AWS não têm as permissões IoT necessárias
+- **Solução**: Certifique-se de que seu usuário/função IAM tenha permissões de acesso completo ao IoT
+
+**Problema: Erros de "Conflito de dependência"**
+- **Causa**: Recursos têm dependências que não foram tratadas
+- **Solução**: O script deve tratar isso automaticamente. Se persistir, execute com `--debug` para ver detalhes
+
+**Problema: Alguns recursos não foram excluídos**
+- **Causa**: Recursos podem estar em uso ou ter dependências externas
+- **Solução**: 
+  - Verifique o relatório resumido para recursos falhados
+  - Use o Console AWS para inspecionar e excluir manualmente os recursos restantes
+  - Execute a limpeza novamente após resolver as dependências
+
+### Melhores Práticas
+
+1. **Sempre use dry-run primeiro**: Visualize o que será excluído antes de executar
+2. **Corresponda os prefixos**: Use o mesmo `--things-prefix` para configuração e limpeza
+3. **Revise o resumo**: Verifique o relatório para garantir que todos os recursos foram excluídos
+4. **Execute a limpeza prontamente**: Não deixe recursos do workshop em execução para evitar custos
+5. **Mantenha as credenciais seguras**: Nunca faça commit de credenciais AWS no controle de versão
 
 ## 🛠️ Solução de Problemas
 

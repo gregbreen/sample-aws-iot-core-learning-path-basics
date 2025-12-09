@@ -244,21 +244,187 @@ python scripts/setup_sample_data.py
 
 **⚠️ 重要**: 学习完成后务必运行清理以避免持续的 AWS 费用。
 
+### 基本用法
+
 ```bash
+# 标准清理 - 删除所有研讨会资源
 python scripts/cleanup_sample_data.py
+
+# 预览将被删除的内容（建议首先执行此步骤）
+python scripts/cleanup_sample_data.py --dry-run
+
+# 使用自定义前缀清理
+python scripts/cleanup_sample_data.py --things-prefix "MyDevice-"
+
+# 启用调试模式以获取详细的 API 日志
+python scripts/cleanup_sample_data.py --debug
 ```
 
-**清理的内容:**
-- ✅ 示例 Things (Vehicle-VIN-001、Vehicle-VIN-002 等)
-- ✅ 关联的证书和策略
-- ✅ Thing Types 和 Thing Groups
-- ✅ 本地证书文件
-- ✅ IoT 规则（如果创建了）
+### 命令行参数
 
-**受保护的内容:**
-- ❌ 现有的生产 IoT 资源
-- ❌ 非示例证书和策略
-- ❌ 非学习脚本创建的资源
+| 参数 | 描述 | 默认值 | 示例 |
+|-----------|-------------|---------|---------|
+| `--things-prefix` | Thing 名称的自定义前缀 | `Vehicle-VIN-` | `--things-prefix "TestDevice-"` |
+| `--dry-run` | 预览清理而不删除 | `False` | `--dry-run` |
+| `--debug` | 启用详细的 API 日志记录 | `False` | `--debug` |
+
+### 资源识别工作原理
+
+清理脚本使用**双重识别系统**来安全识别研讨会资源：
+
+**1. 基于标签的识别（主要方法）**
+- 由设置脚本创建的资源会自动标记：
+  - `workshop-resource: true` - 标识研讨会创建的资源
+  - `created-by: setup-script` - 跟踪创建资源的脚本
+  - `workshop-name: iot-core-basics` - 按研讨会对资源分组
+- **优势**: 最可靠的方法，无论命名如何都能工作
+
+**2. 命名约定回退（次要方法）**
+- 如果标签不存在，脚本通过命名模式识别资源：
+  - Things: 匹配 `--things-prefix` 模式（默认：`Vehicle-VIN-`）
+  - Thing Types: `SedanVehicle`、`SUVVehicle`、`TruckVehicle`
+  - Thing Groups: `CustomerFleet`、`TestFleet`、`MaintenanceFleet`、`DealerFleet`
+  - IoT 规则: 匹配 `*Rule`、`rule_*` 或 `*_workshop_*` 模式
+- **优势**: 适用于在实施标记之前创建的资源
+
+### Dry-Run 模式（建议首先执行此步骤）
+
+**在执行清理操作之前始终预览：**
+
+```bash
+python scripts/cleanup_sample_data.py --dry-run
+```
+
+**Dry-run 模式将：**
+- ✅ 识别将被删除的所有研讨会资源
+- ✅ 按类型显示资源的详细列表
+- ✅ 显示删除顺序（尊重依赖关系）
+- ✅ 生成摘要报告
+- ❌ **不删除任何资源**
+
+**Dry-run 输出示例：**
+```
+🔍 DRY RUN MODE - 不会删除任何资源
+
+已识别的资源:
+  Things: 20个资源
+    - Vehicle-VIN-001
+    - Vehicle-VIN-002
+    ...
+  证书: 20个资源
+  Thing Groups: 4个资源
+  Thing Types: 3个资源
+  IoT 规则: 1个资源
+
+总计: 将删除48个资源
+```
+
+### 自定义前缀使用
+
+如果您在设置期间使用自定义前缀创建了资源，请在清理时使用相同的前缀：
+
+```bash
+# 使用自定义前缀设置
+python scripts/setup_sample_data.py --things-prefix "MyDevice-"
+
+# 使用匹配的前缀清理
+python scripts/cleanup_sample_data.py --things-prefix "MyDevice-"
+```
+
+**重要**: 前缀必须在设置和清理之间完全匹配，基于命名的识别才能正常工作。
+
+### 清理的内容
+
+**删除的资源（按依赖顺序）：**
+1. ✅ Thing Shadows（设备状态数据）
+2. ✅ 证书（首先从 things 分离）
+3. ✅ Things（IoT 设备）
+4. ✅ IoT 规则（消息路由规则）
+5. ✅ Thing Groups（设备集合）
+6. ✅ Thing Types（设备模板）
+7. ✅ 策略（安全策略）
+8. ✅ 本地证书文件（来自 `certs/` 目录）
+
+**受保护的资源：**
+- ❌ 生产 IoT 资源（没有研讨会标签）
+- ❌ 具有不同命名模式的资源
+- ❌ 未与研讨会 things 关联的证书和策略
+- ❌ 在研讨会脚本之外创建的资源
+
+### 依赖关系感知删除
+
+清理脚本自动处理 AWS IoT 资源依赖关系：
+
+**删除顺序：**
+```
+Thing Shadows → 证书 → Things → IoT 规则 → Thing Groups → Thing Types → 策略
+```
+
+**为什么这个顺序很重要：**
+- Thing Shadows 必须在证书之前删除
+- 证书必须在删除 things 之前分离
+- Things 必须在删除组之前从组中删除
+- 策略必须在删除之前分离
+
+**脚本会自动处理这些** - 您无需担心依赖冲突。
+
+### 理解摘要报告
+
+清理完成后，您将看到摘要报告：
+
+```
+📊 清理摘要
+
+资源类型      | 已识别 | 已删除 | 失败
+--------------|--------|--------|------
+Things        |     20 |     20 |    0
+证书          |     20 |     20 |    0
+Thing Groups  |      4 |      4 |    0
+Thing Types   |      3 |      3 |    0
+IoT 规则      |      1 |      1 |    0
+策略          |     20 |     20 |    0
+--------------|--------|--------|------
+总计          |     68 |     68 |    0
+
+✅ 清理成功完成！
+```
+
+**报告字段：**
+- **已识别**: 找到符合研讨会标准的资源
+- **已删除**: 成功删除的资源
+- **失败**: 无法删除的资源（带有错误详细信息）
+
+### 清理故障排除
+
+**问题："未找到资源"**
+- **原因**: 资源可能没有研讨会标签或与前缀不匹配
+- **解决方案**: 
+  - 检查您在设置期间是否使用了自定义前缀
+  - 使用正确的前缀使用 `--things-prefix`
+  - 在 AWS 控制台中验证资源是否存在
+
+**问题："权限被拒绝"错误**
+- **原因**: AWS 凭证缺少必要的 IoT 权限
+- **解决方案**: 确保您的 IAM 用户/角色具有 IoT 完全访问权限
+
+**问题："依赖冲突"错误**
+- **原因**: 资源具有未处理的依赖关系
+- **解决方案**: 脚本应该自动处理这个问题。如果持续存在，使用 `--debug` 运行以查看详细信息
+
+**问题：某些资源未被删除**
+- **原因**: 资源可能正在使用或具有外部依赖关系
+- **解决方案**: 
+  - 检查摘要报告中的失败资源
+  - 使用 AWS 控制台手动检查和删除剩余资源
+  - 解决依赖关系后再次运行清理
+
+### 最佳实践
+
+1. **始终首先使用 dry-run**: 在执行之前预览将被删除的内容
+2. **匹配前缀**: 对设置和清理使用相同的 `--things-prefix`
+3. **查看摘要**: 检查报告以确保所有资源都已删除
+4. **及时运行清理**: 不要让研讨会资源继续运行以避免费用
+5. **保持凭证安全**: 永远不要将 AWS 凭证提交到版本控制
 
 ## 🛠️ 故障排除
 

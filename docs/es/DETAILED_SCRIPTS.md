@@ -6,11 +6,489 @@ Este documento proporciona documentación completa para todos los scripts de apr
 
 ## Tabla de Contenidos
 
+- [Configuración de Datos de Ejemplo](#configuración-de-datos-de-ejemplo)
+- [Limpieza de Datos de Ejemplo](#limpieza-de-datos-de-ejemplo)
 - [Explorador de API del Registro IoT](#explorador-de-api-del-registro-iot)
 - [Gestor de Certificados y Políticas](#gestor-de-certificados-y-políticas)
 - [Comunicación MQTT](#comunicación-mqtt)
 - [Explorador de AWS IoT Device Shadow service](#explorador-de-device-shadow)
 - [Explorador del Motor de Reglas IoT](#explorador-del-motor-de-reglas-iot)
+
+## Configuración de Datos de Ejemplo
+
+### Propósito
+Crea un entorno de aprendizaje completo de AWS IoT con Thing Types, Thing Groups y Things de ejemplo. Este script configura una flota simulada de vehículos con jerarquías organizacionales apropiadas, permitiéndote explorar las APIs de AWS IoT Core sin necesidad de dispositivos físicos.
+
+### Cómo Ejecutar
+
+**Uso Básico:**
+```bash
+python scripts/setup_sample_data.py
+```
+
+**Con Modo Debug (operaciones detalladas de API):**
+```bash
+python scripts/setup_sample_data.py --debug
+```
+
+**Con Prefijo Personalizado (para múltiples entornos):**
+```bash
+python scripts/setup_sample_data.py --things-prefix MyTest
+```
+
+### Opciones de Línea de Comandos
+
+#### `--things-prefix PREFIX`
+Personaliza el prefijo del nombre del Thing para crear múltiples entornos aislados o evitar conflictos de nombres.
+
+**Reglas de Validación:**
+- Debe tener entre 3-20 caracteres
+- Solo caracteres alfanuméricos (a-z, A-Z, 0-9)
+- Sin espacios ni caracteres especiales
+- Distingue entre mayúsculas y minúsculas
+
+**Ejemplos:**
+```bash
+# Entorno de desarrollo
+python scripts/setup_sample_data.py --things-prefix Dev
+
+# Entorno de pruebas
+python scripts/setup_sample_data.py --things-prefix Test
+
+# Entorno de equipo
+python scripts/setup_sample_data.py --things-prefix TeamA
+```
+
+**Nomenclatura de Things Resultante:**
+- Prefijo predeterminado: `Vehicle-VIN-001`, `Vehicle-VIN-002`, ...
+- Con `--things-prefix Dev`: `Dev-VIN-001`, `Dev-VIN-002`, ...
+- Con `--things-prefix Test`: `Test-VIN-001`, `Test-VIN-002`, ...
+
+#### `--debug`
+Habilita el logging detallado mostrando todas las llamadas de API de AWS, parámetros de solicitud y cargas útiles de respuesta. Útil para aprender las APIs de AWS IoT o solucionar problemas.
+
+### Recursos Creados
+
+El script crea una jerarquía completa de recursos de AWS IoT:
+
+#### Thing Types (3)
+Plantillas que definen categorías de vehículos con atributos buscables:
+- **SedanVehicle** - Vehículos de pasajeros estándar
+- **SUVVehicle** - Vehículos utilitarios deportivos
+- **TruckVehicle** - Vehículos comerciales
+
+#### Thing Groups (4)
+Contenedores organizacionales para gestión de flotas:
+- **CustomerFleet** - Grupo principal para todos los vehículos de clientes
+- **TestFleet** - Vehículos de prueba y desarrollo
+- **MaintenanceFleet** - Vehículos que requieren servicio
+- **DealerFleet** - Inventario del concesionario
+
+#### Things (20)
+Representaciones de dispositivos individuales con atributos:
+- Nombres: `{prefix}-VIN-001` a `{prefix}-VIN-020`
+- Atributos: VIN, modelo, año, color, ubicación
+- Distribución de tipos: Mezcla de Sedan, SUV y Truck
+- Membresía de grupos: Asignados a grupos apropiados
+
+### Características de Seguridad
+
+**Verificación de Duplicados:**
+- Verifica recursos existentes antes de crear
+- Omite la creación si los recursos ya existen
+- Previene errores de nombres duplicados
+
+**Validación de Entrada:**
+- Valida el formato del prefijo antes de la creación
+- Proporciona mensajes de error claros
+- Sugiere formatos correctos si la validación falla
+
+**Operación Idempotente:**
+- Seguro ejecutar múltiples veces
+- No crea recursos duplicados
+- Reporta el estado existente de recursos
+
+### Casos de Uso
+
+#### Caso de Uso 1: Entorno de Aprendizaje Estándar
+```bash
+# Crear datos de ejemplo predeterminados
+python scripts/setup_sample_data.py
+
+# Explorar con scripts de aprendizaje
+python scripts/iot_registry_explorer.py
+python scripts/certificate_manager.py
+```
+
+#### Caso de Uso 2: Múltiples Entornos Aislados
+```bash
+# Entorno de desarrollo
+python scripts/setup_sample_data.py --things-prefix Dev
+
+# Entorno de pruebas
+python scripts/setup_sample_data.py --things-prefix Test
+
+# Entorno de producción
+python scripts/setup_sample_data.py --things-prefix Prod
+```
+
+#### Caso de Uso 3: Configuración de Taller de Equipo
+```bash
+# Crear entornos separados para miembros del equipo
+python scripts/setup_sample_data.py --things-prefix Alice
+python scripts/setup_sample_data.py --things-prefix Bob
+python scripts/setup_sample_data.py --things-prefix Carol
+```
+
+### Salida de Ejemplo
+
+```
+🚀 Configurando Datos de Ejemplo de AWS IoT Core
+================================================
+
+🔧 Paso 1: Creando Thing Types
+Creating Thing Type: SedanVehicle
+✅ Created Thing Type: SedanVehicle
+Creating Thing Type: SUVVehicle
+✅ Created Thing Type: SUVVehicle
+Creating Thing Type: TruckVehicle
+✅ Created Thing Type: TruckVehicle
+
+🔧 Paso 2: Creando Thing Groups
+Creating Thing Group: CustomerFleet
+✅ Created Thing Group: CustomerFleet
+Creating Thing Group: TestFleet
+✅ Created Thing Group: TestFleet
+Creating Thing Group: MaintenanceFleet
+✅ Created Thing Group: MaintenanceFleet
+Creating Thing Group: DealerFleet
+✅ Created Thing Group: DealerFleet
+
+🔧 Paso 3: Creando Things
+Creating Thing: Vehicle-VIN-001
+✅ Created Thing: Vehicle-VIN-001
+Creating Thing: Vehicle-VIN-002
+✅ Created Thing: Vehicle-VIN-002
+...
+Creating Thing: Vehicle-VIN-020
+✅ Created Thing: Vehicle-VIN-020
+
+🎉 Configuración completada exitosamente!
+📊 Resumen de recursos creados:
+   • Thing Types: 3
+   • Thing Groups: 4
+   • Things: 20
+
+💡 Próximos pasos:
+   1. Explorar recursos: python scripts/iot_registry_explorer.py
+   2. Crear certificados: python scripts/certificate_manager.py
+   3. Probar MQTT: python scripts/mqtt_client_explorer.py
+```
+
+### Solución de Problemas
+
+**Error: "Thing name already exists"**
+- Causa: Los recursos ya fueron creados
+- Solución: Usar un prefijo diferente o ejecutar el script de limpieza primero
+
+**Error: "Invalid prefix format"**
+- Causa: El prefijo no cumple con los requisitos de validación
+- Solución: Usar 3-20 caracteres alfanuméricos sin espacios
+
+**Error: "Access denied"**
+- Causa: Permisos insuficientes de AWS IAM
+- Solución: Asegurar que las credenciales de AWS tengan permisos de IoT
+
+## Limpieza de Datos de Ejemplo
+
+### Propósito
+Elimina de forma segura todos los recursos de AWS IoT creados por el script de configuración. Este script proporciona limpieza completa con características de seguridad para prevenir eliminaciones accidentales, incluyendo modo de ejecución en seco para vista previa y soporte de prefijos para limpieza dirigida.
+
+### Cómo Ejecutar
+
+**Uso Básico (Limpieza Interactiva):**
+```bash
+python scripts/cleanup_sample_data.py
+```
+
+**Modo de Ejecución en Seco (Vista Previa sin Eliminar):**
+```bash
+python scripts/cleanup_sample_data.py --dry-run
+```
+
+**Limpieza Dirigida con Prefijo:**
+```bash
+python scripts/cleanup_sample_data.py --things-prefix Dev
+```
+
+**Combinación de Opciones:**
+```bash
+# Vista previa de limpieza para prefijo específico
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Test
+
+# Limpieza con logging detallado
+python scripts/cleanup_sample_data.py --debug --things-prefix Prod
+```
+
+### Opciones de Línea de Comandos
+
+#### `--dry-run`
+Modo de vista previa que muestra qué recursos serían eliminados sin realizar eliminaciones reales.
+
+**Características:**
+- Identifica todos los recursos que coinciden con los criterios
+- Muestra resumen detallado de recursos
+- No realiza cambios en AWS
+- Útil para verificar antes de la limpieza real
+
+**Ejemplo de Salida:**
+```
+🔍 MODO DE EJECUCIÓN EN SECO - No se eliminarán recursos
+================================================
+
+📊 Recursos que serían eliminados:
+   • Things: 20 (Vehicle-VIN-001 a Vehicle-VIN-020)
+   • Certificados: 5
+   • Thing Types: 3 (SedanVehicle, SUVVehicle, TruckVehicle)
+   • Thing Groups: 4 (CustomerFleet, TestFleet, MaintenanceFleet, DealerFleet)
+
+💡 Para realizar la limpieza real, ejecutar sin --dry-run
+```
+
+#### `--things-prefix PREFIX`
+Dirige la limpieza a Things con un prefijo específico, permitiendo limpieza selectiva de entornos.
+
+**Reglas de Validación:**
+- Debe tener entre 3-20 caracteres
+- Solo caracteres alfanuméricos (a-z, A-Z, 0-9)
+- Sin espacios ni caracteres especiales
+- Distingue entre mayúsculas y minúsculas
+- Debe coincidir con el prefijo usado durante la configuración
+
+**Comportamiento:**
+- Limpia solo Things que comienzan con el prefijo especificado
+- Limpia certificados asociados con esos Things
+- Preserva Thing Types y Thing Groups (compartidos entre entornos)
+- Proporciona resumen de recursos específicos del prefijo
+
+**Ejemplos:**
+```bash
+# Limpiar solo entorno de desarrollo
+python scripts/cleanup_sample_data.py --things-prefix Dev
+
+# Vista previa de limpieza de entorno de pruebas
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Test
+
+# Limpiar entorno de equipo específico
+python scripts/cleanup_sample_data.py --things-prefix TeamA
+```
+
+#### `--debug`
+Habilita el logging detallado mostrando todas las llamadas de API de AWS, parámetros de solicitud y cargas útiles de respuesta.
+
+### Proceso de Limpieza
+
+El script sigue un orden específico para manejar dependencias de recursos:
+
+#### Paso 1: Certificados
+- Desadjunta certificados de Things
+- Desadjunta políticas de certificados
+- Desactiva certificados
+- Elimina certificados
+- Elimina archivos de certificados locales
+
+#### Paso 2: Things
+- Elimina Things del Registro de IoT
+- Maneja dependencias de Thing Group
+- Limpia metadatos de Thing
+
+#### Paso 3: Thing Groups
+- Elimina Thing Groups vacíos
+- Respeta jerarquías de grupos
+- Maneja relaciones padre-hijo
+
+#### Paso 4: Thing Types
+- Deprecia Thing Types (no se pueden eliminar)
+- Marca tipos como no utilizables
+- Preserva datos históricos
+
+### Características de Seguridad
+
+**Confirmación Interactiva:**
+```
+⚠️ Esta operación eliminará:
+   • 20 Things (Vehicle-VIN-001 a Vehicle-VIN-020)
+   • 5 Certificados y archivos locales
+   • 3 Thing Types (serán depreciados)
+   • 4 Thing Groups
+
+¿Continuar con la limpieza? (y/N):
+```
+
+**Modo de Ejecución en Seco:**
+- Vista previa de cambios antes de ejecutar
+- Verifica el alcance de la limpieza
+- Previene eliminaciones accidentales
+
+**Limpieza Dirigida por Prefijo:**
+- Limpia solo recursos específicos del entorno
+- Preserva otros entornos
+- Reduce el riesgo de eliminación de recursos incorrectos
+
+**Manejo de Errores:**
+- Continúa con otros recursos si uno falla
+- Reporta errores claramente
+- Proporciona resumen de operaciones exitosas/fallidas
+
+### Casos de Uso
+
+#### Caso de Uso 1: Limpieza Completa del Entorno
+```bash
+# Vista previa de qué se eliminará
+python scripts/cleanup_sample_data.py --dry-run
+
+# Realizar limpieza completa
+python scripts/cleanup_sample_data.py
+```
+
+#### Caso de Uso 2: Limpieza de Entorno Específico
+```bash
+# Vista previa de limpieza de entorno de desarrollo
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Dev
+
+# Limpiar solo entorno de desarrollo
+python scripts/cleanup_sample_data.py --things-prefix Dev
+
+# Entornos de pruebas y producción permanecen intactos
+```
+
+#### Caso de Uso 3: Limpieza de Taller de Equipo
+```bash
+# Cada miembro del equipo limpia su propio entorno
+python scripts/cleanup_sample_data.py --things-prefix Alice
+python scripts/cleanup_sample_data.py --things-prefix Bob
+python scripts/cleanup_sample_data.py --things-prefix Carol
+```
+
+#### Caso de Uso 4: Verificación Antes de Limpieza
+```bash
+# Paso 1: Vista previa en modo de ejecución en seco
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Test
+
+# Paso 2: Revisar salida y confirmar alcance
+
+# Paso 3: Realizar limpieza real
+python scripts/cleanup_sample_data.py --things-prefix Test
+```
+
+### Salida de Ejemplo
+
+**Modo de Ejecución en Seco:**
+```
+🔍 MODO DE EJECUCIÓN EN SECO - No se eliminarán recursos
+================================================
+
+📊 Recursos que serían eliminados:
+   • Things: 20 (Vehicle-VIN-001 a Vehicle-VIN-020)
+   • Certificados: 5
+   • Thing Types: 3 (SedanVehicle, SUVVehicle, TruckVehicle)
+   • Thing Groups: 4 (CustomerFleet, TestFleet, MaintenanceFleet, DealerFleet)
+
+💡 Para realizar la limpieza real, ejecutar sin --dry-run
+```
+
+**Limpieza Real:**
+```
+🧹 Limpieza de Datos de Ejemplo de AWS IoT
+==========================================
+
+⚠️ Esta operación eliminará:
+   • 20 Things (Vehicle-VIN-001 a Vehicle-VIN-020)
+   • 5 Certificados y archivos locales
+   • 3 Thing Types (serán depreciados)
+   • 4 Thing Groups
+
+¿Continuar con la limpieza? (y/N): y
+
+🔧 Paso 1: Desadjuntando y eliminando certificados
+✅ Certificado desadjuntado y eliminado para Vehicle-VIN-001
+✅ Certificado desadjuntado y eliminado para Vehicle-VIN-002
+...
+
+🔧 Paso 2: Eliminando Things
+✅ Thing eliminado: Vehicle-VIN-001
+✅ Thing eliminado: Vehicle-VIN-002
+...
+
+🔧 Paso 3: Eliminando Thing Groups
+✅ Thing Group eliminado: CustomerFleet
+✅ Thing Group eliminado: TestFleet
+✅ Thing Group eliminado: MaintenanceFleet
+✅ Thing Group eliminado: DealerFleet
+
+🔧 Paso 4: Depreciando Thing Types
+✅ Thing Type depreciado: SedanVehicle
+✅ Thing Type depreciado: SUVVehicle
+✅ Thing Type depreciado: TruckVehicle
+
+🎉 Limpieza completada exitosamente!
+📊 Resumen:
+   • Things eliminados: 20
+   • Certificados eliminados: 5
+   • Thing Groups eliminados: 4
+   • Thing Types depreciados: 3
+```
+
+**Limpieza con Prefijo:**
+```
+🧹 Limpieza de Datos de Ejemplo de AWS IoT
+==========================================
+🎯 Dirigido a Things con prefijo: Dev
+
+⚠️ Esta operación eliminará:
+   • 20 Things (Dev-VIN-001 a Dev-VIN-020)
+   • 3 Certificados asociados
+   • Thing Types y Groups compartidos permanecerán
+
+¿Continuar con la limpieza? (y/N): y
+
+🔧 Limpiando recursos con prefijo 'Dev'...
+✅ Thing eliminado: Dev-VIN-001
+✅ Thing eliminado: Dev-VIN-002
+...
+
+🎉 Limpieza completada exitosamente!
+📊 Resumen:
+   • Things eliminados: 20 (prefijo: Dev)
+   • Certificados eliminados: 3
+```
+
+### Solución de Problemas
+
+**Error: "Resource has dependencies"**
+- Causa: El Thing tiene certificados o políticas adjuntos
+- Solución: El script maneja esto automáticamente, desadjuntando primero
+
+**Error: "Thing Type cannot be deleted"**
+- Causa: Los Thing Types de AWS IoT no se pueden eliminar, solo depreciar
+- Solución: Esto es comportamiento esperado, el script deprecia en su lugar
+
+**Error: "Access denied"**
+- Causa: Permisos insuficientes de AWS IAM
+- Solución: Asegurar que las credenciales de AWS tengan permisos de IoT
+
+**Advertencia: "Certificate files not found locally"**
+- Causa: Los archivos de certificados ya fueron eliminados o nunca se crearon
+- Solución: Esto es seguro de ignorar, el script continúa con la limpieza
+
+### Mejores Prácticas
+
+1. **Siempre usar --dry-run primero** para vista previa de cambios
+2. **Usar prefijos** para entornos múltiples para habilitar limpieza selectiva
+3. **Verificar el alcance** antes de confirmar la limpieza
+4. **Mantener respaldos** de certificados importantes antes de limpiar
+5. **Documentar prefijos** usados para diferentes entornos
+6. **Limpiar regularmente** entornos de prueba no utilizados
 
 ## Explorador de API del Registro IoT
 

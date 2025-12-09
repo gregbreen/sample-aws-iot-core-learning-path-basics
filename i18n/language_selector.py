@@ -14,7 +14,7 @@ LANGUAGE_SELECTION = {
     "invalid": "❌ Invalid selection. Please enter 1-6.",
 }
 
-LANGUAGE_CODES = {"1": "en", "2": "es", "3": "ja", "4": "zh-CN", "5": "pt-BR", "6": "ko"}
+LANGUAGE_CODES = {"1": "en", "2": "es", "3": "ja", "4": "zh", "5": "pt", "6": "ko"}
 
 
 def get_language():
@@ -28,9 +28,9 @@ def get_language():
     elif env_lang in ["ja", "japanese", "日本語", "jp"]:
         return "ja"
     elif env_lang in ["zh-cn", "chinese", "中文", "zh"]:
-        return "zh-CN"
+        return "zh"
     elif env_lang in ["pt", "pt-br", "portuguese", "português"]:
-        return "pt-BR"
+        return "pt"
     elif env_lang in ["ko", "korean", "한국어", "kr"]:
         return "ko"
 

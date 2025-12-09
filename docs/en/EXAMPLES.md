@@ -9,6 +9,8 @@ This document provides detailed examples and complete workflows for the AWS IoT 
 - [Sample Data Setup Examples](#sample-data-setup-examples)
   - [Interactive Experience Walkthrough](#interactive-experience-walkthrough)
   - [Debug Mode Example](#debug-mode-example)
+  - [Custom Prefix Examples](#custom-prefix-examples)
+  - [Multi-Environment Setup](#multi-environment-setup)
 - [IoT Registry API Explorer Examples](#iot-registry-api-explorer-examples)
   - [Interactive Menu Navigation](#interactive-menu-navigation)
   - [List Things Example](#list-things-example)
@@ -26,6 +28,9 @@ This document provides detailed examples and complete workflows for the AWS IoT 
   - [Rule Testing Example](#rule-testing-example)
 - [Cleanup Examples](#cleanup-examples)
   - [Safe Resource Cleanup](#safe-resource-cleanup)
+  - [Dry-Run Mode Examples](#dry-run-mode-examples)
+  - [Prefix-Based Cleanup](#prefix-based-cleanup)
+  - [Multi-Environment Cleanup](#multi-environment-cleanup)
 - [Error Handling Examples](#error-handling-examples)
   - [Common Error Scenarios](#common-error-scenarios)
 
@@ -131,6 +136,152 @@ Do you want to continue? (y/N): y
   "thingTypeArn": "arn:aws:iot:us-east-1:123456789012:thingtype/SedanVehicle"
 }
 ⏱️  Duration: 0.45 seconds
+```
+
+### Custom Prefix Examples
+
+**Using Custom Prefix for Development Environment:**
+
+```bash
+$ python setup_sample_data.py --things-prefix "Dev-Vehicle-"
+
+🚀 AWS IoT Sample Data Setup
+============================
+This script will create sample IoT resources for learning:
+• 3 Thing Types (vehicle categories)
+• 4 Thing Groups (fleet categories)  
+• 20 Things (simulated vehicles)
+
+📝 Configuration:
+   Thing Name Prefix: Dev-Vehicle-
+   Thing Names: Dev-Vehicle-001 through Dev-Vehicle-020
+
+⚠️  This will create real AWS resources that incur charges.
+Estimated cost: ~$0.05 for Thing storage
+
+Do you want to continue? (y/N): y
+
+🔄 Step 1: Creating Thing Types
+✅ Created Thing Type: SedanVehicle
+✅ Created Thing Type: SUVVehicle  
+✅ Created Thing Type: TruckVehicle
+
+🔄 Step 2: Creating Thing Groups
+✅ Created Thing Group: CustomerFleet
+✅ Created Thing Group: TestFleet
+✅ Created Thing Group: MaintenanceFleet
+✅ Created Thing Group: DealerFleet
+
+🔄 Step 3: Creating Things (20 vehicles)
+✅ Created Thing: Dev-Vehicle-001 (SedanVehicle → CustomerFleet)
+✅ Created Thing: Dev-Vehicle-002 (SUVVehicle → TestFleet)
+✅ Created Thing: Dev-Vehicle-003 (TruckVehicle → MaintenanceFleet)
+...
+✅ Created Thing: Dev-Vehicle-020 (SedanVehicle → DealerFleet)
+
+📊 Summary:
+   Thing Types: 3 created
+   Thing Groups: 4 created  
+   Things: 20 created (prefix: Dev-Vehicle-)
+   
+🎉 Sample data setup complete!
+```
+
+**Invalid Prefix Example:**
+
+```bash
+$ python setup_sample_data.py --things-prefix "123-Device-"
+
+❌ Error: Invalid prefix '123-Device-'
+
+💡 Prefix Requirements:
+   • Must start with a letter (a-z, A-Z)
+   • Can contain letters, numbers, hyphens (-), underscores (_)
+   • Cannot start with numbers or contain spaces
+
+✅ Valid examples:
+   • Vehicle-VIN-
+   • Dev-Device-
+   • MyFleet_
+   • TestEnv-
+
+❌ Invalid examples:
+   • 123-Device- (starts with number)
+   • My Device- (contains space)
+   • Fleet@Home- (contains special character)
+```
+
+### Multi-Environment Setup
+
+**Scenario**: Create separate development and staging environments in the same AWS account.
+
+**Step 1: Create Development Environment**
+
+```bash
+$ python setup_sample_data.py --things-prefix "Dev-"
+
+🚀 AWS IoT Sample Data Setup
+============================
+📝 Configuration:
+   Thing Name Prefix: Dev-
+   Thing Names: Dev-001 through Dev-020
+
+Do you want to continue? (y/N): y
+
+🔄 Creating resources...
+✅ Created 20 Things with prefix 'Dev-'
+✅ Created 3 Thing Types
+✅ Created 4 Thing Groups
+
+🎉 Development environment setup complete!
+```
+
+**Step 2: Create Staging Environment**
+
+```bash
+$ python setup_sample_data.py --things-prefix "Staging-"
+
+🚀 AWS IoT Sample Data Setup
+============================
+📝 Configuration:
+   Thing Name Prefix: Staging-
+   Thing Names: Staging-001 through Staging-020
+
+Do you want to continue? (y/N): y
+
+🔄 Creating resources...
+✅ Created 20 Things with prefix 'Staging-'
+✅ Created 3 Thing Types
+✅ Created 4 Thing Groups
+
+🎉 Staging environment setup complete!
+```
+
+**Step 3: Verify Both Environments Exist**
+
+```bash
+$ python iot_registry_explorer.py
+
+📋 Available Operations:
+1. List Things
+...
+
+Select operation (1-9): 1
+
+🔄 API Call: list_things
+📤 Response: Found 40 Things
+
+Development Environment:
+1. Dev-001 (Type: SedanVehicle)
+2. Dev-002 (Type: SUVVehicle)
+...
+20. Dev-020 (Type: TruckVehicle)
+
+Staging Environment:
+21. Staging-001 (Type: SedanVehicle)
+22. Staging-002 (Type: SUVVehicle)
+...
+40. Staging-020 (Type: TruckVehicle)
 ```
 
 ## IoT Registry API Explorer Examples
@@ -1027,6 +1178,289 @@ Select option (1-3): 1
 
 🎉 Cleanup complete! All sample resources have been removed.
 💡 Your AWS account is now clean and no longer incurring charges for these resources.
+```
+
+### Dry-Run Mode Examples
+
+**Preview Cleanup Before Deleting:**
+
+```bash
+$ python cleanup_sample_data.py --dry-run
+
+🧹 AWS IoT Sample Data Cleanup
+==============================
+
+==============================
+DRY RUN MODE - No resources will be deleted
+==============================
+
+This script will safely remove ONLY the sample resources created by setup_sample_data.py:
+
+✅ Resources to Identify:
+   • 20 Things: Vehicle-VIN-001 through Vehicle-VIN-020
+   • 3 Thing Types: SedanVehicle, SUVVehicle, TruckVehicle
+   • 4 Thing Groups: CustomerFleet, TestFleet, MaintenanceFleet, DealerFleet
+   • Associated certificates and local files
+
+🔍 Step 1: Discovering sample resources...
+📋 Found Resources:
+   Things: 20 sample Things found
+      • Vehicle-VIN-001, Vehicle-VIN-002, Vehicle-VIN-003, ...
+   Thing Types: 3 sample Thing Types found
+      • SedanVehicle, SUVVehicle, TruckVehicle
+   Thing Groups: 4 sample Thing Groups found
+      • CustomerFleet, TestFleet, MaintenanceFleet, DealerFleet
+   Certificates: 15 certificates attached to sample Things
+      • abc123def456... → Vehicle-VIN-001
+      • def456ghi789... → Vehicle-VIN-002
+      • ...
+   Policies: 3 IoT policies found
+      • BasicDevicePolicy (attached to 10 certificates)
+      • ReadOnlyPolicy (attached to 3 certificates)
+      • CustomPolicy (attached to 2 certificates)
+   IAM Roles: 1 role found
+      • IoTRulesEngineRole (used by 2 rules)
+
+🔍 Step 2: Analyzing dependencies...
+📋 Dependency Analysis:
+   Certificate Dependencies:
+      • 15 certificates attached to Things
+      • 15 policies attached to certificates
+      • All dependencies can be resolved
+
+   Thing Group Dependencies:
+      • 20 Things in Thing Groups
+      • All Things will be removed from groups before deletion
+
+   Thing Type Dependencies:
+      • 20 Things using Thing Types
+      • Thing Types will be deprecated before deletion
+
+   IAM Role Dependencies:
+      • IoTRulesEngineRole used by 2 rules
+      • Rules will be deleted before role deletion
+
+📊 Deletion Summary (DRY RUN):
+   Would delete: 20 Things
+   Would delete: 15 Certificates
+   Would detach and delete: 3 Policies
+   Would delete: 4 Thing Groups
+   Would deprecate and delete: 3 Thing Types
+   Would delete: 1 IAM Role
+   Would delete: 2 IoT Rules
+   Would remove: 45 local certificate files
+
+⏱️  Estimated cleanup time: 2-3 minutes
+💾 Estimated storage freed: ~50 MB (local certificates)
+
+💡 DRY RUN COMPLETE - No resources were modified or deleted
+
+To perform actual cleanup, run:
+   python cleanup_sample_data.py
+```
+
+**Dry-Run with Custom Prefix:**
+
+```bash
+$ python cleanup_sample_data.py --dry-run --things-prefix "Dev-"
+
+🧹 AWS IoT Sample Data Cleanup
+==============================
+DRY RUN MODE - No resources will be deleted
+==============================
+
+📝 Configuration:
+   Target Prefix: Dev-
+   Searching for Things: Dev-001 through Dev-020
+
+🔍 Step 1: Discovering sample resources...
+📋 Found Resources:
+   Things: 20 sample Things found with prefix 'Dev-'
+      • Dev-001, Dev-002, Dev-003, ... Dev-020
+   Thing Types: 3 sample Thing Types found
+   Thing Groups: 4 sample Thing Groups found
+   Certificates: 12 certificates attached to Dev- Things
+   Policies: 2 IoT policies found
+
+📊 Deletion Summary (DRY RUN):
+   Would delete: 20 Things (prefix: Dev-)
+   Would delete: 12 Certificates
+   Would delete: 2 Policies
+   Would delete: 4 Thing Groups
+   Would delete: 3 Thing Types
+   Would remove: 36 local certificate files
+
+💡 DRY RUN COMPLETE - No resources were modified or deleted
+
+💡 Note: Things with prefix 'Staging-' and 'Prod-' will NOT be affected
+```
+
+### Prefix-Based Cleanup
+
+**Clean Up Specific Environment:**
+
+```bash
+$ python cleanup_sample_data.py --things-prefix "Dev-"
+
+🧹 AWS IoT Sample Data Cleanup
+==============================
+
+📝 Configuration:
+   Target Prefix: Dev-
+   Searching for Things: Dev-001 through Dev-020
+
+This script will safely remove ONLY the sample resources with prefix 'Dev-':
+
+✅ Safe to Delete:
+   • 20 Things: Dev-001 through Dev-020
+   • 3 Thing Types: SedanVehicle, SUVVehicle, TruckVehicle
+   • 4 Thing Groups: CustomerFleet, TestFleet, MaintenanceFleet, DealerFleet
+   • Associated certificates and local files
+
+❌ Will NOT Delete:
+   • Things with other prefixes (Staging-, Prod-, etc.)
+   • Your existing Things, Thing Types, or Thing Groups
+   • Certificates attached to non-Dev Things
+
+⚠️  This action cannot be undone.
+Do you want to continue? (y/N): y
+
+🔍 Step 1: Discovering sample resources...
+✅ Found 20 Things with prefix 'Dev-'
+
+🧹 Step 2: Certificate cleanup...
+🔄 Processing Thing: Dev-001
+   ✅ Certificate cleanup complete
+...
+
+🧹 Step 3: Thing cleanup...
+✅ Deleted Thing: Dev-001
+✅ Deleted Thing: Dev-002
+...
+✅ All 20 Things deleted successfully
+
+🧹 Step 4: Thing Group cleanup...
+✅ All 4 Thing Groups deleted successfully
+
+🧹 Step 5: Thing Type cleanup...
+✅ All 3 Thing Types deleted successfully
+
+📊 Cleanup Summary:
+   ✅ Things deleted: 20 (prefix: Dev-)
+   ✅ Certificates deleted: 12
+   ✅ Policies deleted: 2
+   ✅ Thing Groups deleted: 4
+   ✅ Thing Types deleted: 3
+   ✅ Local files removed: 36
+
+🎉 Cleanup complete! All Dev- resources have been removed.
+💡 Resources with other prefixes remain untouched.
+```
+
+**Verify Other Environments Remain:**
+
+```bash
+$ python iot_registry_explorer.py
+
+Select operation (1-9): 1
+
+🔄 API Call: list_things
+📤 Response: Found 20 Things
+
+Staging Environment (Still Exists):
+1. Staging-001 (Type: SedanVehicle)
+2. Staging-002 (Type: SUVVehicle)
+...
+20. Staging-020 (Type: TruckVehicle)
+
+✅ Dev- resources deleted
+✅ Staging- resources preserved
+```
+
+### Multi-Environment Cleanup
+
+**Scenario**: Clean up multiple environments selectively.
+
+**Step 1: Preview All Environments**
+
+```bash
+# Preview dev cleanup
+$ python cleanup_sample_data.py --dry-run --things-prefix "Dev-"
+📊 Would delete: 20 Things (prefix: Dev-)
+
+# Preview staging cleanup
+$ python cleanup_sample_data.py --dry-run --things-prefix "Staging-"
+📊 Would delete: 20 Things (prefix: Staging-)
+
+# Preview prod cleanup
+$ python cleanup_sample_data.py --dry-run --things-prefix "Prod-"
+📊 Would delete: 20 Things (prefix: Prod-)
+```
+
+**Step 2: Clean Up Development Only**
+
+```bash
+$ python cleanup_sample_data.py --things-prefix "Dev-"
+
+Do you want to continue? (y/N): y
+
+✅ Deleted 20 Things with prefix 'Dev-'
+🎉 Dev environment cleaned up!
+```
+
+**Step 3: Verify Staging and Prod Remain**
+
+```bash
+$ python iot_registry_explorer.py
+
+Select operation (1-9): 1
+
+📤 Response: Found 40 Things
+
+Staging Environment (Preserved):
+1. Staging-001 through Staging-020
+
+Production Environment (Preserved):
+21. Prod-001 through Prod-020
+
+✅ Only Dev- resources were deleted
+✅ Staging and Prod environments remain intact
+```
+
+**Step 4: Clean Up Staging When Ready**
+
+```bash
+$ python cleanup_sample_data.py --things-prefix "Staging-"
+
+Do you want to continue? (y/N): y
+
+✅ Deleted 20 Things with prefix 'Staging-'
+🎉 Staging environment cleaned up!
+```
+
+**Complete Workflow Example:**
+
+```bash
+# Day 1: Create multiple environments
+python setup_sample_data.py --things-prefix "Dev-"
+python setup_sample_data.py --things-prefix "Staging-"
+python setup_sample_data.py --things-prefix "Prod-"
+
+# Day 2: Work with dev environment
+python certificate_manager.py  # Select Dev- Things
+python mqtt_client_explorer.py  # Test with Dev- devices
+
+# Day 3: Preview dev cleanup
+python cleanup_sample_data.py --dry-run --things-prefix "Dev-"
+
+# Day 4: Clean up dev, keep staging and prod
+python cleanup_sample_data.py --things-prefix "Dev-"
+
+# Day 5: Clean up staging when testing complete
+python cleanup_sample_data.py --things-prefix "Staging-"
+
+# Day 6: Keep prod for demos, or clean up when done
+python cleanup_sample_data.py --things-prefix "Prod-"
 ```
 
 ## Error Handling Examples

@@ -74,6 +74,11 @@
     "invalid_value_error": "❌ Invalid value in",
     "unexpected_error": "❌ Unexpected error in",
     "press_enter": "Press Enter to continue...",
+    "invalid_prefix": "Invalid thing prefix: {}. Must start with a letter and contain only alphanumeric characters, hyphens, and underscores.",
+    "tag_applied": "Applied workshop tags to {}",
+    "tag_failed": "Failed to tag {}: {}",
+    "tag_failures_summary": "Warning: Failed to tag {} resources",
+    "tag_failures_note": "Resources were created successfully but may not be identified by the cleanup script.",
     "learning_moments": {
         "hierarchy": {
             "title": "📚 LEARNING MOMENT: AWS IoT Resource Hierarchy",

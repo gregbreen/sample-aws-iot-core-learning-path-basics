@@ -12,10 +12,14 @@ import sys
 import time
 from datetime import datetime
 
+# Add iot_helpers to path
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
 import boto3
 from awscrt import io, mqtt
 from awsiot import mqtt_connection_builder
 from botocore.exceptions import ClientError
+from iot_helpers.utils.resource_tagger import apply_workshop_tags
 
 # Internationalization support
 def load_messages(lang="en"):
@@ -97,10 +101,11 @@ def get_message(key, **kwargs):
 
 
 class IoTRulesExplorer:
-    def __init__(self, debug=False):
+    def __init__(self, debug=False, enable_tagging=True):
         self.iot = boto3.client("iot")
         self.iam = boto3.client("iam")
         self.debug_mode = debug
+        self.enable_tagging = enable_tagging
         self.rule_role_name = "IoTRulesEngineRole"
 
     def safe_operation(self, func, operation_name, **kwargs):
@@ -617,6 +622,28 @@ class IoTRulesExplorer:
             )
 
             if success:
+                # Add tagging after successful rule creation
+                if self.enable_tagging:
+                    try:
+                        # Get rule ARN
+                        region = self.iot.meta.region_name
+                        account_id = boto3.client('sts').get_caller_identity()['Account']
+                        rule_arn = f"arn:aws:iot:{region}:{account_id}:rule/{rule_name}"
+                        
+                        apply_workshop_tags(
+                            client=self.iot,
+                            resource_arn=rule_arn,
+                            resource_type='iot-rule',
+                            script_name='rules-explorer'
+                        )
+                        
+                        if self.debug_mode:
+                            print(f"   ✅ Applied workshop tags to rule")
+                    except Exception as e:
+                        # Don't fail if tagging fails
+                        if self.debug_mode:
+                            print(f"   ℹ️  Note: Could not apply tags: {e}")
+                
                 break
             elif attempt < max_retries - 1:
                 print(get_message("iam_propagation_wait"))
@@ -714,6 +741,22 @@ class IoTRulesExplorer:
             return None
 
         role_arn = response["Role"]["Arn"]
+        
+        # Apply workshop tags to the IAM role
+        if self.enable_tagging:
+            try:
+                apply_workshop_tags(
+                    client=self.iam,
+                    resource_arn=role_arn,
+                    resource_type="iam-role",
+                    script_name="iot-rules-explorer"
+                )
+                if self.debug_mode:
+                    print(f"   ✅ Applied workshop tags to IAM role")
+            except Exception as e:
+                # Don't fail if tagging fails
+                if self.debug_mode:
+                    print(f"   ⚠️  Warning: Could not tag IAM role: {str(e)}")
 
         policy_document = {
             "Version": "2012-10-17",
@@ -732,6 +775,22 @@ class IoTRulesExplorer:
 
         if policy_success:
             policy_arn = policy_response["Policy"]["Arn"]
+            
+            # Apply workshop tags to the IAM policy
+            if self.enable_tagging:
+                try:
+                    apply_workshop_tags(
+                        client=self.iam,
+                        resource_arn=policy_arn,
+                        resource_type="iam-policy",
+                        script_name="iot-rules-explorer"
+                    )
+                    if self.debug_mode:
+                        print(f"   ✅ Applied workshop tags to IAM policy")
+                except Exception as e:
+                    # Don't fail if tagging fails
+                    if self.debug_mode:
+                        print(f"   ⚠️  Warning: Could not tag IAM policy: {str(e)}")
 
             attach_response, attach_success = self.safe_operation(
                 self.iam.attach_role_policy,
@@ -1276,6 +1335,7 @@ class IoTRulesExplorer:
 def main():
     try:
         debug_mode = "--debug" in sys.argv or "-d" in sys.argv
+        enable_tagging = "--no-tags" not in sys.argv
 
         print(get_message("main_title"))
         print(get_message("header_separator"))
@@ -1301,6 +1361,12 @@ def main():
         print(get_message("feature_topic_filtering"))
         print(get_message("feature_republish_actions"))
         print(get_message("feature_lifecycle"))
+        
+        # Display tagging status
+        if enable_tagging:
+            print("\nℹ️  Workshop tagging: ENABLED (use --no-tags to disable)")
+        else:
+            print("\nℹ️  Workshop tagging: DISABLED")
 
         print(f"\n{get_message('learning_moment_title')}")
         print(get_message("learning_moment_description"))
@@ -1317,7 +1383,7 @@ def main():
 
         print(get_message("header_separator"))
 
-        explorer = IoTRulesExplorer(debug=debug_mode)
+        explorer = IoTRulesExplorer(debug=debug_mode, enable_tagging=enable_tagging)
 
         try:
             while True:

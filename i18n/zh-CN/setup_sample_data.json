@@ -74,6 +74,11 @@
     "invalid_value_error": "❌ 无效值在",
     "unexpected_error": "❌ 意外错误在",
     "press_enter": "按 Enter 键继续...",
+    "invalid_prefix": "无效的Thing前缀：{}。必须以字母开头，只能包含字母数字字符、连字符和下划线。",
+    "tag_applied": "已将工作坊标签应用于 {}",
+    "tag_failed": "标记 {} 失败：{}",
+    "tag_failures_summary": "警告：{} 个资源标记失败",
+    "tag_failures_note": "资源已成功创建，但清理脚本可能无法识别它们。",
     "learning_moments": {
         "hierarchy": {
             "title": "📚 学习要点: AWS IoT 资源层次结构",

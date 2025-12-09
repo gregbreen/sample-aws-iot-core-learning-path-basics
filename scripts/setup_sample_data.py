@@ -14,11 +14,19 @@ from datetime import datetime, timedelta
 # Add i18n to path
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "i18n"))
 
+# Add iot_helpers to path
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
 import boto3
 from botocore.exceptions import ClientError, NoCredentialsError, NoRegionError
 
 from language_selector import get_language
 from loader import load_messages
+from iot_helpers.utils.resource_tagger import apply_workshop_tags
+from iot_helpers.utils.naming_conventions import (
+    generate_thing_name,
+    validate_thing_prefix
+)
 
 # Configuration
 THING_COUNT = 20
@@ -112,8 +120,11 @@ def safe_create(func, resource_type, name, debug=False, **kwargs):
         time.sleep(0.5)
 
 
-def create_thing_types(iot, debug=False):
+def create_thing_types(iot, debug=False, tag_failures=None):
     """Create predefined Thing Types"""
+    if tag_failures is None:
+        tag_failures = []
+        
     print_step(1, get_message("step_1_title"))
 
     for thing_type in THING_TYPES:
@@ -135,7 +146,7 @@ def create_thing_types(iot, debug=False):
             continue
 
         description = f"Template for {thing_type.replace('Vehicle', ' Vehicle')} category"
-        safe_create(
+        response = safe_create(
             iot.create_thing_type,
             "Thing Type",
             thing_type,
@@ -146,15 +157,40 @@ def create_thing_types(iot, debug=False):
                 "searchableAttributes": ["customerId", "country", "manufacturingDate"],
             },
         )
+        
+        # Add tagging after thing type creation
+        if response:
+            thing_type_arn = response.get('thingTypeArn')
+            if thing_type_arn:
+                try:
+                    apply_workshop_tags(
+                        client=iot,
+                        resource_arn=thing_type_arn,
+                        resource_type='thing-type',
+                        script_name='setup-script'
+                    )
+                    if debug:
+                        print(get_message("tag_applied", thing_type))
+                except Exception as e:
+                    tag_failures.append({
+                        'resource': thing_type,
+                        'type': 'thing-type',
+                        'error': str(e)
+                    })
+                    if debug:
+                        print(get_message("tag_failed", thing_type, str(e)))
 
 
-def create_thing_groups(iot, debug=False):
+def create_thing_groups(iot, debug=False, tag_failures=None):
     """Create predefined Thing Groups"""
+    if tag_failures is None:
+        tag_failures = []
+        
     print_step(2, get_message("step_2_title"))
 
     for group in THING_GROUPS:
         description = f"Group for devices in {group.replace('Floor', ' Floor')}"
-        safe_create(
+        response = safe_create(
             iot.create_thing_group,
             "Thing Group",
             group,
@@ -165,6 +201,28 @@ def create_thing_groups(iot, debug=False):
                 "attributePayload": {"attributes": {"location": group, "managed": "true"}},
             },
         )
+        
+        # Add tagging after thing group creation
+        if response:
+            group_arn = response.get('thingGroupArn')
+            if group_arn:
+                try:
+                    apply_workshop_tags(
+                        client=iot,
+                        resource_arn=group_arn,
+                        resource_type='thing-group',
+                        script_name='setup-script'
+                    )
+                    if debug:
+                        print(get_message("tag_applied", group))
+                except Exception as e:
+                    tag_failures.append({
+                        'resource': group,
+                        'type': 'thing-group',
+                        'error': str(e)
+                    })
+                    if debug:
+                        print(get_message("tag_failed", group, str(e)))
 
 
 def generate_random_date():
@@ -175,12 +233,15 @@ def generate_random_date():
     return random_date.strftime("%Y-%m-%d")
 
 
-def create_things(iot, debug=False):
+def create_things(iot, debug=False, things_prefix='Vehicle-VIN-', tag_failures=None):
     """Create sample Things with attributes"""
+    if tag_failures is None:
+        tag_failures = []
+        
     print_step(3, get_message("step_3_title", THING_COUNT))
 
     for i in range(1, THING_COUNT + 1):
-        thing_name = f"Vehicle-VIN-{i:03d}"
+        thing_name = generate_thing_name(things_prefix, i)
         customer_id = str(uuid.uuid4())
         country = random.choice(COUNTRIES)
         manufacturing_date = generate_random_date()
@@ -194,7 +255,7 @@ def create_things(iot, debug=False):
             print(f"   {get_message('thing_type')} {thing_type}")
             time.sleep(0.8)
 
-        safe_create(
+        response = safe_create(
             iot.create_thing,
             "Thing",
             thing_name,
@@ -209,14 +270,17 @@ def create_things(iot, debug=False):
                 }
             },
         )
+        
+        # Note: Things do not support tagging via AWS IoT API
+        # They will be identified by naming conventions during cleanup
 
 
-def add_things_to_groups(iot, debug=False):
+def add_things_to_groups(iot, debug=False, things_prefix='Vehicle-VIN-'):
     """Add Things to random Thing Groups"""
     print_step(4, get_message("step_4_title"))
 
     for i in range(1, THING_COUNT + 1):
-        thing_name = f"Vehicle-VIN-{i:03d}"
+        thing_name = generate_thing_name(things_prefix, i)
         group_name = random.choice(THING_GROUPS)
 
         try:
@@ -283,8 +347,23 @@ def main():
         # Load messages for this script and language
         messages = load_messages("setup_sample_data", USER_LANG)
 
-        # Check for debug flag
-        debug_mode = "--debug" in sys.argv or "-d" in sys.argv
+        # Parse command-line arguments
+        import argparse
+        parser = argparse.ArgumentParser(description='Setup sample IoT Core data')
+        parser.add_argument('--debug', '-d', action='store_true', help='Enable debug mode')
+        parser.add_argument(
+            '--things-prefix',
+            default='Vehicle-VIN-',
+            help='Prefix for thing names (default: Vehicle-VIN-)'
+        )
+        args = parser.parse_args()
+        
+        debug_mode = args.debug
+        
+        # Validate things prefix
+        if not validate_thing_prefix(args.things_prefix):
+            print(get_message("invalid_prefix", args.things_prefix))
+            sys.exit(1)
 
         print(get_message("title"))
         print(get_message("separator"))
@@ -354,24 +433,37 @@ def main():
         print_learning_moment("hierarchy")
         input(get_message("press_enter"))
 
-        # Execute setup steps with debug flag
-        create_thing_types(iot, debug=debug_mode)
+        # Track tagging failures
+        tag_failures = []
+
+        # Execute setup steps with debug flag and tagging
+        create_thing_types(iot, debug=debug_mode, tag_failures=tag_failures)
 
         print_learning_moment("thing_groups")
         input(get_message("press_enter"))
 
-        create_thing_groups(iot, debug=debug_mode)
+        create_thing_groups(iot, debug=debug_mode, tag_failures=tag_failures)
 
         print_learning_moment("things")
         input(get_message("press_enter"))
 
-        create_things(iot, debug=debug_mode)
+        create_things(iot, debug=debug_mode, things_prefix=args.things_prefix, tag_failures=tag_failures)
 
         print_learning_moment("relationships")
         input(get_message("press_enter"))
 
-        add_things_to_groups(iot, debug=debug_mode)
+        add_things_to_groups(iot, debug=debug_mode, things_prefix=args.things_prefix)
         print_summary(iot)
+
+        # Report tag failures if any (excluding Things which don't support tagging via API)
+        reportable_failures = [f for f in tag_failures if f['type'] != 'thing']
+        if reportable_failures:
+            print(f"\n⚠️  {get_message('tag_failures_summary', len(reportable_failures))}")
+            for failure in reportable_failures[:5]:  # Show first 5
+                print(f"   - {failure['type']}: {failure['resource']}")
+            if len(reportable_failures) > 5:
+                print(f"   ... and {len(reportable_failures) - 5} more")
+            print(get_message("tag_failures_note"))
 
         print(f"\n{get_message('setup_complete')}")
 

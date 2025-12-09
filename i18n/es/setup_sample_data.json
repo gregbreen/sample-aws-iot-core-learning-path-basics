@@ -74,6 +74,11 @@
     "invalid_value_error": "❌ Valor inválido en",
     "unexpected_error": "❌ Error inesperado en",
     "press_enter": "Presiona Enter para continuar...",
+    "invalid_prefix": "Prefijo de thing inválido: {}. Debe comenzar con una letra y contener solo caracteres alfanuméricos, guiones y guiones bajos.",
+    "tag_applied": "Etiquetas de taller aplicadas a {}",
+    "tag_failed": "Error al etiquetar {}: {}",
+    "tag_failures_summary": "Advertencia: Error al etiquetar {} recursos",
+    "tag_failures_note": "Los recursos se crearon correctamente pero es posible que el script de limpieza no los identifique.",
     "learning_moments": {
         "hierarchy": {
             "title": "📚 LEARNING MOMENT: Jerarquía de Recursos de AWS IoT",

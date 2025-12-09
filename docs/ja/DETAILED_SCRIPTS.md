@@ -4,6 +4,8 @@
 
 ## 目次
 
+- [サンプルデータセットアップ](#サンプルデータセットアップ)
+- [サンプルデータクリーンアップ](#サンプルデータクリーンアップ)
 - [IoT Registry API エクスプローラー](#iot-registry-api-エクスプローラー)
   - [目的](#目的)
   - [実行方法](#実行方法)
@@ -51,6 +53,251 @@
   - [ルールのテスト](#ルールのテスト)
   - [学習シナリオ](#学習シナリオ-1)
   - [必要なIAM権限](#必要なiam権限-1)
+
+
+## サンプルデータセットアップ
+
+### 目的
+AWS IoTの実践的な学習のためのサンプルリソースを作成します。このスクリプトは、Thing Types、Thing Groups、Things（シミュレートされた車両）を含む完全なIoT環境をセットアップし、他のすべての学習スクリプトで使用できます。
+
+### 実行方法
+
+**基本使用法:**
+```bash
+python scripts/setup_sample_data.py
+```
+
+**デバッグモード付き（詳細なAPIログ）:**
+```bash
+python scripts/setup_sample_data.py --debug
+```
+
+**カスタムプレフィックス付き:**
+```bash
+python scripts/setup_sample_data.py --things-prefix Dev
+```
+
+### コマンドラインオプション
+
+#### `--things-prefix PREFIX`
+Thing名のプレフィックスをカスタマイズして、複数の分離された環境を作成したり、名前の競合を回避します。
+
+**検証ルール:**
+- 3-20文字である必要があります
+- 英数字のみ（a-z、A-Z、0-9）
+- スペースや特殊文字は使用できません
+- 大文字と小文字を区別します
+
+**例:**
+```bash
+# 開発環境
+python scripts/setup_sample_data.py --things-prefix Dev
+
+# テスト環境
+python scripts/setup_sample_data.py --things-prefix Test
+
+# チーム環境
+python scripts/setup_sample_data.py --things-prefix TeamA
+```
+
+**生成されるThing名:**
+- デフォルトプレフィックス: `Vehicle-VIN-001`, `Vehicle-VIN-002`, ...
+- `--things-prefix Dev`の場合: `Dev-VIN-001`, `Dev-VIN-002`, ...
+
+#### `--debug`
+すべてのAWS API呼び出し、リクエストパラメータ、レスポンスペイロードを表示する詳細ログを有効にします。AWS IoT APIの学習や問題のトラブルシューティングに役立ちます。
+
+### 作成されるリソース
+
+スクリプトは、AWS IoTリソースの完全な階層を作成します:
+
+#### Thing Types (3個)
+検索可能な属性を持つ車両カテゴリを定義するテンプレート:
+- **SedanVehicle** - 標準的な乗用車
+- **SUVVehicle** - スポーツユーティリティビークル
+- **TruckVehicle** - 商用車両
+
+#### Thing Groups (4個)
+フリート管理のための組織コンテナ:
+- **CustomerFleet** - すべての顧客車両のメイングループ
+- **TestFleet** - テストおよび開発車両
+- **MaintenanceFleet** - サービスが必要な車両
+- **DealerFleet** - ディーラー在庫
+
+#### Things (20個)
+属性を持つ個別デバイスの表現:
+- 名前: `{prefix}-VIN-001`から`{prefix}-VIN-020`
+- 属性: VIN、モデル、年式、色、場所
+- タイプ分布: Sedan、SUV、Truckの混合
+- グループメンバーシップ: 適切なグループに割り当て
+
+### セキュリティ機能
+
+**重複チェック:**
+- 作成前に既存のリソースを確認
+- リソースが既に存在する場合は作成をスキップ
+- 重複名エラーを防止
+
+**入力検証:**
+- 作成前にプレフィックス形式を検証
+- 明確なエラーメッセージを提供
+- 検証が失敗した場合は正しい形式を提案
+
+**冪等操作:**
+- 複数回実行しても安全
+- 重複リソースを作成しない
+- 既存のリソース状態を報告
+
+## サンプルデータクリーンアップ
+
+### 目的
+セットアップスクリプトによって作成されたAWS IoTリソースを安全に削除します。このスクリプトは、誤った削除を防ぐためのセキュリティ機能を備えた完全なクリーンアップを提供し、プレビュー用のドライランモードと対象を絞ったクリーンアップのためのプレフィックスサポートを含みます。
+
+### 実行方法
+
+**基本使用法（インタラクティブクリーンアップ）:**
+```bash
+python scripts/cleanup_sample_data.py
+```
+
+**ドライランモード（削除せずにプレビュー）:**
+```bash
+python scripts/cleanup_sample_data.py --dry-run
+```
+
+**プレフィックスを指定した対象クリーンアップ:**
+```bash
+python scripts/cleanup_sample_data.py --things-prefix Dev
+```
+
+**オプションの組み合わせ:**
+```bash
+# 特定のプレフィックスのクリーンアッププレビュー
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Test
+
+# 詳細ログ付きクリーンアップ
+python scripts/cleanup_sample_data.py --debug --things-prefix Prod
+```
+
+### コマンドラインオプション
+
+#### `--dry-run`
+実際に削除せずに、削除されるリソースを表示するプレビューモード。
+
+**機能:**
+- 条件に一致するすべてのリソースを識別
+- リソースの詳細なサマリーを表示
+- AWSに変更を加えない
+- 実際のクリーンアップ前の確認に便利
+
+**出力例:**
+```
+🔍 ドライランモード - リソースは削除されません
+================================================
+
+📊 削除されるリソース:
+   • Things: 20 (Vehicle-VIN-001からVehicle-VIN-020)
+   • 証明書: 5
+   • Thing Types: 3 (SedanVehicle、SUVVehicle、TruckVehicle)
+   • Thing Groups: 4 (CustomerFleet、TestFleet、MaintenanceFleet、DealerFleet)
+
+💡 実際のクリーンアップを実行するには、--dry-runなしで実行してください
+```
+
+#### `--things-prefix PREFIX`
+特定のプレフィックスを持つThingsに対してクリーンアップを対象化し、環境の選択的なクリーンアップを可能にします。
+
+**検証ルール:**
+- 3-20文字である必要があります
+- 英数字のみ（a-z、A-Z、0-9）
+- スペースや特殊文字は使用できません
+- 大文字と小文字を区別します
+- セットアップ時に使用したプレフィックスと一致する必要があります
+
+**動作:**
+- 指定されたプレフィックスで始まるThingsのみをクリーンアップ
+- それらのThingsに関連付けられた証明書をクリーンアップ
+- Thing TypesとThing Groupsを保持（環境間で共有）
+- プレフィックス固有のリソースのサマリーを提供
+
+**例:**
+```bash
+# 開発環境のみをクリーンアップ
+python scripts/cleanup_sample_data.py --things-prefix Dev
+
+# テスト環境のクリーンアッププレビュー
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Test
+
+# 特定のチーム環境をクリーンアップ
+python scripts/cleanup_sample_data.py --things-prefix TeamA
+```
+
+#### `--debug`
+すべてのAWS API呼び出し、リクエストパラメータ、レスポンスペイロードを表示する詳細ログを有効にします。
+
+### クリーンアッププロセス
+
+スクリプトは、リソースの依存関係を処理するために特定の順序に従います:
+
+#### ステップ1: 証明書
+- ThingsからCertificatesをデタッチ
+- CertificatesからPoliciesをデタッチ
+- Certificatesを非アクティブ化
+- Certificatesを削除
+- ローカル証明書ファイルを削除
+
+#### ステップ2: Things
+- IoT RegistryからThingsを削除
+- Thing Groupの依存関係を処理
+- Thingメタデータをクリーンアップ
+
+#### ステップ3: Thing Groups
+- 空のThing Groupsを削除
+- グループ階層を尊重
+- 親子関係を処理
+
+#### ステップ4: Thing Types
+- Thing Typesを非推奨化（削除不可）
+- タイプを使用不可としてマーク
+- 履歴データを保持
+
+### セキュリティ機能
+
+**インタラクティブ確認:**
+```
+⚠️ この操作は以下を削除します:
+   • 20個のThings (Vehicle-VIN-001からVehicle-VIN-020)
+   • 5個の証明書とローカルファイル
+   • 3個のThing Types（非推奨化されます）
+   • 4個のThing Groups
+
+クリーンアップを続行しますか？ (y/N):
+```
+
+**ドライランモード:**
+- 実行前に変更をプレビュー
+- クリーンアップの範囲を確認
+- 誤った削除を防止
+
+**プレフィックスによる対象クリーンアップ:**
+- 環境固有のリソースのみをクリーンアップ
+- 他の環境を保持
+- 誤ったリソース削除のリスクを軽減
+
+**エラー処理:**
+- 1つが失敗しても他のリソースで続行
+- エラーを明確に報告
+- 成功/失敗した操作のサマリーを提供
+
+### ベストプラクティス
+
+1. **常に最初に--dry-runを使用**して変更をプレビュー
+2. **複数の環境にはプレフィックスを使用**して選択的なクリーンアップを有効化
+3. **クリーンアップを確認する前に範囲を確認**
+4. **クリーンアップ前に重要な証明書のバックアップを保持**
+5. **異なる環境に使用したプレフィックスを文書化**
+6. **使用されていないテスト環境を定期的にクリーンアップ**
+
 
 ## IoT Registry API エクスプローラー
 

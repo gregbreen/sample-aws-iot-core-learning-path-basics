@@ -11,15 +11,20 @@ import time
 # Add i18n to path
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "i18n"))
 
+# Add iot_helpers to path
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
 import boto3
 from botocore.exceptions import ClientError, NoCredentialsError, NoRegionError
 from language_selector import get_language
 from loader import load_messages
+from iot_helpers.utils.resource_tagger import apply_workshop_tags
 
 # Global variables
 USER_LANG = "en"
 messages = {}
 DEBUG_MODE = True  # Default to True for educational purposes
+ENABLE_TAGGING = True  # Can be disabled with --no-tags
 
 
 def get_message(key, *args):
@@ -329,6 +334,22 @@ def create_certificate(iot, thing_name=None):
         print(f"   {get_message('certificate_id_label')}: {cert_id}")
         print(f"   {get_message('certificate_arn_label')}: {cert_arn}")
         print(f"   {get_message('status_active')}")
+        
+        # Add tagging
+        if ENABLE_TAGGING:
+            try:
+                apply_workshop_tags(
+                    client=iot,
+                    resource_arn=cert_arn,
+                    resource_type='certificate',
+                    script_name='certificate-manager'
+                )
+                if DEBUG_MODE:
+                    print(f"   ✅ Applied workshop tags to certificate")
+            except Exception as e:
+                # Don't fail if tagging fails - it's optional
+                if DEBUG_MODE:
+                    print(f"   ℹ️  Note: Could not apply tags: {e}")
 
         # Save certificate files locally
         if thing_name:
@@ -649,6 +670,24 @@ def create_policy_interactive(iot):
 
     if response:
         print(f"✅ Policy '{policy_name}' created successfully")
+        
+        # Add tagging to policy
+        if ENABLE_TAGGING:
+            policy_arn = response.get('policyArn')
+            if policy_arn:
+                try:
+                    apply_workshop_tags(
+                        client=iot,
+                        resource_arn=policy_arn,
+                        resource_type='policy',
+                        script_name='certificate-manager'
+                    )
+                    if DEBUG_MODE:
+                        print(f"   ✅ Applied workshop tags to policy")
+                except Exception as e:
+                    if DEBUG_MODE:
+                        print(f"   ℹ️  Note: Could not apply tags: {e}")
+        
         return policy_name
 
     return None
@@ -1556,12 +1595,13 @@ def print_summary(cert_id, cert_arn, thing_name, policy_name, cert_source="AWS-G
 def main():
     try:
         # Get user's preferred language
-        global USER_LANG, messages
+        global USER_LANG, messages, ENABLE_TAGGING
         USER_LANG = get_language()
         messages = load_messages("certificate_manager", USER_LANG)
 
-        # Check for debug flag
+        # Check for debug and tagging flags
         debug_mode = "--debug" in sys.argv or "-d" in sys.argv
+        ENABLE_TAGGING = "--no-tags" not in sys.argv
 
         print(get_message("title"))
         print(get_message("separator"))
@@ -1575,6 +1615,12 @@ def main():
         print(get_message("description_intro"))
         for concept in get_message("security_concepts"):
             print(concept)
+        
+        # Display tagging status
+        if ENABLE_TAGGING:
+            print("\nℹ️  Workshop tagging: ENABLED (use --no-tags to disable)")
+        else:
+            print("\nℹ️  Workshop tagging: DISABLED")
 
         if debug_mode:
             print(f"\n{get_message('debug_enabled')}")

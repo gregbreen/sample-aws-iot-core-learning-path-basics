@@ -4,6 +4,19 @@ This document provides comprehensive documentation for all learning scripts in t
 
 ## Table of Contents
 
+- [Sample Data Setup](#sample-data-setup)
+  - [Purpose](#purpose-setup)
+  - [How to Run](#how-to-run-setup)
+  - [Command-Line Options](#command-line-options-setup)
+  - [Custom Prefix Feature](#custom-prefix-feature)
+  - [Learning Features](#learning-features-setup)
+- [Sample Data Cleanup](#sample-data-cleanup)
+  - [Purpose](#purpose-cleanup)
+  - [How to Run](#how-to-run-cleanup)
+  - [Command-Line Options](#command-line-options-cleanup)
+  - [Dry-Run Mode](#dry-run-mode)
+  - [Prefix Matching](#prefix-matching-cleanup)
+  - [Safety Features](#safety-features)
 - [IoT Registry API Explorer](#iot-registry-api-explorer)
   - [Purpose](#purpose)
   - [How to Run](#how-to-run)
@@ -51,6 +64,362 @@ This document provides comprehensive documentation for all learning scripts in t
   - [Testing Your Rules](#testing-your-rules)
   - [Learning Scenarios](#learning-scenarios-1)
   - [Required AWS IAM Permissions](#required-iam-permissions-1)
+
+## Sample Data Setup
+
+### Purpose {#purpose-setup}
+Create sample AWS IoT resources for hands-on learning. This script sets up a complete IoT environment with Thing Types, Thing Groups, and Things (simulated vehicles) that you can use with all other learning scripts.
+
+### How to Run {#how-to-run-setup}
+
+**Basic Usage:**
+```bash
+python setup_sample_data.py
+```
+
+**With Debug Mode (detailed API logging):**
+```bash
+python setup_sample_data.py --debug
+```
+
+**With Custom Prefix:**
+```bash
+python setup_sample_data.py --things-prefix "MyDevice-"
+```
+
+**Combined Options:**
+```bash
+python setup_sample_data.py --debug --things-prefix "TestFleet-"
+```
+
+### Command-Line Options {#command-line-options-setup}
+
+#### `--debug` or `-d`
+- **Purpose**: Enable detailed API call logging
+- **Output**: Shows complete request/response for every AWS API call
+- **Use Case**: Understanding AWS IoT APIs, troubleshooting issues
+- **Example**:
+  ```bash
+  python setup_sample_data.py --debug
+  ```
+
+#### `--things-prefix`
+- **Purpose**: Customize the prefix for Thing names
+- **Default**: `Vehicle-VIN-`
+- **Format**: Must start with a letter, followed by letters, numbers, hyphens, or underscores
+- **Use Cases**:
+  - Multiple test environments (dev, staging, prod)
+  - Different naming conventions per team
+  - Avoiding name conflicts in shared AWS accounts
+  - Testing cleanup with specific resource sets
+- **Examples**:
+  ```bash
+  # Development environment
+  python setup_sample_data.py --things-prefix "Dev-Vehicle-"
+  
+  # Staging environment
+  python setup_sample_data.py --things-prefix "Staging-Device-"
+  
+  # Team-specific prefix
+  python setup_sample_data.py --things-prefix "TeamA-IoT-"
+  
+  # Custom naming convention
+  python setup_sample_data.py --things-prefix "Fleet-"
+  ```
+
+### Custom Prefix Feature
+
+#### Prefix Validation
+The script validates your prefix to ensure it follows AWS IoT naming conventions:
+- **Must start with**: A letter (a-z, A-Z)
+- **Can contain**: Letters, numbers, hyphens (-), underscores (_)
+- **Cannot contain**: Spaces, special characters, or start with numbers
+
+**Valid Prefixes:**
+- ✅ `Vehicle-VIN-`
+- ✅ `Dev-Device-`
+- ✅ `MyFleet_`
+- ✅ `TestEnv-`
+
+**Invalid Prefixes:**
+- ❌ `123-Device-` (starts with number)
+- ❌ `My Device-` (contains space)
+- ❌ `Fleet@Home-` (contains special character)
+
+#### Generated Thing Names
+With prefix `Dev-Vehicle-`, the script creates:
+- `Dev-Vehicle-001`
+- `Dev-Vehicle-002`
+- `Dev-Vehicle-003`
+- ... up to `Dev-Vehicle-020`
+
+#### Multi-Environment Workflow
+**Scenario**: You want separate dev and prod environments in the same AWS account.
+
+```bash
+# Create development resources
+python setup_sample_data.py --things-prefix "Dev-"
+
+# Create production resources
+python setup_sample_data.py --things-prefix "Prod-"
+
+# Later, clean up only dev resources
+python cleanup_sample_data.py --things-prefix "Dev-"
+```
+
+### Learning Features {#learning-features-setup}
+
+**Resource Creation:**
+- **3 Thing Types**: Vehicle categories (SedanVehicle, SUVVehicle, TruckVehicle)
+- **4 Thing Groups**: Fleet organization (CustomerFleet, TestFleet, MaintenanceFleet, DealerFleet)
+- **20 Things**: Simulated vehicles with attributes (customerId, country, manufacturingDate)
+
+**Interactive Learning:**
+- **Cost Awareness**: Shows estimated AWS costs before proceeding
+- **Step-by-Step Progress**: Clear indication of each creation phase
+- **Learning Moments**: Explains concepts like Thing Types, attributes, and relationships
+- **Summary Report**: Final count of all created resources
+
+**Tagging for Safety:**
+- All resources are tagged with `CreatedBy: sample-script`
+- Enables safe cleanup without affecting your existing resources
+- Cleanup script uses tags to identify sample resources
+
+## Sample Data Cleanup
+
+### Purpose {#purpose-cleanup}
+Safely remove sample AWS IoT resources created by the setup script. This script intelligently identifies and deletes only the resources it created, protecting your existing IoT infrastructure.
+
+### How to Run {#how-to-run-cleanup}
+
+**Basic Usage:**
+```bash
+python cleanup_sample_data.py
+```
+
+**Dry-Run Mode (Preview Only):**
+```bash
+python cleanup_sample_data.py --dry-run
+```
+
+**With Custom Prefix:**
+```bash
+python cleanup_sample_data.py --things-prefix "Dev-Vehicle-"
+```
+
+**Dry-Run with Custom Prefix:**
+```bash
+python cleanup_sample_data.py --dry-run --things-prefix "TestFleet-"
+```
+
+**With Debug Mode:**
+```bash
+python cleanup_sample_data.py --debug
+```
+
+**Combined Options:**
+```bash
+python cleanup_sample_data.py --dry-run --debug --things-prefix "Dev-"
+```
+
+### Command-Line Options {#command-line-options-cleanup}
+
+#### `--dry-run`
+- **Purpose**: Preview what would be deleted without actually deleting anything
+- **Safety**: No resources are modified or deleted
+- **Output**: Complete list of resources that would be affected
+- **Use Cases**:
+  - Verify correct resources before deletion
+  - Audit what the script will clean up
+  - Test prefix matching logic
+  - Generate cleanup reports
+- **Example**:
+  ```bash
+  python cleanup_sample_data.py --dry-run
+  ```
+
+#### `--things-prefix`
+- **Purpose**: Target resources with a specific prefix for cleanup
+- **Default**: `Vehicle-VIN-`
+- **Must Match**: The prefix used during setup
+- **Use Cases**:
+  - Clean up specific environment (dev, staging, prod)
+  - Remove team-specific resources
+  - Selective cleanup in shared AWS accounts
+- **Examples**:
+  ```bash
+  # Clean up development environment only
+  python cleanup_sample_data.py --things-prefix "Dev-Vehicle-"
+  
+  # Clean up staging resources
+  python cleanup_sample_data.py --things-prefix "Staging-Device-"
+  
+  # Preview cleanup for specific prefix
+  python cleanup_sample_data.py --dry-run --things-prefix "TeamA-IoT-"
+  ```
+
+#### `--debug` or `-d`
+- **Purpose**: Enable detailed logging of all operations
+- **Output**: Shows API calls, dependency resolution, and deletion steps
+- **Use Case**: Troubleshooting cleanup issues, understanding the process
+- **Example**:
+  ```bash
+  python cleanup_sample_data.py --debug
+  ```
+
+### Dry-Run Mode
+
+#### What Dry-Run Does
+**Identification Phase:**
+1. Scans AWS account for resources matching the prefix
+2. Identifies Things, Thing Types, Thing Groups, Certificates, Policies, and IAM roles
+3. Analyzes dependencies between resources
+4. Calculates deletion order
+
+**Reporting Phase:**
+1. Lists all resources that would be deleted
+2. Shows resource counts by type
+3. Displays dependencies and deletion sequence
+4. Estimates cleanup time
+
+**No Modifications:**
+- ✅ Reads resource information
+- ✅ Analyzes dependencies
+- ✅ Generates reports
+- ❌ Does NOT delete anything
+- ❌ Does NOT modify resources
+- ❌ Does NOT detach policies or certificates
+
+#### Example Dry-Run Output
+```bash
+$ python cleanup_sample_data.py --dry-run --things-prefix "Dev-"
+
+🧹 AWS IoT Sample Data Cleanup
+==============================
+DRY RUN MODE - No resources will be deleted
+==============================
+
+🔍 Step 1: Discovering sample resources...
+📋 Resources Found:
+   ✅ Things: 20 resources with prefix 'Dev-'
+      • Dev-001, Dev-002, Dev-003, ... Dev-020
+   
+   ✅ Thing Types: 3 resources
+      • SedanVehicle, SUVVehicle, TruckVehicle
+   
+   ✅ Thing Groups: 4 resources
+      • CustomerFleet, TestFleet, MaintenanceFleet, DealerFleet
+   
+   ✅ Certificates: 15 certificates attached to Things
+   
+   ✅ Policies: 3 IoT policies
+      • BasicDevicePolicy, ReadOnlyPolicy, CustomPolicy
+   
+   ✅ IAM Roles: 1 role
+      • IoTRulesEngineRole
+
+📊 Deletion Summary (DRY RUN):
+   Would delete: 20 Things
+   Would delete: 15 Certificates
+   Would delete: 3 Policies
+   Would delete: 4 Thing Groups
+   Would delete: 3 Thing Types
+   Would delete: 1 IAM Role
+   Would remove: 45 local certificate files
+
+⏱️  Estimated cleanup time: 2-3 minutes
+
+💡 To perform actual cleanup, run without --dry-run flag
+```
+
+### Prefix Matching {#prefix-matching-cleanup}
+
+#### How Prefix Matching Works
+The cleanup script uses the prefix to identify resources in two ways:
+
+**1. Direct Name Matching (Things):**
+- Searches for Things whose names start with the specified prefix
+- Example: `--things-prefix "Dev-"` matches `Dev-001`, `Dev-002`, etc.
+
+**2. Tag-Based Identification (Other Resources):**
+- Thing Types, Thing Groups, Policies, and IAM roles are identified by tags
+- Resources created by setup script are tagged with `CreatedBy: sample-script`
+- Ensures only sample resources are deleted, not your existing infrastructure
+
+#### Prefix Mismatch Scenario
+**Problem**: Using different prefixes for setup and cleanup
+
+```bash
+# Setup with one prefix
+python setup_sample_data.py --things-prefix "Dev-"
+
+# Cleanup with different prefix (WRONG!)
+python cleanup_sample_data.py --things-prefix "Prod-"
+# Result: No resources found, nothing deleted
+```
+
+**Solution**: Always use matching prefixes
+
+```bash
+# Setup
+python setup_sample_data.py --things-prefix "Dev-"
+
+# Cleanup (matching prefix)
+python cleanup_sample_data.py --things-prefix "Dev-"
+# Result: All Dev- resources cleaned up successfully
+```
+
+#### Multi-Environment Cleanup
+**Scenario**: You have multiple environments and want to clean up only one.
+
+```bash
+# You have these environments:
+# - Dev-Vehicle-001 through Dev-Vehicle-020
+# - Staging-Vehicle-001 through Staging-Vehicle-020
+# - Prod-Vehicle-001 through Prod-Vehicle-020
+
+# Preview dev cleanup
+python cleanup_sample_data.py --dry-run --things-prefix "Dev-Vehicle-"
+
+# Clean up only dev environment
+python cleanup_sample_data.py --things-prefix "Dev-Vehicle-"
+
+# Staging and Prod environments remain untouched
+```
+
+### Safety Features
+
+#### Confirmation Prompt
+Before deleting anything, the script requires explicit confirmation:
+```
+⚠️  This action cannot be undone.
+Do you want to continue? (y/N):
+```
+
+**Dry-run mode skips this prompt** since no deletions occur.
+
+#### Tag-Based Protection
+- Only deletes resources tagged with `CreatedBy: sample-script`
+- Your existing IoT resources without this tag are protected
+- Prevents accidental deletion of production resources
+
+#### Dependency Resolution
+- Automatically handles resource dependencies
+- Detaches policies before deleting certificates
+- Detaches certificates before deleting Things
+- Deprecates Thing Types before deletion (AWS requirement)
+- Ensures clean deletion without orphaned resources
+
+#### Local File Cleanup
+- Removes certificate files from `certificates/` directory
+- Only removes files for deleted Things
+- Preserves certificates for Things that weren't deleted
+
+#### Error Handling
+- Continues cleanup even if individual deletions fail
+- Reports errors without stopping the entire process
+- Provides detailed error messages for troubleshooting
+- Final summary shows successful and failed operations
 
 ## IoT Registry API Explorer
 

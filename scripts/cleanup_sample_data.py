@@ -2,6 +2,7 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
 
+import argparse
 import json
 import os
 import shutil
@@ -12,10 +13,20 @@ import traceback
 # Add i18n to path
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "i18n"))
 
+# Add iot_helpers to path
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
 import boto3
 from botocore.exceptions import ClientError
 from language_selector import get_language
 from loader import load_messages
+
+# Import iot_helpers modules
+from iot_helpers.cleanup.resource_identifier import ResourceIdentifier
+from iot_helpers.cleanup.deletion_engine import DeletionEngine
+from iot_helpers.cleanup.reporter import CleanupReporter
+from iot_helpers.utils.dependency_handler import DependencyHandler
+from iot_helpers.utils.naming_conventions import validate_thing_prefix
 
 # Sample data patterns created by setup scripts
 SAMPLE_THING_TYPES = ["SedanVehicle", "SUVVehicle", "TruckVehicle"]
@@ -764,9 +775,245 @@ def cleanup_sample_rules(iot_client):
         return 0
 
 
+def cleanup_iam_resources(iot_client, iam_client):
+    """Clean up IAM resources by following IoT rule dependencies"""
+    print(f"\n{get_message('step8_title')}")
+    print(get_message("step_separator"))
+    
+    workshop_tag_key = "workshop"
+    workshop_tag_value = "learning-aws-iot-core-basics"
+    
+    debug_print(get_message("debug_cleaning_iam_resources"))
+    
+    try:
+        # Step 1: Scan all IoT rules for workshop tags
+        print(get_message("scanning_rules_for_iam"))
+        
+        log_api_call("list_topic_rules", "List all IoT rules to find workshop-tagged rules")
+        
+        rules_response = iot_client.list_topic_rules()
+        log_api_call("list_topic_rules", "List all IoT rules to find workshop-tagged rules", None, rules_response)
+        
+        all_rules = rules_response.get("rules", [])
+        workshop_rules = []
+        
+        # Check each rule for workshop tags
+        for rule in all_rules:
+            rule_name = rule["ruleName"]
+            
+            try:
+                # Get rule ARN to check tags
+                region = iot_client.meta.region_name
+                sts_client = boto3.client('sts')
+                account_id = sts_client.get_caller_identity()['Account']
+                rule_arn = f"arn:aws:iot:{region}:{account_id}:rule/{rule_name}"
+                
+                # Check tags
+                tags_response = iot_client.list_tags_for_resource(resourceArn=rule_arn)
+                tags = tags_response.get('tags', [])
+                
+                # Check if rule has workshop tag
+                has_workshop_tag = any(
+                    tag['Key'] == workshop_tag_key and tag['Value'] == workshop_tag_value
+                    for tag in tags
+                )
+                
+                if has_workshop_tag:
+                    workshop_rules.append(rule_name)
+                    debug_print(f"Found workshop-tagged rule: {rule_name}")
+                    
+            except ClientError as e:
+                debug_print(f"Could not check tags for rule {rule_name}: {str(e)}")
+                continue
+        
+        if not workshop_rules:
+            print(get_message("no_workshop_rules_found"))
+            print(get_message("iam_cleanup_completed"))
+            return
+        
+        print(get_message("found_workshop_rules", len(workshop_rules)))
+        
+        # Step 2: Extract IAM role ARNs from rule actions
+        role_arns = set()
+        
+        for rule_name in workshop_rules:
+            debug_print(f"Inspecting rule: {rule_name}")
+            
+            try:
+                log_api_call("get_topic_rule", f"Get rule details for {rule_name}", {"ruleName": rule_name})
+                
+                rule_response = iot_client.get_topic_rule(ruleName=rule_name)
+                log_api_call("get_topic_rule", f"Get rule details for {rule_name}", {"ruleName": rule_name}, rule_response)
+                
+                rule_payload = rule_response.get("rule", {})
+                actions = rule_payload.get("actions", [])
+                
+                # Check each action for roleArn
+                for action in actions:
+                    role_arn = None
+                    
+                    if "republish" in action:
+                        role_arn = action["republish"].get("roleArn")
+                    elif "s3" in action:
+                        role_arn = action["s3"].get("roleArn")
+                    elif "lambda" in action:
+                        role_arn = action["lambda"].get("roleArn")
+                    elif "kinesis" in action:
+                        role_arn = action["kinesis"].get("roleArn")
+                    elif "firehose" in action:
+                        role_arn = action["firehose"].get("roleArn")
+                    elif "dynamoDB" in action:
+                        role_arn = action["dynamoDB"].get("roleArn")
+                    elif "dynamoDBv2" in action:
+                        role_arn = action["dynamoDBv2"].get("roleArn")
+                    elif "sns" in action:
+                        role_arn = action["sns"].get("roleArn")
+                    elif "sqs" in action:
+                        role_arn = action["sqs"].get("roleArn")
+                    elif "cloudwatchMetric" in action:
+                        role_arn = action["cloudwatchMetric"].get("roleArn")
+                    elif "cloudwatchAlarm" in action:
+                        role_arn = action["cloudwatchAlarm"].get("roleArn")
+                    elif "elasticsearch" in action:
+                        role_arn = action["elasticsearch"].get("roleArn")
+                    elif "salesforce" in action:
+                        role_arn = action["salesforce"].get("roleArn")
+                    elif "iotAnalytics" in action:
+                        role_arn = action["iotAnalytics"].get("roleArn")
+                    elif "iotEvents" in action:
+                        role_arn = action["iotEvents"].get("roleArn")
+                    elif "stepFunctions" in action:
+                        role_arn = action["stepFunctions"].get("roleArn")
+                    
+                    if role_arn:
+                        role_arns.add(role_arn)
+                        debug_print(f"Found role ARN in action: {role_arn}")
+                        
+            except ClientError as e:
+                print(f"  {get_message('error_getting_rule', rule_name, str(e))}")
+                if DEBUG_MODE:
+                    print(f"{get_message('debug_full_error')}")
+                    print(json.dumps(e.response, indent=2, default=str))
+        
+        if not role_arns:
+            print(get_message("no_iam_roles_in_rules"))
+            print(get_message("iam_cleanup_completed"))
+            return
+        
+        # Step 3: Parse role names from ARNs and clean up
+        print(f"\n{get_message('found_iam_roles', len(role_arns))}")
+        
+        for role_arn in role_arns:
+            # Parse role name from ARN: arn:aws:iam::account:role/RoleName
+            try:
+                role_name = role_arn.split("/")[-1]
+                print(f"\n  {get_message('processing_iam_role', role_name)}")
+                
+                # Check if role exists
+                try:
+                    iam_client.get_role(RoleName=role_name)
+                    print(f"    {get_message('found_iam_role', role_name)}")
+                    
+                    # List and detach managed policies
+                    policies_to_delete = []
+                    
+                    try:
+                        attached_policies = iam_client.list_attached_role_policies(RoleName=role_name)
+                        for policy in attached_policies.get('AttachedPolicies', []):
+                            policy_arn = policy['PolicyArn']
+                            policy_name = policy['PolicyName']
+                            
+                            # Check if this is a customer-managed policy (not AWS managed)
+                            if not policy_arn.startswith('arn:aws:iam::aws:policy/'):
+                                # Check tags on the policy
+                                try:
+                                    policy_tags_response = iam_client.list_policy_tags(PolicyArn=policy_arn)
+                                    policy_tags = policy_tags_response.get('Tags', [])
+                                    
+                                    # Check if policy has workshop tag
+                                    has_workshop_tag = any(
+                                        tag['Key'] == workshop_tag_key and tag['Value'] == workshop_tag_value
+                                        for tag in policy_tags
+                                    )
+                                    
+                                    if has_workshop_tag:
+                                        print(f"      ✅ {get_message('policy_has_workshop_tag', policy_name)}")
+                                        policies_to_delete.append((policy_arn, policy_name))
+                                    else:
+                                        print(f"      ⚠️  {get_message('policy_no_workshop_tag', policy_name)}")
+                                        debug_print(f"Policy {policy_name} does not have workshop tag, skipping deletion")
+                                except ClientError as tag_error:
+                                    print(f"      ⚠️  {get_message('cannot_check_policy_tags', policy_name)}")
+                                    debug_print(f"Error checking tags: {str(tag_error)}")
+                            
+                            # Detach the policy from the role
+                            print(f"      {get_message('detaching_policy', policy_name)}")
+                            iam_client.detach_role_policy(RoleName=role_name, PolicyArn=policy_arn)
+                            debug_print(f"Detached managed policy: {policy_arn}")
+                            
+                    except ClientError as e:
+                        print(f"      {get_message('error_detaching_policies', str(e))}")
+                        if DEBUG_MODE:
+                            print(f"{get_message('debug_full_error')}")
+                            print(json.dumps(e.response, indent=2, default=str))
+                    
+                    # List and delete inline policies
+                    try:
+                        inline_policies = iam_client.list_role_policies(RoleName=role_name)
+                        for policy_name_inline in inline_policies.get('PolicyNames', []):
+                            print(f"      {get_message('deleting_inline_policy', policy_name_inline)}")
+                            iam_client.delete_role_policy(RoleName=role_name, PolicyName=policy_name_inline)
+                            debug_print(f"Deleted inline policy: {policy_name_inline}")
+                    except ClientError as e:
+                        print(f"      {get_message('error_deleting_inline_policies', str(e))}")
+                        if DEBUG_MODE:
+                            print(f"{get_message('debug_full_error')}")
+                            print(json.dumps(e.response, indent=2, default=str))
+                    
+                    # Delete the role
+                    print(f"    {get_message('deleting_iam_role', role_name)}")
+                    iam_client.delete_role(RoleName=role_name)
+                    print(f"    ✅ {get_message('deleted_resource', 'IAM Role', role_name)}")
+                    
+                    # Now delete the tagged policies that were attached to the role
+                    if policies_to_delete:
+                        for policy_arn, policy_name_to_delete in policies_to_delete:
+                            try:
+                                print(f"      {get_message('deleting_iam_policy', policy_name_to_delete)}")
+                                iam_client.delete_policy(PolicyArn=policy_arn)
+                                print(f"      ✅ {get_message('deleted_resource', 'IAM Policy', policy_name_to_delete)}")
+                            except ClientError as e:
+                                print(f"      ❌ {get_message('error_deleting_iam_policy', policy_name_to_delete, str(e))}")
+                                if DEBUG_MODE:
+                                    print(f"{get_message('debug_full_error')}")
+                                    print(json.dumps(e.response, indent=2, default=str))
+                    
+                except ClientError as e:
+                    if e.response["Error"]["Code"] == "NoSuchEntity":
+                        print(f"    {get_message('iam_role_not_found', role_name)}")
+                    else:
+                        print(f"    {get_message('error_checking_iam_role', role_name, str(e))}")
+                        if DEBUG_MODE:
+                            print(f"{get_message('debug_full_error')}")
+                            print(json.dumps(e.response, indent=2, default=str))
+                            
+            except Exception as e:
+                print(f"  {get_message('error_parsing_role_arn', role_arn, str(e))}")
+                if DEBUG_MODE:
+                    traceback.print_exc()
+    
+    except Exception as e:
+        print(f"{get_message('error_generic', str(e))}")
+        if DEBUG_MODE:
+            print(f"{get_message('debug_full_traceback')}")
+            traceback.print_exc()
+    
+    print(f"\n{get_message('iam_cleanup_completed')}")
+
+
 def cleanup_local_files():
     """Clean up local certificate files"""
-    print(f"\n{get_message('step8_title')}")
+    print(f"\n{get_message('step9_title')}")
     print(get_message("step_separator"))
 
     # Clean up certificates directory
@@ -831,11 +1078,51 @@ def cleanup_local_files():
                 debug_print(f"Error removing {filename}: {e}")
 
 
+def list_all_rules(iot_client):
+    """List all IoT rules"""
+    try:
+        response = iot_client.list_topic_rules()
+        return response.get('rules', [])
+    except Exception as e:
+        if DEBUG_MODE:
+            print(f"Error listing rules: {e}")
+        return []
+
+
 def main():
     global USER_LANG, messages, DEBUG_MODE
 
-    # Check for debug mode
-    DEBUG_MODE = "--debug" in sys.argv or "-d" in sys.argv
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(
+        description="Clean up AWS IoT Core sample resources created by workshop setup scripts"
+    )
+    parser.add_argument(
+        '--things-prefix',
+        default='Vehicle-VIN-',
+        help='Prefix for thing names (default: Vehicle-VIN-)'
+    )
+    parser.add_argument(
+        '--dry-run',
+        action='store_true',
+        help='Identify resources without deleting them'
+    )
+    parser.add_argument(
+        '--debug',
+        '-d',
+        action='store_true',
+        help='Enable debug mode with detailed API call logging'
+    )
+    
+    args = parser.parse_args()
+    
+    # Set debug mode
+    DEBUG_MODE = args.debug
+    
+    # Validate things prefix
+    if not validate_thing_prefix(args.things_prefix):
+        print(f"Error: Invalid things prefix '{args.things_prefix}'")
+        print("Prefix must start with a letter and contain only alphanumeric characters, hyphens, and underscores")
+        sys.exit(1)
 
     # Get language preference
     USER_LANG = get_language()
@@ -845,6 +1132,11 @@ def main():
 
     print(get_message("title"))
     print(get_message("separator"))
+    
+    if args.dry_run:
+        print(f"\n{'='*60}")
+        print("DRY RUN MODE - No resources will be deleted")
+        print(f"{'='*60}")
 
     # AWS context information
     print(f"\n{get_message('aws_context_info')}")
@@ -872,7 +1164,7 @@ def main():
 
     # Resources to cleanup
     print(f"\n{get_message('resources_to_cleanup')}")
-    print(get_message("things_prefix", SAMPLE_THING_PREFIX))
+    print(get_message("things_prefix", args.things_prefix))
     print(get_message("thing_types", ", ".join(SAMPLE_THING_TYPES)))
     print(get_message("thing_groups", ", ".join(SAMPLE_THING_GROUPS)))
     print(get_message("certificates_attached"))
@@ -880,22 +1172,23 @@ def main():
     print(get_message("policies_manual_review"))
 
     # Confirmation
-    response = input(f"\n{get_message('continue_cleanup')}").strip().lower()
-    if response not in [
-        "y",
-        "yes",
-        "si",
-        "sí",
-        "はい",
-        "hai",
-        "是",
-        "是的",
-        "sim",
-        "네",
-        "yes",
-    ]:
-        print(get_message("cleanup_cancelled"))
-        return
+    if not args.dry_run:
+        response = input(f"\n{get_message('continue_cleanup')}").strip().lower()
+        if response not in [
+            "y",
+            "yes",
+            "si",
+            "sí",
+            "はい",
+            "hai",
+            "是",
+            "是的",
+            "sim",
+            "네",
+            "yes",
+        ]:
+            print(get_message("cleanup_cancelled"))
+            return
 
     try:
         # Initialize IoT client
@@ -907,45 +1200,163 @@ def main():
             print(f"  {get_message('service_label')}: {iot_client._service_model.service_name}")
             print(f"  {get_message('api_version_label')}: {iot_client._service_model.api_version}")
 
+        # Initialize iot_helpers modules
+        try:
+            s3_client = boto3.client('s3')
+            iam_client = boto3.client('iam')
+            identifier = ResourceIdentifier(iot_client, s3_client, iam_client, USER_LANG, DEBUG_MODE)
+            dependency_handler = DependencyHandler(iot_client, s3_client, iam_client, USER_LANG, DEBUG_MODE)
+            engine = DeletionEngine({'iot_client': iot_client, 's3_client': s3_client, 'iam_client': iam_client}, DEBUG_MODE, args.dry_run, USER_LANG)
+            reporter = CleanupReporter(USER_LANG)
+            
+            if DEBUG_MODE:
+                print("\niot_helpers modules initialized successfully:")
+                print("  - ResourceIdentifier")
+                print("  - DependencyHandler")
+                print("  - DeletionEngine")
+                print("  - CleanupReporter")
+        except Exception as e:
+            print(f"\nError initializing iot_helpers modules: {e}")
+            if DEBUG_MODE:
+                traceback.print_exc()
+            print("\nFalling back to legacy cleanup methods...")
+            identifier = None
+            dependency_handler = None
+            engine = None
+            reporter = None
+
         # Learning moment
-        print(f"\n{get_message('learning_moment_title')}")
-        print(get_message("learning_moment_content"))
-        print(f"\n{get_message('next_cleanup')}")
-        input(get_message("press_enter_continue"))
+        if not args.dry_run:
+            print(f"\n{get_message('learning_moment_title')}")
+            print(get_message("learning_moment_content"))
+            print(f"\n{get_message('next_cleanup')}")
+            input(get_message("press_enter_continue"))
 
-        # Execute cleanup steps
-        certificates_cleaned = cleanup_sample_things(iot_client)
-        skipped_certificates = cleanup_orphaned_certificates(iot_client)
-        deleted_policies, skipped_policies = cleanup_sample_policies(iot_client)
-        cleanup_sample_thing_groups(iot_client)
-        cleanup_sample_thing_types(iot_client)
-        cleanup_device_shadows()
-        cleanup_sample_rules(iot_client)
-        cleanup_local_files()
+        # Execute cleanup steps using new modules if available
+        if engine and identifier and dependency_handler:
+            print(f"\n{'='*60}")
+            print("Using iot_helpers cleanup engine")
+            print(f"{'='*60}")
+            
+            # Get deletion order (1 = all resources)
+            deletion_order = dependency_handler.get_deletion_order(1)
+            
+            # Collect all statistics
+            all_stats = {}
+            
+            # Process each resource type in order
+            for resource_type in deletion_order:
+                if resource_type == 'iot_rules':
+                    # List all rules
+                    rules = list_all_rules(iot_client)
+                    if rules:
+                        stats = engine.delete_resources(
+                            resources=rules,
+                            resource_type='iot-rule',
+                            identifier=identifier,
+                            dependency_handler=dependency_handler,
+                            custom_prefix=args.things_prefix
+                        )
+                        all_stats['iot_rules'] = stats
+                elif resource_type == 'things':
+                    # List all things
+                    response = iot_client.list_things()
+                    things = response.get('things', [])
+                    if things:
+                        stats = engine.delete_resources(
+                            resources=things,
+                            resource_type='thing',
+                            identifier=identifier,
+                            dependency_handler=dependency_handler,
+                            custom_prefix=args.things_prefix
+                        )
+                        all_stats['things'] = stats
+                elif resource_type == 'certificates':
+                    # List all certificates
+                    response = iot_client.list_certificates()
+                    certificates = response.get('certificates', [])
+                    if certificates:
+                        stats = engine.delete_resources(
+                            resources=certificates,
+                            resource_type='certificate',
+                            identifier=identifier,
+                            dependency_handler=dependency_handler,
+                            custom_prefix=args.things_prefix
+                        )
+                        all_stats['certificates'] = stats
+                elif resource_type == 'thing_groups':
+                    # List all thing groups
+                    response = iot_client.list_thing_groups()
+                    groups = response.get('thingGroups', [])
+                    if groups:
+                        stats = engine.delete_resources(
+                            resources=groups,
+                            resource_type='thing-group',
+                            identifier=identifier,
+                            dependency_handler=dependency_handler,
+                            custom_prefix=args.things_prefix
+                        )
+                        all_stats['thing_groups'] = stats
+                elif resource_type == 'policies':
+                    # List all policies
+                    response = iot_client.list_policies()
+                    policies = response.get('policies', [])
+                    if policies:
+                        stats = engine.delete_resources(
+                            resources=policies,
+                            resource_type='policy',
+                            identifier=identifier,
+                            dependency_handler=dependency_handler,
+                            custom_prefix=args.things_prefix
+                        )
+                        all_stats['policies'] = stats
+            
+            # Report summary
+            if reporter:
+                reporter.report_summary(all_stats, args.dry_run)
+            
+            # Clean up local files
+            cleanup_local_files()
+            
+        else:
+            # Fall back to legacy cleanup methods
+            certificates_cleaned = cleanup_sample_things(iot_client)
+            skipped_certificates = cleanup_orphaned_certificates(iot_client)
+            deleted_policies, skipped_policies = cleanup_sample_policies(iot_client)
+            cleanup_sample_thing_groups(iot_client)
+            cleanup_sample_thing_types(iot_client)
+            cleanup_device_shadows()
+            cleanup_sample_rules(iot_client)
+            
+            # Clean up IAM resources created for IoT Rules
+            iam_client = boto3.client('iam')
+            cleanup_iam_resources(iot_client, iam_client)
+            
+            cleanup_local_files()
 
-        # Final summary
-        print(f"\n{get_message('cleanup_summary_title')}")
-        print(get_message("summary_separator"))
-        print(get_message("things_cleaned"))
-        print(get_message("certificates_cleaned"))
-        print(get_message("groups_cleaned"))
-        print(get_message("types_cleaned"))
-        print(get_message("local_files_cleaned"))
-        print(get_message("device_state_cleaned"))
-        print(f"\n{get_message('account_clean')}")
+            # Final summary
+            print(f"\n{get_message('cleanup_summary_title')}")
+            print(get_message("summary_separator"))
+            print(get_message("things_cleaned"))
+            print(get_message("certificates_cleaned"))
+            print(get_message("groups_cleaned"))
+            print(get_message("types_cleaned"))
+            print(get_message("local_files_cleaned"))
+            print(get_message("device_state_cleaned"))
+            print(f"\n{get_message('account_clean')}")
 
-        # Certificate and policy summary
-        if skipped_certificates > 0:
-            print(f"\n{get_message('certificate_cleanup_summary')}")
-            print(get_message("cleaned_certificates", certificates_cleaned))
-            print(get_message("skipped_certificates", skipped_certificates))
-            print(f"\n{get_message('skipped_certs_production')}")
-            print(get_message("manual_cert_deletion"))
+            # Certificate and policy summary
+            if skipped_certificates > 0:
+                print(f"\n{get_message('certificate_cleanup_summary')}")
+                print(get_message("cleaned_certificates", certificates_cleaned))
+                print(get_message("skipped_certificates", skipped_certificates))
+                print(f"\n{get_message('skipped_certs_production')}")
+                print(get_message("manual_cert_deletion"))
 
-        if skipped_policies > 0:
-            print(f"\n{get_message('skipped_policies_note')}")
-            print(get_message("policies_cleanup_auto"))
-            print(get_message("policies_manual_cleanup"))
+            if skipped_policies > 0:
+                print(f"\n{get_message('skipped_policies_note')}")
+                print(get_message("policies_cleanup_auto"))
+                print(get_message("policies_manual_cleanup"))
 
         if DEBUG_MODE:
             print(f"\n{get_message('debug_cleanup_completed')}")

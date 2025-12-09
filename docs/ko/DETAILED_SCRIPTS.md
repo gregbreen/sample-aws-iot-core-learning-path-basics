@@ -52,6 +52,252 @@
   - [학습 시나리오](#학습-시나리오-1)
   - [필요한 AWS IAM 권한](#필요한-iam-권한-1)
 
+
+## 샘플 데이터 설정
+
+### 목적
+실습 학습을 위한 샘플 AWS IoT 리소스를 생성합니다. 이 스크립트는 Thing Types, Thing Groups 및 Things(시뮬레이션된 차량)를 포함한 완전한 IoT 환경을 설정하여 다른 모든 학습 스크립트와 함께 사용할 수 있습니다.
+
+### 실행 방법
+
+**기본 사용법:**
+```bash
+python scripts/setup_sample_data.py
+```
+
+**디버그 모드 사용(상세한 API 로깅):**
+```bash
+python scripts/setup_sample_data.py --debug
+```
+
+**사용자 정의 접두사 사용:**
+```bash
+python scripts/setup_sample_data.py --things-prefix Dev
+```
+
+### 명령줄 옵션
+
+#### `--things-prefix PREFIX`
+Thing 이름의 접두사를 사용자 정의하여 여러 개의 격리된 환경을 만들거나 이름 충돌을 방지합니다.
+
+**검증 규칙:**
+- 3-20자여야 합니다
+- 영숫자만 가능(a-z, A-Z, 0-9)
+- 공백이나 특수 문자 사용 불가
+- 대소문자 구분
+
+**예시:**
+```bash
+# 개발 환경
+python scripts/setup_sample_data.py --things-prefix Dev
+
+# 테스트 환경
+python scripts/setup_sample_data.py --things-prefix Test
+
+# 팀 환경
+python scripts/setup_sample_data.py --things-prefix TeamA
+```
+
+
+**생성되는 Thing 이름:**
+- 기본 접두사: `Vehicle-VIN-001`, `Vehicle-VIN-002`, ...
+- `--things-prefix Dev` 사용 시: `Dev-VIN-001`, `Dev-VIN-002`, ...
+
+#### `--debug`
+모든 AWS API 호출, 요청 매개변수 및 응답 페이로드를 표시하는 상세 로깅을 활성화합니다. AWS IoT API 학습 또는 문제 해결에 유용합니다.
+
+### 생성되는 리소스
+
+스크립트는 AWS IoT 리소스의 완전한 계층 구조를 생성합니다:
+
+#### Thing Types (3개)
+검색 가능한 속성을 가진 차량 카테고리를 정의하는 템플릿:
+- **SedanVehicle** - 표준 승용차
+- **SUVVehicle** - 스포츠 유틸리티 차량
+- **TruckVehicle** - 상업용 차량
+
+#### Thing Groups (4개)
+플릿 관리를 위한 조직 컨테이너:
+- **CustomerFleet** - 모든 고객 차량의 메인 그룹
+- **TestFleet** - 테스트 및 개발 차량
+- **MaintenanceFleet** - 서비스가 필요한 차량
+- **DealerFleet** - 딜러 재고
+
+#### Things (20개)
+속성을 가진 개별 디바이스 표현:
+- 이름: `{prefix}-VIN-001`부터 `{prefix}-VIN-020`까지
+- 속성: VIN, 모델, 연도, 색상, 위치
+- 타입 분포: Sedan, SUV, Truck 혼합
+- 그룹 멤버십: 적절한 그룹에 할당
+
+### 보안 기능
+
+**중복 확인:**
+- 생성 전 기존 리소스 확인
+- 리소스가 이미 존재하는 경우 생성 건너뛰기
+- 중복 이름 오류 방지
+
+**입력 검증:**
+- 생성 전 접두사 형식 검증
+- 명확한 오류 메시지 제공
+- 검증 실패 시 올바른 형식 제안
+
+**멱등 작업:**
+- 여러 번 실행해도 안전
+- 중복 리소스 생성 안 함
+- 기존 리소스 상태 보고
+
+## 샘플 데이터 정리
+
+### 목적
+설정 스크립트로 생성된 AWS IoT 리소스를 안전하게 제거합니다. 이 스크립트는 실수로 인한 삭제를 방지하기 위한 보안 기능을 갖춘 완전한 정리를 제공하며, 미리보기를 위한 드라이런 모드와 대상 정리를 위한 접두사 지원을 포함합니다.
+
+### 실행 방법
+
+**기본 사용법(대화형 정리):**
+```bash
+python scripts/cleanup_sample_data.py
+```
+
+**드라이런 모드(삭제하지 않고 미리보기):**
+```bash
+python scripts/cleanup_sample_data.py --dry-run
+```
+
+**접두사를 지정한 대상 정리:**
+```bash
+python scripts/cleanup_sample_data.py --things-prefix Dev
+```
+
+**옵션 조합:**
+```bash
+# 특정 접두사의 정리 미리보기
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Test
+
+# 상세 로깅과 함께 정리
+python scripts/cleanup_sample_data.py --debug --things-prefix Prod
+```
+
+### 명령줄 옵션
+
+#### `--dry-run`
+실제로 삭제하지 않고 삭제될 리소스를 표시하는 미리보기 모드입니다.
+
+**기능:**
+- 조건과 일치하는 모든 리소스 식별
+- 리소스의 상세한 요약 표시
+- AWS에 변경 사항 적용 안 함
+- 실제 정리 전 확인에 유용
+
+**출력 예시:**
+```
+🔍 드라이런 모드 - 리소스가 삭제되지 않습니다
+================================================
+
+📊 삭제될 리소스:
+   • Things: 20 (Vehicle-VIN-001부터 Vehicle-VIN-020까지)
+   • 인증서: 5
+   • Thing Types: 3 (SedanVehicle, SUVVehicle, TruckVehicle)
+   • Thing Groups: 4 (CustomerFleet, TestFleet, MaintenanceFleet, DealerFleet)
+
+💡 실제 정리를 실행하려면 --dry-run 없이 실행하세요
+```
+
+#### `--things-prefix PREFIX`
+특정 접두사를 가진 Things에 대해 정리를 대상화하여 환경별 선택적 정리를 가능하게 합니다.
+
+**검증 규칙:**
+- 3-20자여야 합니다
+- 영숫자만 가능(a-z, A-Z, 0-9)
+- 공백이나 특수 문자 사용 불가
+- 대소문자 구분
+- 설정 시 사용한 접두사와 일치해야 합니다
+
+**동작:**
+- 지정된 접두사로 시작하는 Things만 정리
+- 해당 Things에 연결된 인증서 정리
+- Thing Types 및 Thing Groups 유지(환경 간 공유)
+- 접두사별 리소스 요약 제공
+
+**예시:**
+```bash
+# 개발 환경만 정리
+python scripts/cleanup_sample_data.py --things-prefix Dev
+
+# 테스트 환경 정리 미리보기
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Test
+
+# 특정 팀 환경 정리
+python scripts/cleanup_sample_data.py --things-prefix TeamA
+```
+
+#### `--debug`
+모든 AWS API 호출, 요청 매개변수 및 응답 페이로드를 표시하는 상세 로깅을 활성화합니다.
+
+### 정리 프로세스
+
+스크립트는 리소스 종속성을 처리하기 위해 특정 순서를 따릅니다:
+
+#### 단계 1: 인증서
+- Things에서 Certificates 분리
+- Certificates에서 Policies 분리
+- Certificates 비활성화
+- Certificates 삭제
+- 로컬 인증서 파일 삭제
+
+#### 단계 2: Things
+- IoT Registry에서 Things 삭제
+- Thing Group 종속성 처리
+- Thing 메타데이터 정리
+
+#### 단계 3: Thing Groups
+- 빈 Thing Groups 삭제
+- 그룹 계층 구조 존중
+- 부모-자식 관계 처리
+
+#### 단계 4: Thing Types
+- Thing Types 사용 중단(삭제 불가)
+- 타입을 사용 불가로 표시
+- 기록 데이터 유지
+
+### 보안 기능
+
+**대화형 확인:**
+```
+⚠️ 이 작업은 다음을 삭제합니다:
+   • 20개의 Things (Vehicle-VIN-001부터 Vehicle-VIN-020까지)
+   • 5개의 인증서 및 로컬 파일
+   • 3개의 Thing Types(사용 중단됨)
+   • 4개의 Thing Groups
+
+정리를 계속하시겠습니까? (y/N):
+```
+
+**드라이런 모드:**
+- 실행 전 변경 사항 미리보기
+- 정리 범위 확인
+- 실수로 인한 삭제 방지
+
+**접두사별 대상 정리:**
+- 환경별 리소스만 정리
+- 다른 환경 유지
+- 잘못된 리소스 삭제 위험 완화
+
+**오류 처리:**
+- 하나가 실패해도 다른 리소스로 계속 진행
+- 오류를 명확하게 보고
+- 성공/실패한 작업의 요약 제공
+
+### 모범 사례
+
+1. **항상 먼저 --dry-run 사용**하여 변경 사항 미리보기
+2. **여러 환경에는 접두사 사용**하여 선택적 정리 활성화
+3. **정리를 확인하기 전에 범위 확인**
+4. **정리 전 중요한 인증서의 백업 유지**
+5. **다른 환경에 사용한 접두사 문서화**
+6. **사용하지 않는 테스트 환경 정기적으로 정리**
+
+
 ## IoT 레지스트리 API 탐색기
 
 ### 목적

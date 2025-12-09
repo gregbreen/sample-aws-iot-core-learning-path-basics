@@ -6,6 +6,7 @@
 
 - [完全学習ワークフロー](#完全学習ワークフロー)
   - [推奨学習シーケンス](#推奨学習シーケンス)
+- [セットアップとクリーンアップの例](#セットアップとクリーンアップの例)
 - [サンプルデータセットアップ例](#サンプルデータセットアップ例)
   - [インタラクティブ体験ウォークスルー](#インタラクティブ体験ウォークスルー)
   - [デバッグモード例](#デバッグモード例)
@@ -67,6 +68,95 @@ python cleanup_sample_data.py
 ```
 
 **初期セットアップスクリプト以外は、学習の興味に基づいて独立して実行できます。**
+
+
+## セットアップとクリーンアップの例
+
+### 例1: カスタムプレフィックスでのセットアップ
+
+**シナリオ:** カスタム命名規則で別個の開発環境を作成します。
+
+```bash
+# カスタムプレフィックスで開発環境を作成
+python scripts/setup_sample_data.py --things-prefix Dev
+
+# 作成されたリソースを確認
+python scripts/iot_registry_explorer.py
+# オプション1を選択（Thingsをリスト）
+# 表示されます: Dev-VIN-001、Dev-VIN-002など
+```
+
+### 例2: 複数環境のセットアップ
+
+**シナリオ:** 開発、テスト、本番用の別個の環境を作成します。
+
+```bash
+# 開発環境
+python scripts/setup_sample_data.py --things-prefix Dev
+
+# テスト環境
+python scripts/setup_sample_data.py --things-prefix Test
+
+# 本番環境
+python scripts/setup_sample_data.py --things-prefix Prod
+```
+
+**結果:**
+- Dev環境: Dev-VIN-001からDev-VIN-020
+- Test環境: Test-VIN-001からTest-VIN-020
+- Prod環境: Prod-VIN-001からProd-VIN-020
+- Thing TypesとGroupsは環境間で共有
+
+### 例3: クリーンアッププレビューのためのドライランモード
+
+**シナリオ:** 実際のクリーンアップを実行する前に、削除されるリソースを確認します。
+
+```bash
+# 何も削除せずにクリーンアップをプレビュー
+python scripts/cleanup_sample_data.py --dry-run
+```
+
+### 例4: 特定環境の対象クリーンアップ
+
+**シナリオ:** テストと本番を保持しながら、開発環境のみをクリーンアップします。
+
+```bash
+# ステップ1: 開発環境のクリーンアッププレビュー
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Dev
+
+# ステップ2: 出力を確認し、範囲を確認
+
+# ステップ3: 開発環境のみをクリーンアップ
+python scripts/cleanup_sample_data.py --things-prefix Dev
+```
+
+### 例5: プレフィックスを使用した完全なワークフロー
+
+**シナリオ:** カスタムプレフィックスを使用したセットアップ、使用、クリーンアップの完全なサイクル。
+
+```bash
+# 1. テスト環境を作成
+python scripts/setup_sample_data.py --things-prefix Test
+
+# 2. リソースを探索
+python scripts/iot_registry_explorer.py
+# Testプレフィックス付きのThingsが表示されます
+
+# 3. テストデバイスの証明書を作成
+python scripts/certificate_manager.py
+# Test-VIN-001、Test-VIN-002などを選択
+
+# 4. MQTT通信をテスト
+python scripts/mqtt_client_explorer.py
+# テストデバイスとして接続
+
+# 5. クリーンアッププレビュー
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Test
+
+# 6. テスト環境をクリーンアップ
+python scripts/cleanup_sample_data.py --things-prefix Test
+```
+
 
 ## サンプルデータセットアップ例
 

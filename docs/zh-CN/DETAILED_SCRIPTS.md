@@ -52,6 +52,251 @@
   - [学习场景](#学习场景-1)
   - [所需的 AWS IAM 权限](#所需的-iam-权限-1)
 
+
+## 示例数据设置
+
+### 目的
+创建用于实践学习的示例 AWS IoT 资源。此脚本设置完整的 IoT 环境，包括 Thing Types、Thing Groups 和 Things（模拟车辆），您可以将其与所有其他学习脚本一起使用。
+
+### 运行方法
+
+**基本用法:**
+```bash
+python scripts/setup_sample_data.py
+```
+
+**使用调试模式（详细的 API 日志）:**
+```bash
+python scripts/setup_sample_data.py --debug
+```
+
+**使用自定义前缀:**
+```bash
+python scripts/setup_sample_data.py --things-prefix Dev
+```
+
+### 命令行选项
+
+#### `--things-prefix PREFIX`
+自定义 Thing 名称的前缀，以创建多个隔离的环境或避免名称冲突。
+
+**验证规则:**
+- 必须为 3-20 个字符
+- 仅限字母数字（a-z、A-Z、0-9）
+- 不能包含空格或特殊字符
+- 区分大小写
+
+**示例:**
+```bash
+# 开发环境
+python scripts/setup_sample_data.py --things-prefix Dev
+
+# 测试环境
+python scripts/setup_sample_data.py --things-prefix Test
+
+# 团队环境
+python scripts/setup_sample_data.py --things-prefix TeamA
+```
+
+**生成的 Thing 名称:**
+- 默认前缀: `Vehicle-VIN-001`, `Vehicle-VIN-002`, ...
+- 使用 `--things-prefix Dev`: `Dev-VIN-001`, `Dev-VIN-002`, ...
+
+#### `--debug`
+启用详细日志记录，显示所有 AWS API 调用、请求参数和响应负载。对学习 AWS IoT API 或排查问题很有用。
+
+### 创建的资源
+
+脚本创建完整的 AWS IoT 资源层次结构:
+
+#### Thing Types (3个)
+定义具有可搜索属性的车辆类别的模板:
+- **SedanVehicle** - 标准乘用车
+- **SUVVehicle** - 运动型多用途车
+- **TruckVehicle** - 商用车辆
+
+#### Thing Groups (4个)
+用于车队管理的组织容器:
+- **CustomerFleet** - 所有客户车辆的主组
+- **TestFleet** - 测试和开发车辆
+- **MaintenanceFleet** - 需要维修的车辆
+- **DealerFleet** - 经销商库存
+
+#### Things (20个)
+具有属性的单个设备表示:
+- 名称: `{prefix}-VIN-001` 到 `{prefix}-VIN-020`
+- 属性: VIN、型号、年份、颜色、位置
+- 类型分布: Sedan、SUV、Truck 混合
+- 组成员资格: 分配到适当的组
+
+### 安全功能
+
+**重复检查:**
+- 创建前检查现有资源
+- 如果资源已存在则跳过创建
+- 防止重复名称错误
+
+**输入验证:**
+- 创建前验证前缀格式
+- 提供清晰的错误消息
+- 如果验证失败则建议正确格式
+
+**幂等操作:**
+- 多次运行安全
+- 不创建重复资源
+- 报告现有资源状态
+
+## 示例数据清理
+
+### 目的
+安全删除由设置脚本创建的 AWS IoT 资源。此脚本提供完整的清理功能，具有防止意外删除的安全功能，包括用于预览的试运行模式和用于定向清理的前缀支持。
+
+### 运行方法
+
+**基本用法（交互式清理）:**
+```bash
+python scripts/cleanup_sample_data.py
+```
+
+**试运行模式（预览而不删除）:**
+```bash
+python scripts/cleanup_sample_data.py --dry-run
+```
+
+**使用前缀的定向清理:**
+```bash
+python scripts/cleanup_sample_data.py --things-prefix Dev
+```
+
+**组合选项:**
+```bash
+# 预览特定前缀的清理
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Test
+
+# 使用详细日志进行清理
+python scripts/cleanup_sample_data.py --debug --things-prefix Prod
+```
+
+### 命令行选项
+
+#### `--dry-run`
+预览模式，显示将要删除的资源而不实际删除它们。
+
+**功能:**
+- 识别所有匹配条件的资源
+- 显示资源的详细摘要
+- 不对 AWS 进行任何更改
+- 对实际清理前的确认很有用
+
+**输出示例:**
+```
+🔍 试运行模式 - 不会删除任何资源
+================================================
+
+📊 将要删除的资源:
+   • Things: 20 (Vehicle-VIN-001 到 Vehicle-VIN-020)
+   • 证书: 5
+   • Thing Types: 3 (SedanVehicle、SUVVehicle、TruckVehicle)
+   • Thing Groups: 4 (CustomerFleet、TestFleet、MaintenanceFleet、DealerFleet)
+
+💡 要执行实际清理，请在不使用 --dry-run 的情况下运行
+```
+
+#### `--things-prefix PREFIX`
+将清理定向到具有特定前缀的 Things，允许按环境进行选择性清理。
+
+**验证规则:**
+- 必须为 3-20 个字符
+- 仅限字母数字（a-z、A-Z、0-9）
+- 不能包含空格或特殊字符
+- 区分大小写
+- 必须与设置期间使用的前缀匹配
+
+**行为:**
+- 仅清理以指定前缀开头的 Things
+- 清理与这些 Things 关联的证书
+- 保留 Thing Types 和 Thing Groups（在环境之间共享）
+- 提供特定于前缀的资源摘要
+
+**示例:**
+```bash
+# 仅清理开发环境
+python scripts/cleanup_sample_data.py --things-prefix Dev
+
+# 预览测试环境清理
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Test
+
+# 清理特定团队环境
+python scripts/cleanup_sample_data.py --things-prefix TeamA
+```
+
+#### `--debug`
+启用详细日志记录，显示所有 AWS API 调用、请求参数和响应负载。
+
+### 清理过程
+
+脚本遵循特定顺序来处理资源依赖关系:
+
+#### 步骤 1: 证书
+- 从 Things 分离 Certificates
+- 从 Certificates 分离 Policies
+- 停用 Certificates
+- 删除 Certificates
+- 删除本地证书文件
+
+#### 步骤 2: Things
+- 从 IoT Registry 删除 Things
+- 处理 Thing Group 依赖关系
+- 清理 Thing 元数据
+
+#### 步骤 3: Thing Groups
+- 删除空的 Thing Groups
+- 尊重组层次结构
+- 处理父子关系
+
+#### 步骤 4: Thing Types
+- 弃用 Thing Types（无法删除）
+- 将类型标记为不可用
+- 保留历史数据
+
+### 安全功能
+
+**交互式确认:**
+```
+⚠️ 此操作将删除:
+   • 20 个 Things (Vehicle-VIN-001 到 Vehicle-VIN-020)
+   • 5 个证书和本地文件
+   • 3 个 Thing Types（将被弃用）
+   • 4 个 Thing Groups
+
+是否继续清理？ (y/N):
+```
+
+**试运行模式:**
+- 执行前预览更改
+- 确认清理范围
+- 防止意外删除
+
+**按前缀定向清理:**
+- 仅清理特定于环境的资源
+- 保留其他环境
+- 降低错误删除资源的风险
+
+**错误处理:**
+- 如果一个失败，继续处理其他资源
+- 清楚地报告错误
+- 提供成功/失败操作的摘要
+
+### 最佳实践
+
+1. **始终先使用 --dry-run** 预览更改
+2. **对多个环境使用前缀** 以启用选择性清理
+3. **在确认清理之前确认范围**
+4. **在清理之前保留重要证书的备份**
+5. **记录用于不同环境的前缀**
+6. **定期清理未使用的测试环境**
+
+
 ## IoT Registry API 探索器
 
 ### 目的

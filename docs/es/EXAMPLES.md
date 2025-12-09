@@ -7,6 +7,7 @@ Esta guía proporciona ejemplos completos de flujos de trabajo y escenarios de u
 ## Tabla de Contenidos
 
 - [Flujo de Trabajo Completo](#flujo-de-trabajo-completo)
+- [Ejemplos de Configuración y Limpieza](#ejemplos-de-configuración-y-limpieza)
 - [Escenarios de Aprendizaje](#escenarios-de-aprendizaje)
 - [Ejemplos de MQTT](#ejemplos-de-mqtt)
 - [Ejemplos de AWS IoT Device Shadow service](#ejemplos-de-device-shadow)
@@ -292,6 +293,255 @@ python scripts/cleanup_sample_data.py
 ...
 
 🎉 Limpieza completada exitosamente!
+```
+
+## Ejemplos de Configuración y Limpieza
+
+### Ejemplo 1: Configuración con Prefijo Personalizado
+
+**Escenario:** Crear un entorno de desarrollo separado con nomenclatura personalizada.
+
+```bash
+# Crear entorno de desarrollo con prefijo personalizado
+python scripts/setup_sample_data.py --things-prefix Dev
+
+# Verificar recursos creados
+python scripts/iot_registry_explorer.py
+# Seleccionar opción 1 (Listar Things)
+# Verás: Dev-VIN-001, Dev-VIN-002, etc.
+```
+
+**Salida Esperada:**
+```
+🚀 Configurando Datos de Ejemplo de AWS IoT Core
+================================================
+🎯 Usando prefijo de Thing: Dev
+
+🔧 Paso 1: Creando Thing Types
+✅ Created Thing Type: SedanVehicle
+✅ Created Thing Type: SUVVehicle
+✅ Created Thing Type: TruckVehicle
+
+🔧 Paso 2: Creando Thing Groups
+✅ Created Thing Group: CustomerFleet
+✅ Created Thing Group: TestFleet
+✅ Created Thing Group: MaintenanceFleet
+✅ Created Thing Group: DealerFleet
+
+🔧 Paso 3: Creando Things
+✅ Created Thing: Dev-VIN-001
+✅ Created Thing: Dev-VIN-002
+...
+✅ Created Thing: Dev-VIN-020
+
+🎉 Configuración completada exitosamente!
+📊 Resumen de recursos creados:
+   • Thing Types: 3
+   • Thing Groups: 4
+   • Things: 20 (prefijo: Dev)
+```
+
+### Ejemplo 2: Configuración de Múltiples Entornos
+
+**Escenario:** Crear entornos separados para desarrollo, pruebas y producción.
+
+```bash
+# Entorno de desarrollo
+python scripts/setup_sample_data.py --things-prefix Dev
+
+# Entorno de pruebas
+python scripts/setup_sample_data.py --things-prefix Test
+
+# Entorno de producción
+python scripts/setup_sample_data.py --things-prefix Prod
+```
+
+**Resultado:**
+- Entorno Dev: Dev-VIN-001 a Dev-VIN-020
+- Entorno Test: Test-VIN-001 a Test-VIN-020
+- Entorno Prod: Prod-VIN-001 a Prod-VIN-020
+- Thing Types y Groups compartidos entre entornos
+
+### Ejemplo 3: Modo de Ejecución en Seco para Vista Previa de Limpieza
+
+**Escenario:** Verificar qué recursos serían eliminados antes de realizar la limpieza real.
+
+```bash
+# Vista previa de limpieza sin eliminar nada
+python scripts/cleanup_sample_data.py --dry-run
+```
+
+**Salida Esperada:**
+```
+🔍 MODO DE EJECUCIÓN EN SECO - No se eliminarán recursos
+================================================
+
+📊 Recursos que serían eliminados:
+   • Things: 20 (Vehicle-VIN-001 a Vehicle-VIN-020)
+   • Certificados: 5
+   • Thing Types: 3 (SedanVehicle, SUVVehicle, TruckVehicle)
+   • Thing Groups: 4 (CustomerFleet, TestFleet, MaintenanceFleet, DealerFleet)
+
+💡 Para realizar la limpieza real, ejecutar sin --dry-run
+```
+
+### Ejemplo 4: Limpieza Dirigida de Entorno Específico
+
+**Escenario:** Limpiar solo el entorno de desarrollo mientras se preservan pruebas y producción.
+
+```bash
+# Paso 1: Vista previa de limpieza de entorno de desarrollo
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Dev
+
+# Paso 2: Revisar salida y confirmar alcance
+
+# Paso 3: Limpiar solo entorno de desarrollo
+python scripts/cleanup_sample_data.py --things-prefix Dev
+```
+
+**Salida Esperada:**
+```
+🧹 Limpieza de Datos de Ejemplo de AWS IoT
+==========================================
+🎯 Dirigido a Things con prefijo: Dev
+
+⚠️ Esta operación eliminará:
+   • 20 Things (Dev-VIN-001 a Dev-VIN-020)
+   • 3 Certificados asociados
+   • Thing Types y Groups compartidos permanecerán
+
+¿Continuar con la limpieza? (y/N): y
+
+🔧 Limpiando recursos con prefijo 'Dev'...
+✅ Thing eliminado: Dev-VIN-001
+✅ Thing eliminado: Dev-VIN-002
+...
+✅ Thing eliminado: Dev-VIN-020
+
+🎉 Limpieza completada exitosamente!
+📊 Resumen:
+   • Things eliminados: 20 (prefijo: Dev)
+   • Certificados eliminados: 3
+   • Thing Types y Groups preservados para otros entornos
+```
+
+### Ejemplo 5: Flujo de Trabajo Completo con Prefijos
+
+**Escenario:** Ciclo completo de configuración, uso y limpieza con prefijos personalizados.
+
+```bash
+# 1. Crear entorno de prueba
+python scripts/setup_sample_data.py --things-prefix Test
+
+# 2. Explorar recursos
+python scripts/iot_registry_explorer.py
+# Verás Things con prefijo Test
+
+# 3. Crear certificados para dispositivos de prueba
+python scripts/certificate_manager.py
+# Seleccionar Test-VIN-001, Test-VIN-002, etc.
+
+# 4. Probar comunicación MQTT
+python scripts/mqtt_client_explorer.py
+# Conectar como dispositivos de prueba
+
+# 5. Vista previa de limpieza
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Test
+
+# 6. Limpiar entorno de prueba
+python scripts/cleanup_sample_data.py --things-prefix Test
+```
+
+### Ejemplo 6: Configuración de Taller de Equipo
+
+**Escenario:** Cada miembro del equipo tiene su propio entorno aislado.
+
+```bash
+# Alice crea su entorno
+python scripts/setup_sample_data.py --things-prefix Alice
+
+# Bob crea su entorno
+python scripts/setup_sample_data.py --things-prefix Bob
+
+# Carol crea su entorno
+python scripts/setup_sample_data.py --things-prefix Carol
+
+# Cada persona trabaja independientemente
+# Alice explora sus recursos
+python scripts/iot_registry_explorer.py
+# Ve: Alice-VIN-001, Alice-VIN-002, etc.
+
+# Al final del taller, cada persona limpia su propio entorno
+python scripts/cleanup_sample_data.py --things-prefix Alice
+python scripts/cleanup_sample_data.py --things-prefix Bob
+python scripts/cleanup_sample_data.py --things-prefix Carol
+```
+
+### Ejemplo 7: Validación de Prefijo
+
+**Escenario:** Entender las reglas de validación de prefijos.
+
+```bash
+# ✅ Prefijos válidos
+python scripts/setup_sample_data.py --things-prefix Dev
+python scripts/setup_sample_data.py --things-prefix Test123
+python scripts/setup_sample_data.py --things-prefix MyTeam
+
+# ❌ Prefijos inválidos
+python scripts/setup_sample_data.py --things-prefix AB
+# Error: Prefijo debe tener al menos 3 caracteres
+
+python scripts/setup_sample_data.py --things-prefix My-Team
+# Error: Solo caracteres alfanuméricos permitidos
+
+python scripts/setup_sample_data.py --things-prefix "My Team"
+# Error: Sin espacios permitidos
+
+python scripts/setup_sample_data.py --things-prefix VeryLongPrefixNameThatExceedsLimit
+# Error: Prefijo debe tener máximo 20 caracteres
+```
+
+### Ejemplo 8: Modo Debug para Aprendizaje
+
+**Escenario:** Aprender las APIs de AWS IoT viendo llamadas detalladas de API.
+
+```bash
+# Configuración con logging detallado de API
+python scripts/setup_sample_data.py --debug --things-prefix Learn
+
+# Verás salida detallada como:
+# 🔄 API Call: CreateThingType
+# 📤 Request: {"thingTypeName": "SedanVehicle", ...}
+# 📥 Response: {"thingTypeName": "SedanVehicle", "thingTypeArn": "...", ...}
+```
+
+### Ejemplo 9: Limpieza con Modo Debug
+
+**Escenario:** Solucionar problemas de limpieza con logging detallado.
+
+```bash
+# Limpieza con logging detallado de API
+python scripts/cleanup_sample_data.py --debug --things-prefix Test
+
+# Verás operaciones detalladas:
+# 🔄 API Call: DetachThingPrincipal
+# 📤 Request: {"thingName": "Test-VIN-001", "principal": "..."}
+# 📥 Response: {}
+# ✅ Certificado desadjuntado de Test-VIN-001
+```
+
+### Ejemplo 10: Combinación de Todas las Opciones
+
+**Escenario:** Usar todas las características juntas para máximo control.
+
+```bash
+# Vista previa de limpieza con prefijo y debug
+python scripts/cleanup_sample_data.py --dry-run --things-prefix Dev --debug
+
+# Esto proporciona:
+# - Vista previa sin eliminaciones (--dry-run)
+# - Dirigido a entorno específico (--things-prefix Dev)
+# - Logging detallado de API (--debug)
 ```
 
 ## Escenarios de Aprendizaje

@@ -214,8 +214,34 @@ python scripts/setup_sample_data.py
 
 ### 1. 📊 Sample Data Setup
 **File**: `scripts/setup_sample_data.py`
-**Purpose**: Creates realistic IoT resources for hands-on learning
-**Creates**: 20 Things, 3 Thing Types, 4 Thing Groups
+**Purpose**: Creates realistic IoT resources for hands-on learning with automatic tagging
+**Creates**: 20 Things, 3 Thing Types, 4 Thing Groups, IoT Rules (with workshop tags)
+
+**Key Features:**
+- **Automatic Tagging**: All resources are tagged for safe cleanup identification
+- **Custom Prefixes**: Support for custom thing name prefixes
+- **Multi-Language**: Full internationalization support
+
+**Usage Examples:**
+```bash
+# Basic setup with default prefix (Vehicle-VIN-)
+python scripts/setup_sample_data.py
+
+# Setup with custom prefix
+python scripts/setup_sample_data.py --things-prefix "MyDevice-"
+
+# Setup with language selection
+export AWS_IOT_LANG=es
+python scripts/setup_sample_data.py
+```
+
+**Resource Tagging:**
+All created resources receive these tags for safe identification:
+- `workshop-resource: true` - Marks as workshop-created
+- `created-by: setup-script` - Identifies the creating script
+- `workshop-name: iot-core-basics` - Groups by workshop name
+
+These tags enable the cleanup script to safely identify and remove only workshop resources, protecting your production IoT infrastructure.
 
 ### 2. 🔍 IoT Registry API Explorer
 **File**: `scripts/iot_registry_explorer.py`
@@ -254,21 +280,187 @@ python scripts/setup_sample_data.py
 
 **⚠️ IMPORTANT**: Always run cleanup when finished learning to avoid ongoing AWS charges.
 
+### Basic Usage
+
 ```bash
+# Standard cleanup - removes all workshop resources
 python scripts/cleanup_sample_data.py
+
+# Preview what will be deleted (recommended first step)
+python scripts/cleanup_sample_data.py --dry-run
+
+# Cleanup with custom prefix
+python scripts/cleanup_sample_data.py --things-prefix "MyDevice-"
+
+# Enable debug mode for detailed API logging
+python scripts/cleanup_sample_data.py --debug
 ```
 
-**What gets cleaned up:**
-- ✅ Sample Things (Vehicle-VIN-001, Vehicle-VIN-002, etc.)
-- ✅ Associated certificates and policies
-- ✅ Thing Types and Thing Groups
-- ✅ Local certificate files
-- ✅ IoT Rules (if any created)
+### Command-Line Parameters
 
-**What's protected:**
-- ❌ Existing production IoT resources
-- ❌ Non-sample certificates and policies
-- ❌ Resources not created by learning scripts
+| Parameter | Description | Default | Example |
+|-----------|-------------|---------|---------|
+| `--things-prefix` | Custom prefix for thing names | `Vehicle-VIN-` | `--things-prefix "TestDevice-"` |
+| `--dry-run` | Preview cleanup without deleting | `False` | `--dry-run` |
+| `--debug` | Enable detailed API logging | `False` | `--debug` |
+
+### How Resource Identification Works
+
+The cleanup script uses a **dual identification system** to safely identify workshop resources:
+
+**1. Tag-Based Identification (Primary Method)**
+- Resources created by setup scripts are automatically tagged with:
+  - `workshop-resource: true` - Identifies workshop-created resources
+  - `created-by: setup-script` - Tracks which script created the resource
+  - `workshop-name: iot-core-basics` - Groups resources by workshop
+- **Advantage**: Most reliable method, works regardless of naming
+
+**2. Naming Convention Fallback (Secondary Method)**
+- If tags are not present, the script identifies resources by naming patterns:
+  - Things: Match the `--things-prefix` pattern (default: `Vehicle-VIN-`)
+  - Thing Types: `SedanVehicle`, `SUVVehicle`, `TruckVehicle`
+  - Thing Groups: `CustomerFleet`, `TestFleet`, `MaintenanceFleet`, `DealerFleet`
+  - IoT Rules: Match `*Rule`, `rule_*`, or `*_workshop_*` patterns
+- **Advantage**: Works with resources created before tagging was implemented
+
+### Dry-Run Mode (Recommended First Step)
+
+**Always preview cleanup operations before executing them:**
+
+```bash
+python scripts/cleanup_sample_data.py --dry-run
+```
+
+**Dry-run mode will:**
+- ✅ Identify all workshop resources that would be deleted
+- ✅ Display a detailed list of resources by type
+- ✅ Show the deletion order (respects dependencies)
+- ✅ Generate a summary report
+- ❌ **NOT delete any resources**
+
+**Example dry-run output:**
+```
+🔍 DRY RUN MODE - No resources will be deleted
+
+Identified Resources:
+  Things: 20 resources
+    - Vehicle-VIN-001
+    - Vehicle-VIN-002
+    ...
+  Certificates: 20 resources
+  Thing Groups: 4 resources
+  Thing Types: 3 resources
+  IoT Rules: 1 resource
+
+Total: 48 resources would be deleted
+```
+
+### Custom Prefix Usage
+
+If you created resources with a custom prefix during setup, use the same prefix for cleanup:
+
+```bash
+# Setup with custom prefix
+python scripts/setup_sample_data.py --things-prefix "MyDevice-"
+
+# Cleanup with matching prefix
+python scripts/cleanup_sample_data.py --things-prefix "MyDevice-"
+```
+
+**Important**: The prefix must match exactly between setup and cleanup for naming-based identification to work correctly.
+
+### What Gets Cleaned Up
+
+**Resources Deleted (in dependency order):**
+1. ✅ Thing Shadows (device state data)
+2. ✅ Certificates (detached from things first)
+3. ✅ Things (IoT devices)
+4. ✅ IoT Rules (message routing rules)
+5. ✅ Thing Groups (device collections)
+6. ✅ Thing Types (device templates)
+7. ✅ Policies (security policies)
+8. ✅ Local certificate files (from `certs/` directory)
+
+**Resources Protected:**
+- ❌ Production IoT resources (without workshop tags)
+- ❌ Resources with different naming patterns
+- ❌ Certificates and policies not associated with workshop things
+- ❌ Resources created outside the workshop scripts
+
+### Dependency-Aware Deletion
+
+The cleanup script automatically handles AWS IoT resource dependencies:
+
+**Deletion Order:**
+```
+Thing Shadows → Certificates → Things → IoT Rules → Thing Groups → Thing Types → Policies
+```
+
+**Why this order matters:**
+- Thing Shadows must be deleted before certificates
+- Certificates must be detached before things can be deleted
+- Things must be removed from groups before groups can be deleted
+- Policies must be detached before deletion
+
+**The script handles this automatically** - you don't need to worry about dependency conflicts.
+
+### Understanding the Summary Report
+
+After cleanup completes, you'll see a summary report:
+
+```
+📊 Cleanup Summary
+
+Resource Type    | Identified | Deleted | Failed
+-----------------|------------|---------|--------
+Things           |         20 |      20 |      0
+Certificates     |         20 |      20 |      0
+Thing Groups     |          4 |       4 |      0
+Thing Types      |          3 |       3 |      0
+IoT Rules        |          1 |       1 |      0
+Policies         |         20 |      20 |      0
+-----------------|------------|---------|--------
+Total            |         68 |      68 |      0
+
+✅ Cleanup completed successfully!
+```
+
+**Report Fields:**
+- **Identified**: Resources found matching workshop criteria
+- **Deleted**: Resources successfully removed
+- **Failed**: Resources that couldn't be deleted (with error details)
+
+### Troubleshooting Cleanup
+
+**Issue: "No resources found"**
+- **Cause**: Resources may not have workshop tags or don't match the prefix
+- **Solution**: 
+  - Check if you used a custom prefix during setup
+  - Use `--things-prefix` with the correct prefix
+  - Verify resources exist in AWS Console
+
+**Issue: "Permission denied" errors**
+- **Cause**: AWS credentials lack necessary IoT permissions
+- **Solution**: Ensure your IAM user/role has IoT full access permissions
+
+**Issue: "Dependency conflict" errors**
+- **Cause**: Resources have dependencies that weren't handled
+- **Solution**: The script should handle this automatically. If it persists, run with `--debug` to see details
+
+**Issue: Some resources not deleted**
+- **Cause**: Resources may be in use or have external dependencies
+- **Solution**: 
+  - Check the summary report for failed resources
+  - Use AWS Console to manually inspect and delete remaining resources
+  - Run cleanup again after resolving dependencies
+
+### Best Practices
+
+1. **Always use dry-run first**: Preview what will be deleted before executing
+2. **Match prefixes**: Use the same `--things-prefix` for setup and cleanup
+3. **Review the summary**: Check the report to ensure all resources were deleted
+4. **Run cleanup promptly**: Don't leave workshop resources running to avoid charges
+5. **Keep credentials secure**: Never commit AWS credentials to version control
 
 ## 🛠️ Troubleshooting
 
@@ -297,6 +489,85 @@ All scripts support debug mode for detailed API logging:
 ```bash
 python scripts/<script_name>.py --debug
 ```
+
+## ❓ Frequently Asked Questions (FAQ)
+
+### General Questions
+
+**Q: What resources will be deleted by the cleanup script?**
+A: The cleanup script identifies and deletes resources created by the workshop setup scripts. This includes Things, Certificates, Thing Groups, Thing Types, IoT Rules, and Policies that have workshop tags or match the naming patterns. Production resources are protected.
+
+**Q: How do I preview cleanup without deleting anything?**
+A: Use the `--dry-run` flag:
+```bash
+python scripts/cleanup_sample_data.py --dry-run
+```
+This shows exactly what would be deleted without making any changes.
+
+**Q: Can I use a custom prefix for thing names?**
+A: Yes! Use the `--things-prefix` parameter in both setup and cleanup:
+```bash
+# Setup
+python scripts/setup_sample_data.py --things-prefix "MyDevice-"
+
+# Cleanup
+python scripts/cleanup_sample_data.py --things-prefix "MyDevice-"
+```
+
+**Q: What if I don't have tags on my resources?**
+A: The cleanup script has a fallback mechanism. If tags aren't present, it uses naming conventions to identify workshop resources. Resources matching the thing prefix pattern (default: `Vehicle-VIN-`) or standard workshop names will be identified.
+
+**Q: How do I change the language?**
+A: Set the `AWS_IOT_LANG` environment variable:
+```bash
+export AWS_IOT_LANG=es  # Spanish
+export AWS_IOT_LANG=ja  # Japanese
+export AWS_IOT_LANG=zh-CN  # Chinese
+export AWS_IOT_LANG=pt-BR  # Portuguese
+export AWS_IOT_LANG=ko  # Korean
+```
+Or run the script without setting it - you'll be prompted to select a language interactively.
+
+**Q: What if cleanup fails partway through?**
+A: The cleanup script is designed to be idempotent - you can run it multiple times safely. If cleanup fails:
+1. Check the summary report to see which resources failed
+2. Run the script again - it will skip already-deleted resources
+3. Use `--debug` mode to see detailed error messages
+4. Manually delete remaining resources via AWS Console if needed
+
+**Q: How do I verify resources were deleted?**
+A: Check the summary report at the end of cleanup. You can also verify in the AWS IoT Console:
+- Navigate to AWS IoT Core → Manage → Things
+- Check that workshop things (Vehicle-VIN-*) are gone
+- Verify Thing Groups, Thing Types, and Certificates are removed
+
+### Technical Questions
+
+**Q: Why does the cleanup script delete resources in a specific order?**
+A: AWS IoT resources have dependencies. For example, you can't delete a Thing that still has certificates attached. The script follows this order:
+1. Thing Shadows (no dependencies)
+2. Certificates (must be detached from things)
+3. Things (must be removed from groups)
+4. IoT Rules (no dependencies on things)
+5. Thing Groups (must be empty)
+6. Thing Types (must not be in use)
+7. Policies (must be detached)
+
+**Q: What's the difference between tag-based and naming-based identification?**
+A: 
+- **Tag-based** (primary): Uses AWS resource tags (`workshop-resource: true`). Most reliable, works regardless of naming.
+- **Naming-based** (fallback): Uses naming patterns (e.g., `Vehicle-VIN-*`). Works with older resources created before tagging was implemented.
+
+The script tries tag-based first, then falls back to naming patterns if tags aren't present.
+
+**Q: Can I use this in a production AWS account?**
+A: While the cleanup script has multiple safety mechanisms (tags, naming patterns, dry-run mode), **we strongly recommend using a dedicated development/learning AWS account**. This follows AWS best practices for environment isolation.
+
+**Q: What happens if I interrupt cleanup with Ctrl+C?**
+A: The script handles interruptions gracefully. Resources deleted before the interruption remain deleted. Simply run the cleanup script again to continue - it will skip already-deleted resources and complete the remaining deletions.
+
+**Q: How much does it cost to run these learning scripts?**
+A: Approximately $0.17 USD for a complete learning session. See the [Cost Information](#cost-information) section for detailed breakdown. Always run cleanup when finished to avoid ongoing charges.
 
 ## 📖 Advanced Documentation
 

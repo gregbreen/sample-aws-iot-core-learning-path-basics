@@ -1,30 +1,30 @@
 {
   "summary": {
-    "header": "정리 요약",
-    "header_dry_run": "정리 요약 (드라이런 - 리소스가 삭제되지 않음)",
-    "deleted_section": "삭제된 리소스:",
+    "header": "정리한 내용이에요",
+    "header_dry_run": "정리할 내용이에요 (드라이런 - 아직 삭제되지 않았어요)",
+    "deleted_section": "삭제한 리소스:",
     "skipped_section": "건너뛴 리소스:",
-    "failed_section": "삭제 실패:",
+    "failed_section": "삭제하지 못한 리소스:",
     "overall_section": "전체 요약:",
-    "non_workshop_reason": "워크샵이 아닌 리소스",
+    "non_workshop_reason": "워크샵 관련 아님",
     "total": "합계",
-    "total_resources_processed": "처리된 총 리소스",
+    "total_resources_processed": "확인한 총 리소스",
     "would_delete": "삭제 예정",
     "successfully_deleted": "성공적으로 삭제됨",
-    "skipped_non_workshop": "건너뜀 (워크샵 외)",
-    "failed": "실패",
-    "execution_time": "실행 시간"
+    "skipped_non_workshop": "건너뜀 (워크샵 관련 아님)",
+    "failed": "삭제 실패",
+    "execution_time": "소요 시간"
   },
   "skipped": {
-    "header_debug": "건너뛴 {} 리소스 (총 {}):",
-    "count_only": "{} 리소스 건너뜀: {} (워크샵이 아님)"
+    "header_debug": "{} 리소스를 건너뛰었어요 (총 {}):",
+    "count_only": "{} 리소스 건너뜀: {} (워크샵 관련 아님)"
   },
   "identification": {
     "workshop": "워크샵 리소스",
-    "non_workshop": "워크샵이 아님",
-    "method_tag": "태그 일치",
-    "method_naming": "명명 패턴",
-    "method_association": "연결",
-    "method_none": "일치 없음"
+    "non_workshop": "워크샵 관련 아님",
+    "method_tag": "태그로 찾음",
+    "method_naming": "이름 패턴으로 찾음",
+    "method_association": "연결로 찾음",
+    "method_none": "식별 불가"
   }
 }

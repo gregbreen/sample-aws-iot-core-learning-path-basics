@@ -1,30 +1,30 @@
 {
   "summary": {
-    "header": "Cleanup Summary",
-    "header_dry_run": "Cleanup Summary (DRY RUN - No Resources Deleted)",
-    "deleted_section": "Deleted Resources:",
-    "skipped_section": "Skipped Resources:",
-    "failed_section": "Failed Deletions:",
-    "overall_section": "Overall Summary:",
-    "non_workshop_reason": "non-workshop resources",
+    "header": "Here's what we cleaned up",
+    "header_dry_run": "Here's what we'd clean up (DRY RUN - nothing deleted yet)",
+    "deleted_section": "Resources we removed:",
+    "skipped_section": "Resources we skipped:",
+    "failed_section": "Resources we couldn't delete:",
+    "overall_section": "Overall summary:",
+    "non_workshop_reason": "not workshop-related",
     "total": "Total",
-    "total_resources_processed": "Total Resources Processed",
-    "would_delete": "Would Delete",
-    "successfully_deleted": "Successfully Deleted",
-    "skipped_non_workshop": "Skipped (Non-Workshop)",
-    "failed": "Failed",
-    "execution_time": "Execution Time"
+    "total_resources_processed": "Total resources we looked at",
+    "would_delete": "Would remove",
+    "successfully_deleted": "Successfully removed",
+    "skipped_non_workshop": "Skipped (not workshop-related)",
+    "failed": "Couldn't delete",
+    "execution_time": "Time it took"
   },
   "skipped": {
-    "header_debug": "Skipped {} Resources ({} total):",
-    "count_only": "Skipped {} resources: {} (non-workshop)"
+    "header_debug": "We skipped {} resources ({} total):",
+    "count_only": "Skipped {} resources: {} (not workshop-related)"
   },
   "identification": {
-    "workshop": "Workshop Resource",
-    "non_workshop": "Non-Workshop",
-    "method_tag": "Tag Match",
-    "method_naming": "Naming Pattern",
-    "method_association": "Association",
-    "method_none": "No Match"
+    "workshop": "Workshop resource",
+    "non_workshop": "Not workshop-related",
+    "method_tag": "Found by tag",
+    "method_naming": "Found by name pattern",
+    "method_association": "Found by association",
+    "method_none": "Couldn't identify"
   }
 }

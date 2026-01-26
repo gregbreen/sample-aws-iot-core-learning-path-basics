@@ -1,0 +1,30 @@
+{
+  "summary": {
+    "header": "Riepilogo Pulizia",
+    "header_dry_run": "Riepilogo Pulizia (SIMULAZIONE - Nessuna Risorsa Eliminata)",
+    "deleted_section": "Risorse Eliminate:",
+    "skipped_section": "Risorse Saltate:",
+    "failed_section": "Eliminazioni Fallite:",
+    "overall_section": "Riepilogo Generale:",
+    "non_workshop_reason": "risorse non del workshop",
+    "total": "Totale",
+    "total_resources_processed": "Totale Risorse Elaborate",
+    "would_delete": "Da Eliminare",
+    "successfully_deleted": "Eliminate con Successo",
+    "skipped_non_workshop": "Saltate (Non-Workshop)",
+    "failed": "Fallite",
+    "execution_time": "Tempo di Esecuzione"
+  },
+  "skipped": {
+    "header_debug": "Saltate {} Risorse ({} totale):",
+    "count_only": "Saltate {} risorse: {} (non del workshop)"
+  },
+  "identification": {
+    "workshop": "Risorsa Workshop",
+    "non_workshop": "Non-Workshop",
+    "method_tag": "Corrispondenza Tag",
+    "method_naming": "Pattern di Denominazione",
+    "method_association": "Associazione",
+    "method_none": "Nessuna Corrispondenza"
+  }
+}

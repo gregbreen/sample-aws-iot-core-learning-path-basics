@@ -1,6 +1,6 @@
 # トラブルシューティングガイド
 
-このドキュメントは、Amazon Web Services (AWS) AWS IoT Core - 基礎学習プロジェクトの包括的なトラブルシューティングガイダンスを提供します。
+何か問題が起きましたか？大丈夫です、誰にでもあることです。このガイドでは、AWS IoT Coreを学習する際によくある問題の解決方法をご紹介します。
 
 ## 目次
 
@@ -39,7 +39,7 @@
 
 ### AWS認証情報
 
-#### 認証情報が設定されているか確認
+#### 認証情報を確認してみましょう
 ```bash
 # 認証情報が設定されているか確認
 aws sts get-caller-identity
@@ -77,8 +77,8 @@ aws configure set region us-east-1
 ```
 
 **問題: "The security token included in the request is invalid"**
-- **原因**: 期限切れの一時認証情報または不正なセッショントークン
-- **解決策**: 認証情報を更新するか、期限切れのセッショントークンを削除
+- **原因**: 一時認証情報の有効期限が切れているか、セッショントークンが正しくありません
+- **解決策**: 認証情報を更新するか、期限切れのセッショントークンを削除しましょう
 ```bash
 unset AWS_SESSION_TOKEN
 # その後、新しい認証情報を設定
@@ -86,7 +86,7 @@ unset AWS_SESSION_TOKEN
 
 ### 仮想環境の問題
 
-#### 仮想環境を確認
+#### 仮想環境を確認してみましょう
 ```bash
 # venvがアクティブか確認
 which python
@@ -115,7 +115,7 @@ pip install -r requirements.txt
 
 ### 依存関係の問題
 
-#### 必要なパッケージの確認
+#### 必要なパッケージを確認してみましょう
 ```bash
 # requirements.txtの内容を確認
 cat requirements.txt
@@ -147,7 +147,8 @@ pip install awsiotsdk>=1.11.0
 
 ### 権限の問題
 
-#### 必要なIAM権限
+#### 必要なIAM権限について
+
 学習スクリプトには以下のIAM権限が必要です:
 
 ```json
@@ -180,8 +181,8 @@ aws iot describe-endpoint --endpoint-type iot:Data-ATS
 ```
 
 **問題: "AccessDeniedException"**
-- **原因**: 不十分なIAM権限
-- **解決策**: IAMユーザーまたはロールに適切な権限を付与
+- **原因**: IAM権限が不足しています
+- **解決策**: IAMユーザーまたはロールに適切な権限を付与しましょう
 
 ### 証明書の問題
 
@@ -208,9 +209,9 @@ python certificate_manager.py
 
 **問題: "Certificate is not active"**
 ```bash
-# 解決策: 証明書をアクティブ化
+# 解決策: 証明書をアクティブ化しましょう
 python certificate_manager.py
-# 証明書を選択してアクティブ化
+# 証明書を選択してアクティブ化してください
 ```
 
 ## MQTT接続の問題
@@ -229,19 +230,19 @@ ls -la certificates/*/
 #### よくあるMQTT接続エラー
 
 **問題: "SSL: CERTIFICATE_VERIFY_FAILED"**
-- **原因**: 無効または期限切れの証明書
-- **解決策**: 新しい証明書を作成し、適切なポリシーをアタッチ
+- **原因**: 証明書が無効か、有効期限が切れています
+- **解決策**: 新しい証明書を作成して、適切なポリシーをアタッチしましょう
 
 **問題: "Connection refused"**
-- **原因**: 不正なエンドポイントまたはポート
-- **解決策**: エンドポイントを確認
+- **原因**: エンドポイントまたはポートが正しくありません
+- **解決策**: エンドポイントを確認してみましょう
 ```bash
 aws iot describe-endpoint --endpoint-type iot:Data-ATS
 ```
 
 **問題: "MQTT connection timeout"**
-- **原因**: ネットワーク問題またはファイアウォール
-- **解決策**: ポート8883（MQTT over TLS）が開いていることを確認
+- **原因**: ネットワークの問題またはファイアウォールが原因です
+- **解決策**: ポート8883（MQTT over TLS）が開いていることを確認しましょう
 
 ### WebSocket MQTTの問題
 
@@ -257,12 +258,12 @@ aws sts get-caller-identity
 #### よくあるWebSocket MQTTエラー
 
 **問題: "WebSocket connection failed"**
-- **原因**: 無効なAWS認証情報または権限
-- **解決策**: 認証情報を確認し、IoT権限を付与
+- **原因**: AWS認証情報が無効か、権限が不足しています
+- **解決策**: 認証情報を確認して、IoT権限を付与しましょう
 
 **問題: "Signature mismatch"**
-- **原因**: 時刻同期の問題
-- **解決策**: システム時刻を同期
+- **原因**: システムの時刻同期に問題があります
+- **解決策**: システム時刻を同期しましょう
 ```bash
 # macOS
 sudo sntp -sS time.apple.com
@@ -288,12 +289,12 @@ cat shadow.json | python -m json.tool
 #### よくあるShadowエラー
 
 **問題: "ResourceNotFoundException: No shadow exists for the specified thing"**
-- **原因**: Shadowがまだ作成されていない
-- **解決策**: 希望する状態または報告された状態を更新してShadowを作成
+- **原因**: Shadowがまだ作成されていません
+- **解決策**: 希望する状態または報告された状態を更新してShadowを作成しましょう
 
 **問題: "InvalidRequestException: Invalid JSON"**
-- **原因**: 不正なJSON形式
-- **解決策**: JSON構文を確認
+- **原因**: JSON形式が正しくありません
+- **解決策**: JSON構文を確認してみましょう
 ```bash
 # JSONを検証
 echo '{"state":{"desired":{"temp":22}}}' | python -m json.tool
@@ -302,8 +303,8 @@ echo '{"state":{"desired":{"temp":22}}}' | python -m json.tool
 ### Shadow状態ファイルの問題
 
 **問題: Shadow更新が反映されない**
-- **原因**: バージョン競合または権限問題
-- **解決策**: 最新のShadowを取得してからバージョンを確認
+- **原因**: バージョン競合または権限の問題があります
+- **解決策**: 最新のShadowを取得してからバージョンを確認しましょう
 
 ## Rules Engineの問題
 
@@ -321,8 +322,8 @@ aws iot get-topic-rule --rule-name YourRuleName
 #### よくあるルールエラー
 
 **問題: "InvalidRequestException: Invalid SQL"**
-- **原因**: 不正なSQL構文
-- **解決策**: SQL構文を確認
+- **原因**: SQL構文が正しくありません
+- **解決策**: SQL構文を確認してみましょう
 ```sql
 -- 正しい例
 SELECT * FROM 'topic/+' WHERE temperature > 25
@@ -332,14 +333,14 @@ SELECT * FROM topic/+ WHERE temperature > 25  -- クォートなし
 ```
 
 **問題: "Rule action failed"**
-- **原因**: 不十分なIAM権限
-- **解決策**: ルール実行ロールに適切な権限を付与
+- **原因**: IAM権限が不足しています
+- **解決策**: ルール実行ロールに適切な権限を付与しましょう
 
 ### ルールテストの問題
 
 **問題: ルールがトリガーされない**
-- **原因**: トピックパターンの不一致
-- **解決策**: トピックパターンとメッセージトピックを確認
+- **原因**: トピックパターンが一致していません
+- **解決策**: トピックパターンとメッセージトピックを確認しましょう
 ```bash
 # ルールSQL: SELECT * FROM 'device/+/temperature'
 # メッセージトピック: device/sensor1/temperature  ✅ 一致
@@ -448,8 +449,8 @@ python setup_sample_data.py --debug
 ```
 
 **問題: "ThrottlingException"**
-- **原因**: APIレート制限に達した
-- **解決策**: リクエスト間に遅延を追加、またはバッチサイズを削減
+- **原因**: APIレート制限に達しました
+- **解決策**: リクエスト間に遅延を追加するか、バッチサイズを削減しましょう
 
 ### 接続タイムアウト
 
@@ -470,9 +471,9 @@ mqtt_connection = mqtt_connection_builder.mtls_from_path(
 
 ## 追加ヘルプの取得
 
-### デバッグモードの使用
+### デバッグモードを使ってみましょう
 
-すべてのスクリプトは詳細なデバッグ情報を提供します:
+すべてのスクリプトで詳細なデバッグ情報を確認できます:
 ```bash
 python script_name.py --debug
 ```
@@ -483,18 +484,18 @@ python script_name.py --debug
 - 接続診断情報
 - タイミング情報
 
-### AWS IoTコンソール確認
+### AWS IoTコンソールで確認してみましょう
 
-AWS IoTコンソールで以下を確認:
+AWS IoTコンソールで以下を確認できます:
 1. **Things**: 作成されたデバイスの確認
 2. **Certificates**: 証明書のステータス確認
 3. **Policies**: ポリシーの内容確認
 4. **Rules**: ルールの設定確認
 5. **Logs**: CloudWatchログの確認
 
-### CloudWatchログ
+### CloudWatchログを確認してみましょう
 
-AWS IoT関連のログを確認:
+AWS IoT関連のログを確認できます:
 ```bash
 # AWS CLIでログを確認
 aws logs describe-log-groups --log-group-name-prefix /aws/iot
@@ -554,4 +555,4 @@ aws logs get-log-events --log-group-name /aws/iot/rules --log-stream-name your-r
 
 ---
 
-このトラブルシューティングガイドで問題が解決しない場合は、デバッグモードの出力とエラーメッセージを含めて、上記のサポートリソースに問い合わせてください。
+このトラブルシューティングガイドで問題が解決しない場合は、デバッグモードの出力とエラーメッセージを含めて、上記のサポートリソースにお問い合わせください。きっと解決できますよ！

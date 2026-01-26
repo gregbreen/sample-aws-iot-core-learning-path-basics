@@ -1,30 +1,30 @@
 {
   "summary": {
-    "header": "Resumo da Limpeza",
-    "header_dry_run": "Resumo da Limpeza (SIMULAÇÃO - Nenhum Recurso Excluído)",
-    "deleted_section": "Recursos Excluídos:",
-    "skipped_section": "Recursos Ignorados:",
-    "failed_section": "Exclusões Falhadas:",
-    "overall_section": "Resumo Geral:",
-    "non_workshop_reason": "recursos não do workshop",
+    "header": "Aqui está o que limpamos",
+    "header_dry_run": "Aqui está o que limparíamos (SIMULAÇÃO - nada foi excluído ainda)",
+    "deleted_section": "Recursos que removemos:",
+    "skipped_section": "Recursos que pulamos:",
+    "failed_section": "Recursos que não conseguimos excluir:",
+    "overall_section": "Resumo geral:",
+    "non_workshop_reason": "não relacionado ao workshop",
     "total": "Total",
-    "total_resources_processed": "Total de Recursos Processados",
-    "would_delete": "Seria Excluído",
-    "successfully_deleted": "Excluído com Sucesso",
-    "skipped_non_workshop": "Ignorado (Não do Workshop)",
-    "failed": "Falhou",
-    "execution_time": "Tempo de Execução"
+    "total_resources_processed": "Total de recursos que analisamos",
+    "would_delete": "Removeria",
+    "successfully_deleted": "Removido com sucesso",
+    "skipped_non_workshop": "Pulado (não relacionado ao workshop)",
+    "failed": "Não conseguimos excluir",
+    "execution_time": "Tempo que levou"
   },
   "skipped": {
-    "header_debug": "Recursos {} Ignorados ({} total):",
-    "count_only": "Recursos {} ignorados: {} (não do workshop)"
+    "header_debug": "Pulamos {} recursos ({} total):",
+    "count_only": "Pulamos {} recursos: {} (não relacionado ao workshop)"
   },
   "identification": {
-    "workshop": "Recurso do Workshop",
-    "non_workshop": "Não do Workshop",
-    "method_tag": "Correspondência de Tag",
-    "method_naming": "Padrão de Nomenclatura",
-    "method_association": "Associação",
-    "method_none": "Sem Correspondência"
+    "workshop": "Recurso do workshop",
+    "non_workshop": "Não relacionado ao workshop",
+    "method_tag": "Encontrado por tag",
+    "method_naming": "Encontrado por padrão de nome",
+    "method_association": "Encontrado por associação",
+    "method_none": "Não conseguimos identificar"
   }
 }

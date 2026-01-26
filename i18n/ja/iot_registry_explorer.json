@@ -4,7 +4,7 @@
   "aws_config": "📍 AWS設定:",
   "account_id": "アカウントID",
   "region": "リージョン",
-  "description": "詳細な説明付きのAWS IoT Registry APIのインタラクティブ探索。",
+  "description": "詳しい説明と一緒にAWS IoT Registry APIを探索してみましょう！",
   "debug_enabled": "🔍 デバッグモード有効",
   "debug_features": [
     "• 完全なAPIリクエスト/レスポンス詳細",
@@ -16,11 +16,11 @@
     "• 簡潔モードは主要メトリクスのみ表示",
     "• デバッグモードは完全なAPI詳細を表示"
   ],
-  "client_initialized": "✅ AWS IoTクライアントが正常に初期化されました",
-  "invalid_credentials": "❌ 無効なAWS認証情報",
+  "client_initialized": "✅ いいですね！AWS IoTクライアントの準備ができました",
+  "invalid_credentials": "❌ あれ、AWS認証情報が正しくないようです",
   "learning_intro_title": "AWS IoT Registry APIs - デバイス管理",
-  "learning_intro_content": "AWS IoT Registryは、IoTデバイス（Things）、その組織（Thing Groups）、デバイステンプレート（Thing Types）、セキュリティ証明書に関する情報を格納する中央データベースです。これらのAPIにより、IoTデバイスフリート全体をプログラムで管理できます。これらの操作を理解することは、スケーラブルなIoTソリューションを構築するための基本です。",
-  "learning_intro_next": "詳細な説明付きで8つのコアRegistry APIを探索します",
+  "learning_intro_content": "AWS IoT Registryは、すべてのIoTデバイス（Things）、その組織方法（Thing Groups）、デバイステンプレート（Thing Types）、セキュリティ証明書を管理する中央データベースのようなものです。これらのAPIを使えば、IoTデバイスフリート全体をプログラムで管理できます。これらの操作を理解することは、スケーラブルなIoTソリューションを構築するための鍵となります！",
+  "learning_intro_next": "詳しい説明と一緒に8つのコアRegistry APIを探索してみましょう",
   "press_enter": "Enterキーを押して続行...",
   "goodbye": "👋 さようなら！",
   "operations_menu": "📋 利用可能な操作:",
@@ -36,7 +36,7 @@
     "9. 終了"
   ],
   "select_operation": "操作を選択 (1-9):",
-  "invalid_choice": "❌ 無効な選択です。1-9を選択してください。",
+  "invalid_choice": "❌ おっと！1から9の数字を選んでくださいね。",
   "list_things_options": "🔍 List Things オプション:",
   "list_things_menu": [
     "   1. すべてのThingsをリスト（基本）",
@@ -49,8 +49,8 @@
   "thing_type_prompt": "Thing Type名を入力（例: SedanVehicle）:",
   "attribute_name_prompt": "属性名を入力（例: country）:",
   "attribute_value_prompt": "属性値を入力（例: US）:",
-  "no_thing_type": "❌ Thing Typeが指定されていません",
-  "attribute_required": "❌ 属性名と値が必要です",
+  "no_thing_type": "❌ おっと！Thing Typeを指定する必要があります",
+  "attribute_required": "❌ フィルタリングには属性名と値の両方が必要です",
   "executing": "🔄 実行中:",
   "completed": "完了",
   "found_things": "📊 {}個のThingsが見つかりました",
@@ -68,94 +68,94 @@
   "enter_thing_selection": "番号またはThing名を入力: ",
   "enter_group_selection": "番号またはThing Group名を入力: ",
   "enter_type_selection": "番号またはThing Type名を入力: ",
-  "no_things_found": "⚠️ アカウントにThingsが見つかりません",
-  "no_groups_found": "⚠️ アカウントにThing Groupsが見つかりません",
-  "no_types_found": "⚠️ アカウントにThing Typesが見つかりません",
+  "no_things_found": "⚠️ まだアカウントにThingsがないようです",
+  "no_groups_found": "⚠️ まだアカウントにThing Groupsがないようです",
+  "no_types_found": "⚠️ まだアカウントにThing Typesがないようです",
   "could_not_list_things": "⚠️ Thingsをリストできませんでした:",
   "could_not_list_groups": "⚠️ Thing Groupsをリストできませんでした:",
   "could_not_list_types": "⚠️ Thing Typesをリストできませんでした:",
-  "invalid_selection": "❌ 無効な選択です。選択してください",
+  "invalid_selection": "❌ うーん、それは有効な選択ではありません。選んでください",
   "endpoint_type_prompt": "エンドポイントタイプを入力（iot:Data-ATS, iot:CredentialProvider, iot:Jobs）[デフォルト: iot:Data-ATS]: ",
   "pagination_learning_title": "📚 学習ポイント: ページネーション",
-  "pagination_learning_content": "ページネーションにより、大きなデータセットを小さなチャンクで取得できます。これは、タイムアウトやメモリ問題を回避するために、数百または数千のデバイスを管理する際に不可欠です。",
+  "pagination_learning_content": "ページネーションを使うと、大きなデータセットを小さくて扱いやすいチャンクで取得できます。数百や数千のデバイスを管理する際に、タイムアウトを防いでスムーズに動作させるのにとても便利です！",
   "pagination_listing": "🔄 ページネーション付きでThingsをリスト中（ページあたり最大{}）...",
   "page_summary": "📊 ページ{}概要: {}個のThingsを取得",
   "continue_next_page": "次のページに続行しますか？ (y/N): ",
   "pagination_complete": "🏁 ページネーション完了: {}ページにわたって合計{}個のThingsが見つかりました",
   "filter_by_type_learning_title": "📚 学習ポイント: Thing Typeによるフィルタリング",
-  "filter_by_type_learning_content": "フィルタリングにより、特定のカテゴリのデバイスを見つけることができます。Thing Typesは類似のデバイスをグループ化するテンプレートとして機能します。",
+  "filter_by_type_learning_content": "フィルタリングを使うと、特定のカテゴリのデバイスを簡単に見つけられます。Thing Typesは類似のデバイスをまとめるテンプレートのようなもので、整理にとても便利です！",
   "filtering_by_type": "🔄 Thing Type: {}でThingsをフィルタリング中...",
   "filter_type_results": "📊 フィルタ結果: Thing Type '{}'で{}個のThingsが見つかりました",
   "filter_by_attribute_learning_title": "📚 学習ポイント: 属性によるフィルタリング",
-  "filter_by_attribute_learning_content": "属性フィルタリングは、特定の特性を持つデバイスを見つけるのに役立ちます。これは、場所、顧客、またはその他のメタデータによってデバイスをターゲットにするのに便利です。",
+  "filter_by_attribute_learning_content": "属性フィルタリングは、特定の特性を持つデバイスを見つけるのに役立ちます。場所、顧客、または設定した他のメタデータでデバイスをターゲットにするのにとても便利です！",
   "filtering_by_attribute": "🔄 属性{}={}でThingsをフィルタリング中...",
   "filter_attribute_results": "📊 フィルタ結果: {}='{}'で{}個のThingsが見つかりました",
   "debug_full_error": "🔍 デバッグ: 完全なエラーレスポンス:",
   "debug_full_traceback": "🔍 デバッグ: 完全なトレースバック:",
   "api_error": "❌ APIエラー:",
   "error": "❌ エラー:",
-  "no_region_error": "❌ AWSリージョンが設定されていません",
+  "no_region_error": "❌ AWSリージョンがまだ設定されていないようです",
   "region_setup_instructions": [
-    "以下のいずれかの方法でAWSリージョンを設定してください:",
+    "大丈夫です！以下のいずれかの方法でAWSリージョンを設定できます:",
     "1. 環境変数を設定: export AWS_DEFAULT_REGION=us-east-1",
     "2. AWS CLIを設定: aws configure",
     "3. AWS認証情報ファイルでリージョンを設定"
   ],
   "aws_context_error": "⚠️ AWSコンテキストを取得できませんでした:",
-  "aws_credentials_reminder": "   AWS認証情報が設定されていることを確認してください",
+  "aws_credentials_reminder": "   AWS認証情報が正しく設定されていることを確認してくださいね",
   "learning_moments": {
     "list_things": {
       "title": "List Things - デバイス発見",
-      "content": "list_things APIは、アカウント内のすべてのIoTデバイス（Things）を取得します。これは、デバイスインベントリ管理、フリートサイズの監視、属性によるデバイス発見に不可欠です。ページネーションとフィルタリングを使用して、デバイスフリートを効率的に処理できます。",
-      "next": "異なるオプションでlist_things APIを呼び出します"
+      "content": "list_things APIは、アカウント内のすべてのIoTデバイス（Things）を取得します。デバイスインベントリの管理、フリートサイズの監視、属性によるデバイス発見にとても便利です。ページネーションとフィルタリングを使えば、大規模なデバイスフリートも効率的に処理できます！",
+      "next": "さまざまなオプションでlist_things APIを呼び出してみましょう"
     },
     "list_certificates": {
       "title": "List Certificates - セキュリティインベントリ",
-      "content": "X.509証明書はIoTデバイスセキュリティの基盤です。各証明書はデバイスを一意に識別し、AWS IoT Coreとの安全な通信を可能にします。このAPIは、セキュリティ態勢の監査、証明書ライフサイクルの追跡、証明書ローテーションが必要なデバイスの特定に役立ちます。",
-      "next": "すべての証明書を取得し、そのセキュリティプロパティを調査します"
+      "content": "X.509証明書はIoTデバイスセキュリティの基盤です。各証明書はデバイスを一意に識別し、AWS IoT Coreとの安全な通信を可能にします。このAPIは、セキュリティ設定の確認、証明書ライフサイクルの追跡、証明書ローテーションが必要なデバイスの特定に役立ちます。",
+      "next": "すべての証明書を取得して、そのセキュリティプロパティを確認してみましょう"
     },
     "list_thing_groups": {
       "title": "List Thing Groups - デバイス組織",
-      "content": "Thing Groupsは、ファイル用のフォルダと同様に、IoTデバイスの階層組織を提供します。一括操作、ポリシー継承、場所、機能、またはビジネス基準による論理グループ化を可能にします。これは、大規模なIoTデプロイメントの管理に重要です。",
-      "next": "Thing Groupsとその組織構造を探索します"
+      "content": "Thing Groupsは、ファイル用のフォルダのように、IoTデバイスを階層的に整理するのに役立ちます！一括操作、ポリシー継承、場所、機能、またはビジネス基準による論理的なグループ化が可能になります。大規模なIoTデプロイメントの管理にとても重要です。",
+      "next": "Thing Groupsとその組織構造を探索してみましょう"
     },
     "list_thing_types": {
       "title": "List Thing Types - デバイステンプレート",
-      "content": "Thing TypesはIoTデバイスのカテゴリを定義するテンプレートです。類似のデバイスの共通属性と動作を指定するブループリントとして機能します。例えば、'SedanVehicle'タイプは、エンジンタイプや座席数などの属性を定義する場合があります。Thing Typesは、デバイスフリートの整理と標準化されたデバイス管理を可能にします。",
-      "next": "Thing Typesとその属性スキーマを調査します"
+      "content": "Thing TypesはIoTデバイスのカテゴリを定義するテンプレートのようなものです。類似のデバイスの共通属性と動作を指定するブループリントとして機能します。例えば、'SedanVehicle'タイプは、エンジンタイプや座席数などの属性を定義する場合があります。Thing Typesは、デバイスフリートの整理と標準化されたデバイス管理を可能にします！",
+      "next": "Thing Typesとその属性スキーマを確認してみましょう"
     },
     "describe_thing": {
       "title": "Describe Thing - 詳細なデバイス情報",
-      "content": "describe_thing APIは、特定のIoTデバイスの完全な詳細を提供します。これには、属性、Thing Type、Thing Group メンバーシップ、バージョン情報が含まれます。これは、デバイスのトラブルシューティング、設定の確認、デバイス固有の操作の実行に不可欠です。",
-      "next": "特定のThingの詳細情報を取得します"
+      "content": "describe_thing APIは、特定のIoTデバイスの完全な情報を提供します。属性、Thing Type、バージョン、一意の識別子などが含まれます。デバイスのトラブルシューティング、設定の管理、IoTセットアップ内でのデバイスの関係性を理解するのにとても役立ちます。",
+      "next": "特定のThingの詳細情報を見てみましょう"
     },
     "describe_thing_group": {
-      "title": "Describe Thing Group - グループ詳細",
-      "content": "Thing Groupsは、デバイスの組織構造を提供します。このAPIは、グループのプロパティ、親子関係、メンバーデバイス、適用されるポリシーを表示します。これは、グループベースの操作とポリシー管理を理解するために重要です。",
-      "next": "Thing Groupの詳細な構造を調査します"
+      "title": "Describe Thing Group - グループ管理",
+      "content": "Thing Groupの詳細は、IoTフリートがどのように組織されているかを示します。グループのプロパティ、親子階層、適用されたポリシー、メンバーデバイスを確認できます。この情報は、アクセス制御、ポリシーの継承方法、デバイス組織戦略を理解するのにとても重要です。",
+      "next": "特定のThing Groupの詳細なプロパティを調べてみましょう"
     },
     "describe_thing_type": {
-      "title": "Describe Thing Type - タイプ仕様",
-      "content": "Thing Typesは、デバイスカテゴリのテンプレートとして機能します。このAPIは、タイプの属性スキーマ、説明、作成日を表示します。これは、デバイス標準化とタイプベースの操作を理解するために重要です。",
-      "next": "Thing Typeの詳細な仕様を調査します"
+      "title": "Describe Thing Type - テンプレート分析",
+      "content": "Thing Typeの詳細は、デバイスカテゴリのブループリント定義を示します。検索可能な属性、プロパティ制約、このタイプのデバイスがどのように構造化されるべきかを定義するメタデータを確認できます。これは、デバイス登録の一貫性を確保し、フリートを効率的にクエリするのに役立ちます！",
+      "next": "特定のThing Typeのスキーマとプロパティを分析してみましょう"
     },
     "describe_endpoint": {
-      "title": "Describe Endpoint - 接続情報",
-      "content": "IoTエンドポイントは、デバイスがAWS IoT Coreに接続するためのURLです。このAPIは、MQTT、HTTPS、WebSocketsなどの異なるプロトコルのエンドポイントを提供します。これは、デバイス接続の設定とトラブルシューティングに不可欠です。",
-      "next": "利用可能なIoTエンドポイントを取得します"
+      "title": "Describe Endpoint - 接続の発見",
+      "content": "IoTエンドポイントは、デバイスがAWS IoT Coreに接続するために使用するゲートウェイURLです。異なるエンドポイントタイプは異なる目的を果たします：デバイス通信用のData-ATS、認証用のCredentialProvider、デバイス管理用のAWS IoT Jobsなどです。エンドポイントを理解することは、デバイス接続を正しく設定するための鍵となります！",
+      "next": "デバイス接続用のエンドポイントURLを見つけてみましょう"
     }
   },
   "api_desc_list_things_paginated": "ページ {} - 最大 {} Things を取得",
   "api_desc_list_things_by_type": "Thing Type '{}' でフィルタされた Things を取得",
   "api_desc_list_things_by_attribute": "属性 '{}={}' でフィルタされた Things を取得",
-  "api_desc_list_things": "AWS アカウント内のすべての IoT Things のページネーションされたリストを取得",
-  "api_desc_list_certificates": "AWS IoT アカウントに登録された X.509 証明書のリストを取得",
-  "api_desc_list_thing_groups": "IoT デバイスの組織と管理に使用される Thing Groups のリストを取得",
-  "api_desc_list_thing_types": "デバイステンプレートと属性を定義する Thing Types のリストを取得",
-  "api_desc_describe_thing": "特定の IoT Thing の詳細情報を取得",
-  "api_desc_describe_thing_group": "特定の Thing Group の詳細情報を取得",
-  "api_desc_describe_thing_type": "特定の Thing Type の詳細情報を取得",
-  "api_desc_describe_endpoint": "AWS アカウントとリージョンの IoT エンドポイント URL を取得",
+  "api_desc_list_things": "AWSアカウント内のすべてのIoT Thingsのページネーションされたリストを取得します",
+  "api_desc_list_certificates": "AWS IoTアカウントに登録されたX.509証明書のリストを取得します",
+  "api_desc_list_thing_groups": "IoTデバイスの組織と管理に使用されるThing Groupsのリストを取得します",
+  "api_desc_list_thing_types": "デバイステンプレートと属性を定義するThing Typesのリストを取得します",
+  "api_desc_describe_thing": "特定のIoT Thingの詳細情報を取得します",
+  "api_desc_describe_thing_group": "特定のThing Groupの詳細情報を取得します",
+  "api_desc_describe_thing_type": "特定のThing Typeの詳細情報を取得します",
+  "api_desc_describe_endpoint": "AWSアカウントとリージョンのIoTエンドポイントURLを取得します",
   "api_explain_list_things": "名前、タイプ、属性、作成日を含むデバイスインベントリを表示",
   "api_explain_list_certificates": "ID、ARN、ステータス、有効期限を含むセキュリティ証明書を表示",
   "api_explain_list_thing_groups": "グループ階層とプロパティを含むデバイス組織構造を表示",
@@ -163,7 +163,7 @@
   "api_explain_describe_thing": "属性、タイプ、バージョン情報を含む完全なデバイスプロファイルを表示",
   "api_explain_describe_thing_group": "グループ設定、親子関係、適用されたポリシーを表示",
   "api_explain_describe_thing_type": "テンプレートスキーマ、検索可能な属性、プロパティ制約を表示",
-  "api_explain_describe_endpoint": "デバイス通信とデータ操作に使用される HTTPS エンドポイント URL を返す",
+  "api_explain_describe_endpoint": "デバイス通信とデータ操作に使用されるHTTPSエンドポイントURLを返します",
   "api_call_label": "API呼び出し",
   "http_request_label": "HTTPリクエスト",
   "description_label": "説明",

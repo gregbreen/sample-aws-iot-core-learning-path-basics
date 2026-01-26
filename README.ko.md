@@ -2,10 +2,10 @@
 
 > 🌍 **사용 가능한 언어** | **Available Languages** | **Idiomas Disponibles** | **利用可能な言語** | **可用语言**
 > 
-> - [English](README.md) | [Español](README.es.md) | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [Português](README.pt-BR.md) | **한국어** (현재)
-> - **문서**: [English](docs/en/) | [Español](docs/es/) | [中文](docs/zh-CN/) | [日本語](docs/ja/) | [Português](docs/pt-BR/) | [한국어](docs/ko/)
+> - [English](README.md) | [Español](README.es.md) | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [Português](README.pt-BR.md) | **한국어** (현재) | [Deutsch](README.de.md) | [Italiano](README.it.md) | [Français](README.fr.md)
+> - **문서**: [English](docs/en/) | [Español](docs/es/) | [中文](docs/zh-CN/) | [日本語](docs/ja/) | [Português](docs/pt-BR/) | [한국어](docs/ko/) | [Deutsch](docs/de/) | [Italiano](docs/it/) | [Français](docs/fr/)
 
-실습을 통해 Amazon Web Services (AWS) AWS IoT Core 기본 개념을 학습할 수 있는 포괄적인 Python 툴킷입니다. 대화형 스크립트는 디바이스 관리, 보안, API 작업 및 MQTT 통신을 자세한 설명과 함께 시연합니다.
+실습을 통해 Amazon Web Services (AWS) AWS IoT Core의 기본 개념을 배울 수 있는 Python 툴킷이에요. 대화형 스크립트로 디바이스 관리, 보안, API 작업, MQTT 통신을 자세한 설명과 함께 직접 체험해볼 수 있어요.
 
 ## 🚀 빠른 시작 - 완전한 학습 경로
 
@@ -36,37 +36,37 @@ python scripts/iot_rules_explorer.py         # 메시지 라우팅 및 처리
 python scripts/cleanup_sample_data.py        # 리소스 정리 (중요!)
 ```
 
-**⚠️ 비용 경고**: 실제 AWS 리소스를 생성합니다 (총 ~$0.17). 완료 후 정리를 실행하세요!
+**⚠️ 비용 경고**: 실제 AWS 리소스를 생성해요 (총 ~$0.17). 완료하면 꼭 정리를 실행해주세요!
 
 ## 대상 사용자
 
 **주요 대상**: AWS IoT Core를 처음 접하는 클라우드 개발자, 솔루션 아키텍트, DevOps 엔지니어
 
-**전제 조건**: 기본 AWS 지식, Python 기초, 명령줄 사용법
+**필요한 사전 지식**: 기본 AWS 지식, Python 기초, 명령줄 사용법
 
-**학습 수준**: 실습 접근 방식의 어소시에이트 레벨
+**학습 수준**: 실습 중심의 어소시에이트 레벨
 
 ## 🔧 AWS SDK로 구축
 
-이 프로젝트는 공식 AWS SDK를 활용하여 진정한 AWS IoT Core 경험을 제공합니다:
+이 프로젝트는 공식 AWS SDK를 활용해서 진짜 AWS IoT Core 경험을 제공해요:
 
 ### **Boto3 - Python용 AWS SDK**
-- **목적**: 모든 AWS IoT 레지스트리 작업, 인증서 관리 및 규칙 엔진 상호작용을 지원
+- **목적**: 모든 AWS IoT 레지스트리 작업, 인증서 관리, 규칙 엔진 상호작용을 지원해요
 - **버전**: `>=1.26.0`
 - **문서**: [Boto3 문서](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 - **AWS IoT Core API**: [Boto3 IoT 클라이언트](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/iot.html)
 
 ### **Python용 AWS IoT 디바이스 SDK**
-- **목적**: X.509 인증서를 사용하여 AWS IoT Core와 진정한 MQTT 통신 가능
+- **목적**: X.509 인증서를 사용해서 AWS IoT Core와 진짜 MQTT 통신을 할 수 있어요
 - **버전**: `>=1.11.0`
 - **문서**: [Python용 AWS IoT 디바이스 SDK v2](https://aws.github.io/aws-iot-device-sdk-python-v2/)
 - **GitHub**: [aws-iot-device-sdk-python-v2](https://github.com/aws/aws-iot-device-sdk-python-v2)
 
-**이러한 SDK가 중요한 이유:**
-- **프로덕션 준비**: 실제 IoT 애플리케이션에서 사용되는 동일한 SDK
-- **보안**: AWS IoT 보안 모범 사례에 대한 내장 지원
-- **신뢰성**: 포괄적인 오류 처리를 갖춘 AWS 공식 유지 관리 라이브러리
-- **학습 가치**: 진정한 AWS IoT 개발 패턴 경험
+**이 SDK들이 중요한 이유:**
+- **프로덕션 준비**: 실제 IoT 애플리케이션에서 사용하는 바로 그 SDK예요
+- **보안**: AWS IoT 보안 모범 사례를 기본으로 지원해요
+- **신뢰성**: AWS가 공식적으로 관리하는 라이브러리로 포괄적인 오류 처리를 제공해요
+- **학습 가치**: 진짜 AWS IoT 개발 패턴을 경험할 수 있어요
 
 ## 목차
 
@@ -79,17 +79,17 @@ python scripts/cleanup_sample_data.py        # 리소스 정리 (중요!)
 
 ## ⚙️ 설치 및 설정
 
-### 전제 조건
+### 필요한 것들
 - Python 3.10+
 - IoT 권한이 있는 AWS 계정
 - 터미널/명령줄 액세스
 - OpenSSL (인증서 기능용)
 
-**⚠️ 중요한 안전 참고사항**: 전용 개발/학습 AWS 계정을 사용하세요. 프로덕션 IoT 리소스가 포함된 계정에서는 이러한 스크립트를 실행하지 마세요. 정리 스크립트에 여러 안전 메커니즘이 있지만, 학습 활동에는 격리된 환경을 사용하는 것이 모범 사례입니다.
+**⚠️ 중요한 안전 참고사항**: 전용 개발/학습 AWS 계정을 사용하세요. 프로덕션 IoT 리소스가 있는 계정에서는 이 스크립트들을 실행하지 마세요. 정리 스크립트에 여러 안전 장치가 있지만, 학습 활동에는 격리된 환경을 사용하는 게 가장 좋아요.
 
 ### 비용 정보
 
-**이 프로젝트는 요금이 발생하는 실제 AWS 리소스를 생성합니다 (총 ~$0.17).**
+**이 프로젝트는 요금이 발생하는 실제 AWS 리소스를 생성해요 (총 ~$0.17).**
 
 | 서비스 | 사용량 | 예상 비용 (USD) |
 |---------|-------|---------------------|
@@ -100,22 +100,22 @@ python scripts/cleanup_sample_data.py        # 리소스 정리 (중요!)
 | **Amazon CloudWatch Logs** | 기본 로깅 | $0.01 |
 | **총 예상** | **완전한 학습 세션** | **~$0.17** |
 
-**⚠️ 중요**: 지속적인 요금을 피하기 위해 완료 후 항상 정리 스크립트를 실행하세요.
+**⚠️ 중요**: 계속 요금이 나가지 않도록 완료하면 꼭 정리 스크립트를 실행해주세요.
 
-### 자세한 설치
+### 자세한 설치 방법
 
-**1. 저장소 클론:**
+**1. 저장소 클론하기:**
 ```bash
 git clone https://github.com/aws-samples/sample-aws-iot-core-learning-path-basics.git
 cd sample-aws-iot-core-learning-path-basics
 ```
 
-**2. OpenSSL 설치:**
+**2. OpenSSL 설치하기:**
 - **macOS:** `brew install openssl`
 - **Ubuntu/Debian:** `sudo apt-get install openssl`
 - **Windows:** [OpenSSL 웹사이트](https://www.openssl.org/)에서 다운로드
 
-**3. 가상 환경 (권장):**
+**3. 가상 환경 만들기 (권장):**
 ```bash
 python3 -m venv venv
 source venv/bin/activate  # macOS/Linux
@@ -123,7 +123,7 @@ source venv/bin/activate  # macOS/Linux
 pip install -r requirements.txt
 ```
 
-**4. 언어 구성 (선택사항):**
+**4. 언어 설정하기 (선택사항):**
 ```bash
 # 모든 스크립트에 대한 언어 설정
 export AWS_IOT_LANG=ko     # 한국어
@@ -133,10 +133,10 @@ export AWS_IOT_LANG=ja     # 일본어
 export AWS_IOT_LANG=zh-CN  # 중국어
 export AWS_IOT_LANG=pt-BR  # 포르투갈어
 
-# 대안: 설정되지 않은 경우 스크립트가 언어를 묻습니다
+# 대안: 설정하지 않으면 스크립트가 언어를 물어봐요
 ```
 
-**지원되는 언어:**
+**지원하는 언어:**
 - **한국어** (`ko`, `korean`, `한국어`, `kr`) - 완전한 번역 제공
 - **영어** (`en`, `english`) - 기본값
 - **스페인어** (`es`, `spanish`, `español`) - 완전한 번역 제공
@@ -146,25 +146,25 @@ export AWS_IOT_LANG=pt-BR  # 포르투갈어
 
 ## 🌍 다국어 지원
 
-모든 학습 스크립트는 영어, 스페인어, 일본어, 중국어, 포르투갈어, 한국어 인터페이스를 지원합니다. 언어는 다음에 영향을 줍니다:
+모든 학습 스크립트는 영어, 스페인어, 일본어, 중국어, 포르투갈어, 한국어 인터페이스를 지원해요. 언어 설정은 다음에 영향을 줘요:
 
-**✅ 번역되는 것:**
-- 환영 메시지 및 교육 콘텐츠
-- 메뉴 옵션 및 사용자 프롬프트
-- 학습 순간 및 설명
-- 오류 메시지 및 확인
-- 진행 표시기 및 상태 메시지
+**✅ 번역되는 것들:**
+- 환영 메시지와 교육 콘텐츠
+- 메뉴 옵션과 사용자 프롬프트
+- 학습 순간과 설명
+- 오류 메시지와 확인
+- 진행 표시기와 상태 메시지
 
-**❌ 원래 언어로 유지되는 것:**
+**❌ 원래 언어로 유지되는 것들:**
 - AWS API 응답 (JSON 데이터)
-- 기술적 매개변수 이름 및 값
-- HTTP 메서드 및 엔드포인트
-- 디버그 정보 및 로그
-- AWS 리소스 이름 및 식별자
+- 기술적 매개변수 이름과 값
+- HTTP 메서드와 엔드포인트
+- 디버그 정보와 로그
+- AWS 리소스 이름과 식별자
 
-**사용 옵션:**
+**사용 방법:**
 
-**옵션 1: 환경 변수 (권장)**
+**방법 1: 환경 변수 (권장)**
 ```bash
 # 모든 스크립트에 대한 언어 설정
 export AWS_IOT_LANG=ko     # 한국어
@@ -174,13 +174,13 @@ export AWS_IOT_LANG=ja     # 일본어
 export AWS_IOT_LANG=zh-CN  # 중국어
 export AWS_IOT_LANG=pt-BR  # 포르투갈어
 
-# 스크립트 실행 - 언어가 자동으로 적용됩니다
+# 스크립트 실행 - 언어가 자동으로 적용돼요
 python scripts/iot_registry_explorer.py
 ```
 
-**옵션 2: 대화형 선택**
+**방법 2: 대화형 선택**
 ```bash
-# 환경 변수 없이 실행 - 스크립트가 언어를 묻습니다
+# 환경 변수 없이 실행 - 스크립트가 언어를 물어봐요
 python scripts/setup_sample_data.py
 
 # 출력 예시:
@@ -194,7 +194,7 @@ python scripts/setup_sample_data.py
 # Select language (1-6): 6
 ```
 
-**지원되는 스크립트:**
+**지원하는 스크립트:**
 - ✅ `setup_sample_data.py` - 샘플 데이터 생성
 - ✅ `iot_registry_explorer.py` - API 탐색
 - ✅ `certificate_manager.py` - 인증서 관리
@@ -206,21 +206,21 @@ python scripts/setup_sample_data.py
 
 ## 📚 학습 스크립트
 
-**권장 학습 경로:**
+**권장하는 학습 순서:**
 
-### 1. 📊 샘플 데이터 설정
+### 1. 📊 샘플 데이터 설정하기
 **파일**: `scripts/setup_sample_data.py`
-**목적**: 실습 학습을 위한 현실적인 IoT 리소스 생성
-**생성**: 20개 Things, 3개 Thing Types, 4개 Thing Groups
+**목적**: 실습 학습을 위한 현실적인 IoT 리소스 만들기
+**생성되는 것**: 20개 Things, 3개 Thing Types, 4개 Thing Groups
 
 ### 2. 🔍 IoT 레지스트리 API 탐색기
 **파일**: `scripts/iot_registry_explorer.py`
-**목적**: AWS IoT 레지스트리 API 학습을 위한 대화형 도구
+**목적**: AWS IoT 레지스트리 API를 배우기 위한 대화형 도구
 **기능**: 자세한 설명과 실제 API 호출이 포함된 8개 핵심 API
 
-### 3. 🔐 인증서 및 정책 관리자
+### 3. 🔐 인증서와 정책 관리자
 **파일**: `scripts/certificate_manager.py`
-**목적**: 인증서 및 정책 관리를 통한 AWS IoT 보안 학습
+**목적**: 인증서와 정책 관리를 통해 AWS IoT 보안 배우기
 **기능**: 인증서 생성, 정책 연결, 외부 인증서 등록
 
 ### 4. 📡 MQTT 통신
@@ -228,41 +228,41 @@ python scripts/setup_sample_data.py
 - `scripts/mqtt_client_explorer.py` (인증서 기반, 권장)
 - `scripts/mqtt_websocket_explorer.py` (WebSocket 기반 대안)
 
-**목적**: MQTT 프로토콜을 사용한 실시간 IoT 통신 경험
+**목적**: MQTT 프로토콜을 사용한 실시간 IoT 통신 경험하기
 **기능**: 대화형 명령줄 인터페이스, 주제 구독, 메시지 게시
 
 ### 5. 🌟 AWS IoT Device Shadow service 탐색기
 **파일**: `scripts/device_shadow_explorer.py`
-**목적**: AWS IoT Device Shadow를 사용한 디바이스 상태 동기화 학습
+**목적**: AWS IoT Device Shadow를 사용한 디바이스 상태 동기화 배우기
 **기능**: 대화형 섀도우 관리, 상태 업데이트, 델타 처리
 
 ### 6. ⚙️ IoT Rules Engine 탐색기
 **파일**: `scripts/iot_rules_explorer.py`
-**목적**: IoT Rules Engine을 사용한 메시지 라우팅 및 처리 학습
+**목적**: IoT Rules Engine을 사용한 메시지 라우팅과 처리 배우기
 **기능**: 규칙 생성, SQL 필터링, 자동 AWS IAM 설정
 
-### 7. 🧹 샘플 데이터 정리
+### 7. 🧹 샘플 데이터 정리하기
 **파일**: `scripts/cleanup_sample_data.py`
-**목적**: 요금을 피하기 위해 모든 학습 리소스 정리
+**목적**: 요금이 나가지 않도록 모든 학습 리소스 정리하기
 **기능**: 종속성 처리를 통한 안전한 정리
 
 ## 🧹 리소스 정리
 
-**⚠️ 중요**: 지속적인 AWS 요금을 피하기 위해 학습 완료 후 항상 정리를 실행하세요.
+**⚠️ 중요**: 계속 AWS 요금이 나가지 않도록 학습을 마치면 꼭 정리를 실행해주세요.
 
 ### 기본 사용법
 
 ```bash
-# 표준 정리 - 모든 워크샵 리소스 제거
+# 표준 정리 - 모든 워크샵 리소스 제거하기
 python scripts/cleanup_sample_data.py
 
-# 삭제될 항목 미리보기 (첫 번째 단계로 권장)
+# 삭제될 항목 미리보기 (첫 번째 단계로 권장해요)
 python scripts/cleanup_sample_data.py --dry-run
 
-# 사용자 지정 접두사로 정리
+# 사용자 지정 접두사로 정리하기
 python scripts/cleanup_sample_data.py --things-prefix "MyDevice-"
 
-# 상세한 API 로깅을 위한 디버그 모드 활성화
+# 상세한 API 로깅을 위한 디버그 모드 켜기
 python scripts/cleanup_sample_data.py --debug
 ```
 
@@ -276,37 +276,37 @@ python scripts/cleanup_sample_data.py --debug
 
 ### 리소스 식별 작동 방식
 
-정리 스크립트는 **이중 식별 시스템**을 사용하여 워크샵 리소스를 안전하게 식별합니다:
+정리 스크립트는 **이중 식별 시스템**을 사용해서 워크샵 리소스를 안전하게 찾아내요:
 
 **1. 태그 기반 식별 (주요 방법)**
-- 설정 스크립트로 생성된 리소스는 자동으로 태그가 지정됩니다:
-  - `workshop-resource: true` - 워크샵에서 생성된 리소스 식별
-  - `created-by: setup-script` - 리소스를 생성한 스크립트 추적
+- 설정 스크립트로 만든 리소스는 자동으로 태그가 붙어요:
+  - `workshop-resource: true` - 워크샵에서 만든 리소스 식별
+  - `created-by: setup-script` - 리소스를 만든 스크립트 추적
   - `workshop-name: iot-core-basics` - 워크샵별로 리소스 그룹화
-- **장점**: 가장 신뢰할 수 있는 방법, 이름 지정과 관계없이 작동
+- **장점**: 가장 신뢰할 수 있는 방법이고, 이름과 관계없이 작동해요
 
 **2. 명명 규칙 대체 (보조 방법)**
-- 태그가 없는 경우 스크립트는 명명 패턴으로 리소스를 식별:
+- 태그가 없으면 스크립트가 이름 패턴으로 리소스를 찾아요:
   - Things: `--things-prefix` 패턴과 일치 (기본값: `Vehicle-VIN-`)
   - Thing Types: `SedanVehicle`, `SUVVehicle`, `TruckVehicle`
   - Thing Groups: `CustomerFleet`, `TestFleet`, `MaintenanceFleet`, `DealerFleet`
   - IoT 규칙: `*Rule`, `rule_*`, 또는 `*_workshop_*` 패턴과 일치
-- **장점**: 태그 지정이 구현되기 전에 생성된 리소스에서 작동
+- **장점**: 태그 지정이 구현되기 전에 만든 리소스에서도 작동해요
 
-### Dry-Run 모드 (첫 번째 단계로 권장)
+### Dry-Run 모드 (첫 번째 단계로 권장해요)
 
-**정리 작업을 실행하기 전에 항상 미리보기하세요:**
+**정리 작업을 실행하기 전에 항상 미리 확인해보세요:**
 
 ```bash
 python scripts/cleanup_sample_data.py --dry-run
 ```
 
-**Dry-run 모드는:**
-- ✅ 삭제될 모든 워크샵 리소스 식별
-- ✅ 유형별 리소스의 상세 목록 표시
-- ✅ 삭제 순서 표시 (종속성 존중)
-- ✅ 요약 보고서 생성
-- ❌ **리소스를 삭제하지 않음**
+**Dry-run 모드는 이렇게 동작해요:**
+- ✅ 삭제될 모든 워크샵 리소스를 찾아내요
+- ✅ 유형별 리소스의 상세 목록을 보여줘요
+- ✅ 삭제 순서를 보여줘요 (종속성 존중)
+- ✅ 요약 보고서를 만들어줘요
+- ❌ **리소스를 삭제하지는 않아요**
 
 **Dry-run 출력 예시:**
 ```
@@ -325,21 +325,21 @@ python scripts/cleanup_sample_data.py --dry-run
 총계: 48개 리소스가 삭제됩니다
 ```
 
-### 사용자 지정 접두사 사용
+### 사용자 지정 접두사 사용하기
 
-설정 중에 사용자 지정 접두사로 리소스를 생성한 경우 정리에 동일한 접두사를 사용하세요:
+설정할 때 사용자 지정 접두사로 리소스를 만들었다면 정리할 때도 같은 접두사를 사용하세요:
 
 ```bash
-# 사용자 지정 접두사로 설정
+# 사용자 지정 접두사로 설정하기
 python scripts/setup_sample_data.py --things-prefix "MyDevice-"
 
-# 일치하는 접두사로 정리
+# 일치하는 접두사로 정리하기
 python scripts/cleanup_sample_data.py --things-prefix "MyDevice-"
 ```
 
-**중요**: 이름 기반 식별이 올바르게 작동하려면 설정과 정리 간에 접두사가 정확히 일치해야 합니다.
+**중요**: 이름 기반 식별이 제대로 작동하려면 설정과 정리에서 접두사가 정확히 일치해야 해요.
 
-### 정리되는 항목
+### 정리되는 것들
 
 **삭제되는 리소스 (종속성 순서):**
 1. ✅ Thing Shadows (디바이스 상태 데이터)
@@ -353,13 +353,13 @@ python scripts/cleanup_sample_data.py --things-prefix "MyDevice-"
 
 **보호되는 리소스:**
 - ❌ 프로덕션 IoT 리소스 (워크샵 태그 없음)
-- ❌ 다른 명명 패턴의 리소스
-- ❌ 워크샵 Things와 연결되지 않은 인증서 및 정책
-- ❌ 워크샵 스크립트 외부에서 생성된 리소스
+- ❌ 다른 이름 패턴의 리소스
+- ❌ 워크샵 Things와 연결되지 않은 인증서와 정책
+- ❌ 워크샵 스크립트 외부에서 만든 리소스
 
 ### 종속성 인식 삭제
 
-정리 스크립트는 AWS IoT 리소스 종속성을 자동으로 처리합니다:
+정리 스크립트는 AWS IoT 리소스 종속성을 자동으로 처리해요:
 
 **삭제 순서:**
 ```
@@ -367,16 +367,16 @@ Thing Shadows → 인증서 → Things → IoT 규칙 → Thing Groups → Thing
 ```
 
 **이 순서가 중요한 이유:**
-- Thing Shadows는 인증서 전에 삭제해야 합니다
-- 인증서는 Things를 삭제하기 전에 분리해야 합니다
-- Things는 그룹을 삭제하기 전에 그룹에서 제거해야 합니다
-- 정책은 삭제 전에 분리해야 합니다
+- Thing Shadows는 인증서 전에 삭제해야 해요
+- 인증서는 Things를 삭제하기 전에 분리해야 해요
+- Things는 그룹을 삭제하기 전에 그룹에서 제거해야 해요
+- 정책은 삭제 전에 분리해야 해요
 
-**스크립트가 이를 자동으로 처리합니다** - 종속성 충돌에 대해 걱정할 필요가 없습니다.
+**스크립트가 이걸 자동으로 처리해줘요** - 종속성 충돌에 대해 걱정할 필요 없어요.
 
-### 요약 보고서 이해
+### 요약 보고서 이해하기
 
-정리가 완료되면 요약 보고서가 표시됩니다:
+정리가 완료되면 요약 보고서가 나와요:
 
 ```
 📊 정리 요약
@@ -396,49 +396,49 @@ IoT 규칙       |      1 |      1 |    0
 ```
 
 **보고서 필드:**
-- **식별됨**: 워크샵 기준과 일치하는 리소스 발견
-- **삭제됨**: 성공적으로 제거된 리소스
-- **실패**: 삭제할 수 없었던 리소스 (오류 세부 정보 포함)
+- **식별됨**: 워크샵 기준과 일치하는 리소스를 찾았어요
+- **삭제됨**: 성공적으로 제거한 리소스예요
+- **실패**: 삭제할 수 없었던 리소스예요 (오류 세부 정보 포함)
 
 ### 정리 문제 해결
 
 **문제: "리소스를 찾을 수 없음"**
-- **원인**: 리소스에 워크샵 태그가 없거나 접두사와 일치하지 않을 수 있습니다
+- **원인**: 리소스에 워크샵 태그가 없거나 접두사와 일치하지 않을 수 있어요
 - **해결책**: 
-  - 설정 중에 사용자 지정 접두사를 사용했는지 확인
-  - 올바른 접두사로 `--things-prefix` 사용
-  - AWS 콘솔에서 리소스가 존재하는지 확인
+  - 설정할 때 사용자 지정 접두사를 사용했는지 확인해보세요
+  - 올바른 접두사로 `--things-prefix`를 사용하세요
+  - AWS 콘솔에서 리소스가 있는지 확인해보세요
 
 **문제: "권한 거부" 오류**
-- **원인**: AWS 자격 증명에 필요한 IoT 권한이 없습니다
-- **해결책**: IAM 사용자/역할에 IoT 전체 액세스 권한이 있는지 확인
+- **원인**: AWS 자격 증명에 필요한 IoT 권한이 없어요
+- **해결책**: IAM 사용자/역할에 IoT 전체 액세스 권한이 있는지 확인하세요
 
 **문제: "종속성 충돌" 오류**
-- **원인**: 리소스에 처리되지 않은 종속성이 있습니다
-- **해결책**: 스크립트가 이를 자동으로 처리해야 합니다. 문제가 지속되면 `--debug`로 실행하여 세부 정보 확인
+- **원인**: 리소스에 처리되지 않은 종속성이 있어요
+- **해결책**: 스크립트가 이걸 자동으로 처리해야 해요. 문제가 계속되면 `--debug`로 실행해서 세부 정보를 확인하세요
 
 **문제: 일부 리소스가 삭제되지 않음**
-- **원인**: 리소스가 사용 중이거나 외부 종속성이 있을 수 있습니다
+- **원인**: 리소스가 사용 중이거나 외부 종속성이 있을 수 있어요
 - **해결책**: 
-  - 요약 보고서에서 실패한 리소스 확인
-  - AWS 콘솔을 사용하여 남은 리소스를 수동으로 검사 및 삭제
-  - 종속성을 해결한 후 정리를 다시 실행
+  - 요약 보고서에서 실패한 리소스를 확인하세요
+  - AWS 콘솔을 사용해서 남은 리소스를 수동으로 검사하고 삭제하세요
+  - 종속성을 해결한 후 정리를 다시 실행하세요
 
 ### 모범 사례
 
-1. **항상 먼저 dry-run 사용**: 실행하기 전에 삭제될 항목 미리보기
-2. **접두사 일치**: 설정 및 정리에 동일한 `--things-prefix` 사용
-3. **요약 검토**: 보고서를 확인하여 모든 리소스가 삭제되었는지 확인
-4. **신속하게 정리 실행**: 요금을 피하기 위해 워크샵 리소스를 실행 상태로 두지 마세요
-5. **자격 증명 보안 유지**: AWS 자격 증명을 버전 관리에 커밋하지 마세요
+1. **항상 먼저 dry-run 사용하기**: 실행하기 전에 삭제될 것들을 미리 확인하세요
+2. **접두사 일치시키기**: 설정과 정리에 같은 `--things-prefix`를 사용하세요
+3. **요약 검토하기**: 보고서를 확인해서 모든 리소스가 삭제되었는지 확인하세요
+4. **신속하게 정리 실행하기**: 요금이 나가지 않도록 워크샵 리소스를 실행 상태로 두지 마세요
+5. **자격 증명 보안 유지하기**: AWS 자격 증명을 버전 관리에 커밋하지 마세요
 
 ## 🛠️ 문제 해결
 
-### 일반적인 문제
+### 일반적인 문제들
 
 **AWS 자격 증명:**
 ```bash
-# 자격 증명 설정
+# 자격 증명 설정하기
 export AWS_ACCESS_KEY_ID=<your-key>
 export AWS_SECRET_ACCESS_KEY=<your-secret>
 export AWS_DEFAULT_REGION=us-east-1
@@ -455,7 +455,7 @@ pip install -r requirements.txt
 
 ### 디버그 모드
 
-모든 스크립트는 자세한 API 로깅을 위한 디버그 모드를 지원합니다:
+모든 스크립트는 자세한 API 로깅을 위한 디버그 모드를 지원해요:
 ```bash
 python scripts/<script_name>.py --debug
 ```
@@ -483,9 +483,9 @@ python scripts/<script_name>.py --debug
 - **[MQTT 프로토콜 사양](https://mqtt.org/)** - 공식 MQTT 문서
 - **[X.509 인증서 표준](https://tools.ietf.org/html/rfc5280)** - 인증서 형식 사양
 
-## 🤝 기여
+## 🤝 기여하기
 
-이것은 교육 프로젝트입니다. 학습 경험을 개선하는 기여를 환영합니다:
+이건 교육 프로젝트예요. 학습 경험을 개선하는 기여를 환영해요:
 
 - 스크립트 문제에 대한 **버그 수정**
 - 더 나은 현지화를 위한 **번역 개선**
@@ -494,7 +494,7 @@ python scripts/<script_name>.py --debug
 
 ## 📄 라이선스
 
-이 프로젝트는 MIT-0 라이선스에 따라 라이선스가 부여됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
+이 프로젝트는 MIT-0 라이선스에 따라 라이선스가 부여돼요. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
 
 ## 🏷️ 태그
 

@@ -4,7 +4,7 @@
     "aws_config": "📍 Configuración de AWS:",
     "account_id": "ID de Cuenta",
     "region": "Región",
-    "description": "Exploración interactiva de las APIs del Registro de AWS IoT con explicaciones detalladas.",
+    "description": "¡Exploremos juntos las APIs del Registro de AWS IoT con explicaciones detalladas!",
     "debug_enabled": "🔍 MODO DEBUG HABILITADO",
     "debug_features": [
         "• Detalles completos de solicitud/respuesta de API",
@@ -16,11 +16,11 @@
         "• El modo condensado muestra solo métricas clave",
         "• El modo debug muestra detalles completos de API"
     ],
-    "client_initialized": "✅ Cliente de AWS IoT inicializado exitosamente",
-    "invalid_credentials": "❌ Credenciales de AWS inválidas",
+    "client_initialized": "✅ ¡Genial! El cliente de AWS IoT está listo para empezar",
+    "invalid_credentials": "❌ Hmm, esas credenciales de AWS no se ven bien",
     "learning_intro_title": "APIs del Registro de AWS IoT - Gestión de Dispositivos",
-    "learning_intro_content": "El Registro de AWS IoT es la base de datos central que almacena información sobre tus dispositivos IoT (Things), su organización (Thing Groups), plantillas de dispositivos (Thing Types) y certificados de seguridad. Estas APIs te permiten gestionar programáticamente toda tu flota de dispositivos IoT. Entender estas operaciones es fundamental para construir soluciones IoT escalables.",
-    "learning_intro_next": "Exploraremos 8 APIs centrales del Registro con explicaciones detalladas",
+    "learning_intro_content": "El Registro de AWS IoT es como una base de datos central que mantiene registro de todos tus dispositivos IoT (Things), cómo están organizados (Thing Groups), plantillas de dispositivos (Thing Types) y certificados de seguridad. Estas APIs te permiten gestionar toda tu flota de dispositivos IoT de forma programática. ¡Entender estas operaciones es clave para construir soluciones IoT escalables!",
+    "learning_intro_next": "Exploremos 8 APIs centrales del Registro con explicaciones detalladas",
     "press_enter": "Presiona Enter para continuar...",
     "goodbye": "👋 ¡Adiós!",
     "operations_menu": "📋 Operaciones Disponibles:",
@@ -36,7 +36,7 @@
         "9. Salir"
     ],
     "select_operation": "Seleccionar operación (1-9):",
-    "invalid_choice": "❌ Selección inválida. Por favor selecciona 1-9.",
+    "invalid_choice": "❌ ¡Ups! Por favor elige un número entre 1-9.",
     "list_things_options": "🔍 Opciones de Listar Things:",
     "list_things_menu": [
         "   1. Listar todos los Things (básico)",
@@ -49,8 +49,8 @@
     "thing_type_prompt": "Ingresa nombre del Thing Type (ej., SedanVehicle):",
     "attribute_name_prompt": "Ingresa nombre del atributo (ej., country):",
     "attribute_value_prompt": "Ingresa valor del atributo (ej., US):",
-    "no_thing_type": "❌ No se especificó Thing Type",
-    "attribute_required": "❌ Se requieren nombre y valor del atributo",
+    "no_thing_type": "❌ ¡Ups! Necesitas especificar un Thing Type",
+    "attribute_required": "❌ Necesitamos tanto el nombre como el valor del atributo para filtrar",
     "executing": "🔄 Ejecutando:",
     "completed": "completado",
     "found_things": "📊 Encontrados {} Things",
@@ -68,81 +68,81 @@
     "enter_thing_selection": "Ingresa número o nombre del Thing: ",
     "enter_group_selection": "Ingresa número o nombre del Thing Group: ",
     "enter_type_selection": "Ingresa número o nombre del Thing Type: ",
-    "no_things_found": "⚠️ No se encontraron Things en tu cuenta",
-    "no_groups_found": "⚠️ No se encontraron Thing Groups en tu cuenta",
-    "no_types_found": "⚠️ No se encontraron Thing Types en tu cuenta",
+    "no_things_found": "⚠️ Parece que aún no hay Things en tu cuenta",
+    "no_groups_found": "⚠️ Parece que aún no hay Thing Groups en tu cuenta",
+    "no_types_found": "⚠️ Parece que aún no hay Thing Types en tu cuenta",
     "could_not_list_things": "⚠️ No se pudieron listar los Things:",
     "could_not_list_groups": "⚠️ No se pudieron listar los Thing Groups:",
     "could_not_list_types": "⚠️ No se pudieron listar los Thing Types:",
-    "invalid_selection": "❌ Selección inválida. Por favor elige",
+    "invalid_selection": "❌ Hmm, esa no es una opción válida. Por favor elige",
     "endpoint_type_prompt": "Ingresa tipo de endpoint (iot:Data-ATS, iot:CredentialProvider, iot:Jobs) [predeterminado: iot:Data-ATS]: ",
     "pagination_learning_title": "📚 LEARNING MOMENT: Paginación",
-    "pagination_learning_content": "La paginación te permite recuperar grandes conjuntos de datos en fragmentos más pequeños. Esto es esencial cuando gestionas cientos o miles de dispositivos para evitar timeouts y problemas de memoria.",
+    "pagination_learning_content": "La paginación te permite obtener grandes conjuntos de datos en fragmentos más pequeños y manejables. ¡Esto es súper útil cuando gestionas cientos o miles de dispositivos - previene timeouts y mantiene todo funcionando sin problemas!",
     "pagination_listing": "🔄 Listando Things con paginación (máximo {} por página)...",
     "page_summary": "📊 Página {} Resumen: {} Things recuperados",
     "continue_next_page": "¿Continuar a la siguiente página? (s/N): ",
     "pagination_complete": "🏁 Paginación Completa: {} Things totales encontrados en {} página(s)",
     "filter_by_type_learning_title": "📚 LEARNING MOMENT: Filtrar por Thing Type",
-    "filter_by_type_learning_content": "El filtrado te permite encontrar categorías específicas de dispositivos. Los Thing Types actúan como plantillas que agrupan dispositivos similares.",
+    "filter_by_type_learning_content": "El filtrado te permite encontrar categorías específicas de dispositivos fácilmente. Piensa en los Thing Types como plantillas que agrupan dispositivos similares - ¡súper útil para la organización!",
     "filtering_by_type": "🔄 Filtrando Things por Thing Type: {}...",
     "filter_type_results": "📊 Resultados del Filtro: {} Things encontrados con Thing Type '{}'",
     "filter_by_attribute_learning_title": "📚 LEARNING MOMENT: Filtrar por Atributos",
-    "filter_by_attribute_learning_content": "El filtrado por atributos te ayuda a encontrar dispositivos con características específicas. Esto es útil para dirigirse a dispositivos por ubicación, cliente u otros metadatos.",
+    "filter_by_attribute_learning_content": "El filtrado por atributos te ayuda a encontrar dispositivos con características específicas. ¡Es realmente útil para dirigirte a dispositivos por ubicación, cliente o cualquier otro metadato que hayas configurado!",
     "filtering_by_attribute": "🔄 Filtrando Things por atributo {}={}...",
     "filter_attribute_results": "📊 Resultados del Filtro: {} Things encontrados con {}='{}'",
     "debug_full_error": "🔍 DEBUG: Respuesta completa de error:",
     "debug_full_traceback": "🔍 DEBUG: Traza completa:",
     "api_error": "❌ Error de API:",
     "error": "❌ Error:",
-    "no_region_error": "❌ Región de AWS no configurada",
+    "no_region_error": "❌ Parece que tu región de AWS aún no está configurada",
     "region_setup_instructions": [
-        "Por favor configura tu región de AWS usando uno de estos métodos:",
+        "¡No te preocupes! Puedes configurar tu región de AWS usando cualquiera de estos métodos:",
         "1. Variable de entorno: export AWS_DEFAULT_REGION=us-east-1",
         "2. Configurar AWS CLI: aws configure",
         "3. Establecer región en el archivo de credenciales de AWS"
     ],
     "aws_context_error": "⚠️ No se pudo recuperar el contexto de AWS:",
-    "aws_credentials_reminder": "   Asegúrate de que las credenciales de AWS estén configuradas",
+    "aws_credentials_reminder": "   Solo asegúrate de que tus credenciales de AWS estén configuradas correctamente",
     "learning_moments": {
         "list_things": {
             "title": "Listar Things - Descubrimiento de Dispositivos",
-            "content": "La API list_things recupera todos los dispositivos IoT (Things) en tu cuenta. Esto es esencial para la gestión de inventario de dispositivos, monitorear el tamaño de la flota y descubrir dispositivos por atributos. Puedes usar paginación y filtrado para manejar flotas de dispositivos eficientemente.",
-            "next": "Llamaremos a la API list_things con diferentes opciones"
+            "content": "La API list_things obtiene todos tus dispositivos IoT (Things) de tu cuenta. Esto es súper útil para mantener un registro del inventario de dispositivos, monitorear qué tan grande es tu flota y encontrar dispositivos por sus atributos. ¡Puedes usar paginación y filtrado para manejar flotas de dispositivos grandes de manera eficiente!",
+            "next": "Llamemos a la API list_things con diferentes opciones"
         },
         "list_certificates": {
             "title": "Listar Certificados - Inventario de Seguridad",
-            "content": "Los certificados X.509 son la base de la seguridad de dispositivos IoT. Cada certificado identifica únicamente un dispositivo y permite comunicación segura con AWS IoT Core. Esta API te ayuda a auditar tu postura de seguridad, rastrear el ciclo de vida de certificados e identificar dispositivos que necesitan rotación de certificados.",
-            "next": "Recuperaremos todos los certificados y examinaremos sus propiedades de seguridad"
+            "content": "Los certificados X.509 son la columna vertebral de la seguridad de dispositivos IoT. Cada certificado identifica únicamente un dispositivo y permite comunicación segura con AWS IoT Core. Esta API te ayuda a revisar tu configuración de seguridad, rastrear el ciclo de vida de certificados e identificar dispositivos que podrían necesitar rotación de certificados.",
+            "next": "Recuperemos todos los certificados y revisemos sus propiedades de seguridad"
         },
         "list_thing_groups": {
             "title": "Listar Thing Groups - Organización de Dispositivos",
-            "content": "Los Thing Groups proporcionan organización jerárquica para tus dispositivos IoT, similar a carpetas para archivos. Permiten operaciones masivas, herencia de políticas y agrupación lógica por ubicación, función o cualquier criterio de negocio. Esto es crucial para gestionar despliegues IoT a gran escala.",
-            "next": "Exploraremos tus Thing Groups y su estructura organizacional"
+            "content": "Los Thing Groups te ayudan a organizar tus dispositivos IoT jerárquicamente - ¡como carpetas para archivos! Te permiten hacer operaciones masivas, heredar políticas y agrupar dispositivos lógicamente por ubicación, función o cualquier criterio de negocio. Esto es realmente importante para gestionar despliegues IoT a gran escala.",
+            "next": "Exploremos tus Thing Groups y veamos cómo están organizados"
         },
         "list_thing_types": {
             "title": "Listar Thing Types - Plantillas de Dispositivos",
-            "content": "Los Thing Types son plantillas que definen categorías de dispositivos IoT. Actúan como planos que especifican atributos y comportamientos comunes para dispositivos similares. Por ejemplo, un tipo 'SedanVehicle' podría definir atributos como tipo de motor y capacidad de asientos. Los Thing Types ayudan a organizar tu flota de dispositivos y permiten gestión estandarizada de dispositivos.",
-            "next": "Examinaremos tus Thing Types y sus esquemas de atributos"
+            "content": "Los Thing Types son como plantillas que definen categorías de dispositivos IoT. Actúan como planos que especifican atributos y comportamientos comunes para dispositivos similares. Por ejemplo, un tipo 'SedanVehicle' podría definir cosas como tipo de motor y capacidad de asientos. ¡Los Thing Types te ayudan a organizar tu flota de dispositivos y hacen que la gestión de dispositivos sea más estandarizada!",
+            "next": "Revisemos tus Thing Types y sus esquemas de atributos"
         },
         "describe_thing": {
             "title": "Describir Thing - Detalles del Dispositivo",
-            "content": "La API describe_thing proporciona información completa sobre un dispositivo IoT específico, incluyendo sus atributos, Thing Type, versión e identificadores únicos. Esto es esencial para solución de problemas de dispositivos, gestión de configuración y entender las relaciones de dispositivos dentro de tu arquitectura IoT.",
-            "next": "Examinaremos información detallada para un Thing específico"
+            "content": "La API describe_thing te da información completa sobre un dispositivo IoT específico - incluyendo sus atributos, Thing Type, versión e identificadores únicos. Esto es realmente útil para solucionar problemas de dispositivos, gestionar configuraciones y entender cómo los dispositivos se relacionan entre sí en tu configuración IoT.",
+            "next": "Veamos información detallada para un Thing específico"
         },
         "describe_thing_group": {
             "title": "Describir Thing Group - Gestión de Grupos",
-            "content": "Los detalles del Thing Group revelan la estructura organizacional de tu flota IoT. Puedes ver propiedades del grupo, jerarquías padre-hijo, políticas adjuntas y dispositivos miembros. Esta información es vital para entender el control de acceso, herencia de políticas y estrategias de organización de dispositivos.",
-            "next": "Examinaremos propiedades detalladas de un Thing Group específico"
+            "content": "Los detalles del Thing Group te muestran cómo está organizada tu flota IoT. Puedes ver propiedades del grupo, jerarquías padre-hijo, políticas adjuntas y qué dispositivos son miembros. Esta información es realmente importante para entender el control de acceso, cómo se heredan las políticas y tus estrategias de organización de dispositivos.",
+            "next": "Examinemos las propiedades detalladas de un Thing Group específico"
         },
         "describe_thing_type": {
             "title": "Describir Thing Type - Análisis de Plantillas",
-            "content": "Los detalles del Thing Type muestran la definición del plano para categorías de dispositivos. Puedes examinar atributos buscables, restricciones de propiedades y metadatos que definen cómo deben estructurarse los dispositivos de este tipo. Esto ayuda a asegurar registro consistente de dispositivos y permite consultas eficientes de flota.",
-            "next": "Analizaremos el esquema y propiedades de un Thing Type específico"
+            "content": "Los detalles del Thing Type te muestran la definición del plano para categorías de dispositivos. Puedes revisar atributos buscables, restricciones de propiedades y metadatos que definen cómo deben estructurarse los dispositivos de este tipo. ¡Esto ayuda a asegurar que el registro de dispositivos sea consistente y te permite consultar tu flota de manera eficiente!",
+            "next": "Analicemos el esquema y propiedades de un Thing Type específico"
         },
         "describe_endpoint": {
             "title": "Describir Endpoint - Descubrimiento de Conexión",
-            "content": "Los endpoints IoT son las URLs de puerta de enlace que los dispositivos usan para conectarse a AWS IoT Core. Diferentes tipos de endpoint sirven diferentes propósitos: Data-ATS para comunicación de dispositivos, CredentialProvider para autenticación y AWS IoT Jobs para gestión de dispositivos. Entender los endpoints es crucial para la configuración de conectividad de dispositivos.",
-            "next": "Descubriremos la URL del endpoint para conexiones de dispositivos"
+            "content": "Los endpoints IoT son las URLs de puerta de enlace que tus dispositivos usan para conectarse a AWS IoT Core. Diferentes tipos de endpoint sirven diferentes propósitos: Data-ATS para comunicación de dispositivos, CredentialProvider para autenticación y AWS IoT Jobs para gestión de dispositivos. ¡Entender los endpoints es clave para configurar correctamente la conectividad de tus dispositivos!",
+            "next": "Descubramos la URL del endpoint para conexiones de dispositivos"
         }
     },
     "api_desc_list_things_paginated": "Página {} - Obtiene hasta {} Things",

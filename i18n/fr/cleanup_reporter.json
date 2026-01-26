@@ -1,0 +1,30 @@
+{
+  "summary": {
+    "header": "Résumé du nettoyage",
+    "header_dry_run": "Résumé du nettoyage (SIMULATION - Aucune ressource supprimée)",
+    "deleted_section": "Ressources supprimées :",
+    "skipped_section": "Ressources ignorées :",
+    "failed_section": "Suppressions échouées :",
+    "overall_section": "Résumé général :",
+    "non_workshop_reason": "ressources hors atelier",
+    "total": "Total",
+    "total_resources_processed": "Total des ressources traitées",
+    "would_delete": "Serait supprimé",
+    "successfully_deleted": "Supprimé avec succès",
+    "skipped_non_workshop": "Ignoré (hors atelier)",
+    "failed": "Échoué",
+    "execution_time": "Temps d'exécution"
+  },
+  "skipped": {
+    "header_debug": "{} ressources ignorées ({} au total) :",
+    "count_only": "{} ressources ignorées : {} (hors atelier)"
+  },
+  "identification": {
+    "workshop": "Ressource d'atelier",
+    "non_workshop": "Hors atelier",
+    "method_tag": "Correspondance de tag",
+    "method_naming": "Modèle de nommage",
+    "method_association": "Association",
+    "method_none": "Aucune correspondance"
+  }
+}

@@ -1,6 +1,6 @@
 # 故障排除指南
 
-本文档为 Amazon Web Services (AWS) AWS IoT Core - 基础学习项目提供全面的故障排除指导。
+这份指南会帮你解决在使用 AWS IoT Core 学习项目时可能遇到的各种问题。别担心，大多数问题都很容易解决！
 
 ## 目录
 
@@ -41,10 +41,10 @@
 
 #### 检查凭证是否已设置
 ```bash
-# 检查凭证是否已设置
+# 看看凭证是不是已经设置好了
 aws sts get-caller-identity
 
-# 检查当前区域
+# 检查一下当前区域
 echo $AWS_DEFAULT_REGION
 
 # 列出环境变量
@@ -60,10 +60,10 @@ export AWS_ACCESS_KEY_ID=<your-access-key>
 export AWS_SECRET_ACCESS_KEY=<your-secret-key>
 export AWS_DEFAULT_REGION=us-east-1
 
-# 解决方案2: 使用 AWS CLI 配置
+# 解决方案2: 用 AWS CLI 配置
 aws configure
 
-# 解决方案3: 检查现有配置
+# 解决方案3: 看看现有配置
 aws configure list
 ```
 
@@ -72,13 +72,13 @@ aws configure list
 # 设置默认区域
 export AWS_DEFAULT_REGION=us-east-1
 
-# 或在 AWS CLI 配置中指定
+# 或者在 AWS CLI 配置中指定
 aws configure set region us-east-1
 ```
 
 **问题: "The security token included in the request is invalid"**
-- **原因**: 过期的临时凭证或无效的会话令牌
-- **解决方案**: 刷新凭证或删除过期的会话令牌
+- **原因**: 临时凭证过期了或会话令牌无效
+- **解决方案**: 刷新一下凭证或删除过期的会话令牌
 ```bash
 unset AWS_SESSION_TOKEN
 # 然后设置新的凭证
@@ -88,7 +88,7 @@ unset AWS_SESSION_TOKEN
 
 #### 检查虚拟环境
 ```bash
-# 检查 venv 是否激活
+# 看看 venv 是不是已经激活了
 which python
 # 应该显示: /path/to/your/project/venv/bin/python
 
@@ -108,14 +108,14 @@ pip list
 source venv/bin/activate  # macOS/Linux
 # venv\Scripts\activate   # Windows
 
-# 验证激活
+# 验证一下是否激活了
 which python
 pip list
 ```
 
 **问题: venv 不存在**
 ```bash
-# 创建新的虚拟环境
+# 创建一个新的虚拟环境
 python -m venv venv
 
 # 激活并安装依赖项
@@ -128,15 +128,15 @@ pip install -r requirements.txt
 # 检查系统 Python 版本
 python3 --version
 
-# 使用特定的 Python 版本创建 venv
-python3.8 -m venv venv  # 如果您有 Python 3.8
+# 用特定的 Python 版本创建 venv
+python3.8 -m venv venv  # 如果你有 Python 3.8
 ```
 
 ### 依赖项问题
 
 #### 安装依赖项
 ```bash
-# 确保 venv 已激活
+# 确保 venv 已经激活了
 source venv/bin/activate
 
 # 升级 pip
@@ -170,11 +170,11 @@ pip install awsiotsdk>=1.11.0
 
 **问题: 版本冲突**
 ```bash
-# 检查当前版本
+# 看看当前版本
 pip show boto3
 pip show awsiotsdk
 
-# 升级到所需版本
+# 升级到需要的版本
 pip install --upgrade boto3>=1.26.0
 pip install --upgrade awsiotsdk>=1.11.0
 ```
@@ -182,7 +182,7 @@ pip install --upgrade awsiotsdk>=1.11.0
 ### 权限问题
 
 #### 检查 AWS IAM 权限
-您的 AWS 用户或角色需要以下权限：
+你的 AWS 用户或角色需要以下权限：
 
 **基本 IoT 权限:**
 ```json
@@ -208,7 +208,7 @@ pip install --upgrade awsiotsdk>=1.11.0
 
 **问题: "User is not authorized to perform: iot:CreateThing"**
 - **原因**: 缺少 IoT 权限
-- **解决方案**: 将 IoT 权限添加到您的 IAM 用户/角色
+- **解决方案**: 给你的 IAM 用户/角色添加 IoT 权限
 
 **问题: "User is not authorized to perform: iam:CreateRole"**
 - **原因**: Rules Engine 脚本需要 AWS IAM 权限
@@ -231,7 +231,7 @@ python scripts/certificate_manager.py
 ```
 
 **问题: "Invalid certificate format"**
-- **原因**: 证书文件损坏或格式不正确
+- **原因**: 证书文件损坏了或格式不对
 - **解决方案**: 重新生成证书
 ```bash
 # 删除损坏的证书
@@ -243,7 +243,7 @@ python scripts/certificate_manager.py
 
 **问题: "Certificate is not active"**
 ```bash
-# 使用证书管理器激活证书
+# 用证书管理器激活证书
 python scripts/certificate_manager.py
 # 选择选项 5: 管理证书状态
 ```
@@ -255,7 +255,7 @@ python scripts/certificate_manager.py
 #### 连接故障排除
 
 **问题: "Connection failed with error code 5"**
-- **原因**: 认证失败
+- **原因**: 认证失败了
 - **检查**:
   1. 证书文件是否存在且有效
   2. 证书是否处于活动状态
@@ -265,12 +265,12 @@ python scripts/certificate_manager.py
 # 检查证书文件
 ls -la certificates/Vehicle-VIN-001/
 
-# 使用调试模式运行
+# 用调试模式运行
 python scripts/mqtt_client_explorer.py --debug
 ```
 
 **问题: "Connection timeout"**
-- **原因**: 网络问题或错误的端点
+- **原因**: 网络问题或端点不对
 - **解决方案**:
 ```bash
 # 检查 IoT 端点
@@ -282,7 +282,7 @@ ping your-iot-endpoint.iot.us-east-1.amazonaws.com
 ```
 
 **问题: "SSL handshake failed"**
-- **原因**: 证书或 SSL 配置问题
+- **原因**: 证书或 SSL 配置有问题
 - **解决方案**:
   1. 验证证书文件完整性
   2. 检查系统时间是否正确
@@ -293,7 +293,7 @@ ping your-iot-endpoint.iot.us-east-1.amazonaws.com
 #### WebSocket 连接故障排除
 
 **问题: "WebSocket connection failed"**
-- **原因**: 凭证或网络问题
+- **原因**: 凭证或网络有问题
 - **解决方案**:
 ```bash
 # 检查 AWS 凭证
@@ -304,7 +304,7 @@ aws iam get-user
 ```
 
 **问题: "Signature mismatch"**
-- **原因**: 时钟偏差或凭证问题
+- **原因**: 时钟偏差或凭证有问题
 - **解决方案**:
   1. 同步系统时间
   2. 刷新 AWS 凭证
@@ -315,7 +315,7 @@ aws iam get-user
 ### Shadow 连接问题
 
 **问题: "Thing not found"**
-- **原因**: Thing 不存在或名称不正确
+- **原因**: Thing 不存在或名称不对
 - **解决方案**:
 ```bash
 # 列出可用的 Things
@@ -328,7 +328,7 @@ python scripts/setup_sample_data.py
 
 **问题: "Access denied to shadow"**
 - **原因**: 缺少 AWS IoT Device Shadow service 权限
-- **解决方案**: 添加 Shadow 权限到您的 AWS IAM 策略
+- **解决方案**: 给你的 AWS IAM 策略添加 Shadow 权限
 ```json
 {
   "Effect": "Allow",
@@ -344,10 +344,10 @@ python scripts/setup_sample_data.py
 ### Shadow 状态文件问题
 
 **问题: "Invalid JSON in shadow update"**
-- **原因**: 格式错误的 JSON 有效负载
+- **原因**: JSON 格式有问题
 - **解决方案**: 验证 JSON 语法
 ```bash
-# 使用调试模式查看完整的有效负载
+# 用调试模式查看完整的有效负载
 python scripts/device_shadow_explorer.py --debug
 ```
 
@@ -377,7 +377,7 @@ SELECT * FROM topic/+/data WHERE temperature > 25  -- 错误
 ### 规则测试问题
 
 **问题: "Rule not triggering"**
-- **原因**: 主题模式不匹配或 SQL 过滤器
+- **原因**: 主题模式不匹配或 SQL 过滤器有问题
 - **解决方案**:
   1. 验证主题模式
   2. 测试 SQL 语句
@@ -389,10 +389,10 @@ SELECT * FROM topic/+/data WHERE temperature > 25  -- 错误
 
 **macOS:**
 ```bash
-# 使用 Homebrew 安装
+# 用 Homebrew 安装
 brew install openssl
 
-# 如果路径问题
+# 如果有路径问题
 export PATH="/usr/local/opt/openssl/bin:$PATH"
 ```
 
@@ -429,7 +429,7 @@ openssl req -x509 -newkey rsa:2048 -keyout test.key -out test.crt -days 365 -nod
 ### 防火墙和代理问题
 
 **问题: 连接被防火墙阻止**
-- **端口**: 确保端口 443 (HTTPS) 和 8883 (MQTT) 开放
+- **端口**: 确保端口 443 (HTTPS) 和 8883 (MQTT) 是开放的
 - **域**: 允许访问 `*.amazonaws.com`
 
 **问题: 代理配置**
@@ -459,7 +459,7 @@ nslookup your-endpoint.iot.us-east-1.amazonaws.com 8.8.8.8
 ### API 速率限制
 
 **问题: "ThrottlingException"**
-- **原因**: 超过 API 速率限制
+- **原因**: 超过 API 速率限制了
 - **解决方案**: 在 API 调用之间添加延迟
 ```python
 import time
@@ -476,12 +476,12 @@ time.sleep(1)  # 在调用之间等待 1 秒
 
 ### 使用调试模式
 
-所有脚本都支持调试模式以获得详细输出：
+所有脚本都支持调试模式，可以获得详细输出：
 ```bash
 python scripts/<script_name>.py --debug
 ```
 
-调试模式提供：
+调试模式会提供：
 - 详细的 API 请求/响应
 - 完整的错误堆栈跟踪
 - 连接详细信息
@@ -489,7 +489,7 @@ python scripts/<script_name>.py --debug
 
 ### AWS IoT 控制台检查
 
-使用 AWS IoT 控制台验证：
+用 AWS IoT 控制台验证：
 1. **Things**: 检查设备是否已创建
 2. **证书**: 验证证书状态和策略
 3. **策略**: 检查策略文档和附加
@@ -497,9 +497,9 @@ python scripts/<script_name>.py --debug
 
 ### Amazon CloudWatch 日志
 
-检查 Amazon CloudWatch 日志以获得额外见解：
+检查 Amazon CloudWatch 日志可以获得更多信息：
 ```bash
-# 使用 AWS CLI 检查日志
+# 用 AWS CLI 检查日志
 aws logs describe-log-groups --log-group-name-prefix "/aws/iot"
 aws logs get-log-events --log-group-name "/aws/iot/rules" --log-stream-name "your-rule-name"
 ```
@@ -507,12 +507,12 @@ aws logs get-log-events --log-group-name "/aws/iot/rules" --log-stream-name "you
 ### 通用解决步骤
 
 1. **检查基础知识**:
-   - AWS 凭证已设置
-   - 正确的区域
-   - 虚拟环境已激活
-   - 依赖项已安装
+   - AWS 凭证已经设置好了
+   - 区域是正确的
+   - 虚拟环境已经激活了
+   - 依赖项已经安装好了
 
-2. **使用调试模式**:
+2. **用调试模式**:
    ```bash
    python scripts/<script_name>.py --debug
    ```
@@ -544,12 +544,12 @@ aws logs get-log-events --log-group-name "/aws/iot/rules" --log-stream-name "you
 
 ### 报告问题
 
-如果您遇到此指南未涵盖的问题，请提供：
+如果你遇到了这份指南没有涵盖的问题，请提供：
 1. 完整的错误消息
 2. 调试模式输出
-3. 您的环境详细信息（OS、Python 版本）
+3. 你的环境详细信息（OS、Python 版本）
 4. 重现问题的步骤
 
 ---
 
-**记住**: 大多数问题都与 AWS 凭证、权限或网络配置有关。从基础知识开始，然后逐步深入到更具体的问题。
+**记住**: 大多数问题都跟 AWS 凭证、权限或网络配置有关。先从基础知识开始检查，然后再深入到更具体的问题。

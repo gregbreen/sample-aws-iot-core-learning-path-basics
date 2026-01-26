@@ -1,30 +1,30 @@
 {
   "summary": {
-    "header": "清理摘要",
-    "header_dry_run": "清理摘要（模拟运行 - 未删除资源）",
-    "deleted_section": "已删除的资源：",
-    "skipped_section": "跳过的资源：",
-    "failed_section": "删除失败：",
-    "overall_section": "总体摘要：",
-    "non_workshop_reason": "非研讨会资源",
+    "header": "看看我们清理了什么",
+    "header_dry_run": "看看我们会清理什么（模拟运行 - 还没删除任何东西哦）",
+    "deleted_section": "我们移除的资源：",
+    "skipped_section": "我们跳过的资源：",
+    "failed_section": "我们没能删除的资源：",
+    "overall_section": "整体情况：",
+    "non_workshop_reason": "与研讨会无关",
     "total": "总计",
-    "total_resources_processed": "已处理的资源总数",
-    "would_delete": "将删除",
-    "successfully_deleted": "成功删除",
-    "skipped_non_workshop": "已跳过（非研讨会）",
-    "failed": "失败",
-    "execution_time": "执行时间"
+    "total_resources_processed": "我们查看的资源总数",
+    "would_delete": "会移除",
+    "successfully_deleted": "成功移除",
+    "skipped_non_workshop": "已跳过（与研讨会无关）",
+    "failed": "没能删除",
+    "execution_time": "花费时间"
   },
   "skipped": {
-    "header_debug": "跳过的{}资源（共{}个）：",
-    "count_only": "跳过{}个资源：{}（非研讨会）"
+    "header_debug": "我们跳过了 {} 个资源（共 {} 个）：",
+    "count_only": "跳过了 {} 个资源：{}（与研讨会无关）"
   },
   "identification": {
     "workshop": "研讨会资源",
-    "non_workshop": "非研讨会",
-    "method_tag": "标签匹配",
-    "method_naming": "命名模式",
-    "method_association": "关联",
-    "method_none": "无匹配"
+    "non_workshop": "与研讨会无关",
+    "method_tag": "通过标签找到",
+    "method_naming": "通过名称模式找到",
+    "method_association": "通过关联找到",
+    "method_none": "没能识别"
   }
 }

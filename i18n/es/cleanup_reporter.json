@@ -1,30 +1,30 @@
 {
   "summary": {
-    "header": "Resumen de Limpieza",
-    "header_dry_run": "Resumen de Limpieza (SIMULACIÓN - No se Eliminaron Recursos)",
-    "deleted_section": "Recursos Eliminados:",
-    "skipped_section": "Recursos Omitidos:",
-    "failed_section": "Eliminaciones Fallidas:",
-    "overall_section": "Resumen General:",
-    "non_workshop_reason": "recursos no del taller",
+    "header": "Esto es lo que limpiamos",
+    "header_dry_run": "Esto es lo que limpiaríamos (SIMULACIÓN - nada eliminado todavía)",
+    "deleted_section": "Recursos que eliminamos:",
+    "skipped_section": "Recursos que omitimos:",
+    "failed_section": "Recursos que no pudimos eliminar:",
+    "overall_section": "Resumen general:",
+    "non_workshop_reason": "no relacionado con el taller",
     "total": "Total",
-    "total_resources_processed": "Total de Recursos Procesados",
-    "would_delete": "Se Eliminarían",
-    "successfully_deleted": "Eliminados Exitosamente",
-    "skipped_non_workshop": "Omitidos (No del Taller)",
-    "failed": "Fallidos",
-    "execution_time": "Tiempo de Ejecución"
+    "total_resources_processed": "Total de recursos que revisamos",
+    "would_delete": "Eliminaríamos",
+    "successfully_deleted": "Eliminados exitosamente",
+    "skipped_non_workshop": "Omitidos (no relacionados con el taller)",
+    "failed": "No pudimos eliminar",
+    "execution_time": "Tiempo que tomó"
   },
   "skipped": {
-    "header_debug": "Recursos {} Omitidos ({} total):",
-    "count_only": "Recursos {} omitidos: {} (no del taller)"
+    "header_debug": "Omitimos {} recursos ({} total):",
+    "count_only": "Omitimos {} recursos: {} (no relacionados con el taller)"
   },
   "identification": {
-    "workshop": "Recurso del Taller",
-    "non_workshop": "No del Taller",
-    "method_tag": "Coincidencia de Etiqueta",
-    "method_naming": "Patrón de Nomenclatura",
-    "method_association": "Asociación",
-    "method_none": "Sin Coincidencia"
+    "workshop": "Recurso del taller",
+    "non_workshop": "No relacionado con el taller",
+    "method_tag": "Encontrado por etiqueta",
+    "method_naming": "Encontrado por patrón de nombre",
+    "method_association": "Encontrado por asociación",
+    "method_none": "No pudimos identificar"
   }
 }

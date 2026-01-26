@@ -2,10 +2,10 @@
 
 > 🌍 **Idiomas Disponibles** | **Available Languages** | **利用可能な言語** | **可用语言**
 > 
-> - [English](README.md) | **Español** (Actual) | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [Português](README.pt-BR.md)
-> - **Documentación**: [English](docs/en/) | [Español](docs/es/) | [中文](docs/zh-CN/) | [日本語](docs/ja/) | [Português](docs/pt-BR/)
+> - [English](README.md) | **Español** (Actual) | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [Português](README.pt-BR.md) | [한국어](README.ko.md) | [Deutsch](README.de.md) | [Italiano](README.it.md) | [Français](README.fr.md)
+> - **Documentación**: [English](docs/en/) | [Español](docs/es/) | [中文](docs/zh-CN/) | [日本語](docs/ja/) | [Português](docs/pt-BR/) | [한국어](docs/ko/) | [Deutsch](docs/de/) | [Italiano](docs/it/) | [Français](docs/fr/)
 
-Un conjunto completo de herramientas en Python para aprender los conceptos básicos de Amazon Web Services (AWS) AWS IoT Core a través de exploración práctica. Los scripts interactivos demuestran gestión de dispositivos, seguridad, operaciones de API y comunicación MQTT con explicaciones detalladas.
+Un conjunto completo de herramientas en Python para que aprendas los conceptos básicos de Amazon Web Services (AWS) AWS IoT Core de forma práctica. Los scripts interactivos te muestran cómo funciona la gestión de dispositivos, seguridad, operaciones de API y comunicación MQTT con explicaciones detalladas.
 
 ## 🚀 Resumen Rápido - Ruta de Aprendizaje Completa
 
@@ -36,11 +36,11 @@ python scripts/iot_rules_explorer.py         # Enrutamiento y procesamiento de m
 python scripts/cleanup_sample_data.py        # Limpiar recursos (¡IMPORTANTE!)
 ```
 
-**⚠️ Advertencia de Costos**: Esto crea recursos reales de AWS (~$0.17 total). ¡Ejecuta la limpieza cuando termines!
+**⚠️ Advertencia de Costos**: Esto crea recursos reales de AWS (~$0.17 total). ¡Recuerda ejecutar la limpieza cuando termines!
 
 ## Audiencia Objetivo
 
-**Audiencia Principal:** Desarrolladores cloud, arquitectos de soluciones, ingenieros DevOps nuevos en AWS IoT Core
+**Audiencia Principal:** Desarrolladores cloud, arquitectos de soluciones, ingenieros DevOps que están empezando con AWS IoT Core
 
 **Prerrequisitos:** Conocimiento básico de AWS, fundamentos de Python, uso de línea de comandos
 
@@ -48,25 +48,25 @@ python scripts/cleanup_sample_data.py        # Limpiar recursos (¡IMPORTANTE!)
 
 ## 🔧 Construido con SDKs de AWS
 
-Este proyecto aprovecha los SDKs oficiales de AWS para proporcionar experiencias auténticas de AWS IoT Core:
+Este proyecto usa los SDKs oficiales de AWS para darte experiencias auténticas con AWS IoT Core:
 
 ### **Boto3 - SDK de AWS para Python**
-- **Propósito**: Potencia todas las operaciones del Registro de AWS IoT, gestión de certificados e interacciones del Motor de Reglas
+- **Propósito**: Maneja todas las operaciones del Registro de AWS IoT, gestión de certificados e interacciones del Motor de Reglas
 - **Versión**: `>=1.26.0`
 - **Documentación**: [Documentación de Boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 - **APIs de AWS IoT Core**: [Cliente IoT de Boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/iot.html)
 
 ### **SDK de Dispositivos AWS IoT para Python**
-- **Propósito**: Permite comunicación MQTT auténtica con AWS IoT Core usando certificados X.509
+- **Propósito**: Te permite hacer comunicación MQTT auténtica con AWS IoT Core usando certificados X.509
 - **Versión**: `>=1.11.0`
 - **Documentación**: [SDK de Dispositivos AWS IoT para Python v2](https://aws.github.io/aws-iot-device-sdk-python-v2/)
 - **GitHub**: [aws-iot-device-sdk-python-v2](https://github.com/aws/aws-iot-device-sdk-python-v2)
 
 **Por Qué Importan Estos SDKs:**
-- **Listos para Producción**: Los mismos SDKs utilizados en aplicaciones IoT reales
-- **Seguridad**: Soporte integrado para las mejores prácticas de seguridad de AWS IoT
-- **Confiabilidad**: Bibliotecas oficiales mantenidas por AWS con manejo integral de errores
-- **Valor de Aprendizaje**: Experimenta patrones auténticos de desarrollo de AWS IoT
+- **Listos para Producción**: Son los mismos SDKs que se usan en aplicaciones IoT reales
+- **Seguridad**: Vienen con soporte integrado para las mejores prácticas de seguridad de AWS IoT
+- **Confiabilidad**: Son bibliotecas oficiales mantenidas por AWS con manejo completo de errores
+- **Valor de Aprendizaje**: Experimentas patrones auténticos de desarrollo de AWS IoT
 
 ## Tabla de Contenidos
 
@@ -85,7 +85,7 @@ Este proyecto aprovecha los SDKs oficiales de AWS para proporcionar experiencias
 - Acceso a terminal/línea de comandos
 - OpenSSL (para funciones de certificados)
 
-**⚠️ NOTA IMPORTANTE DE SEGURIDAD**: Usa una cuenta de AWS dedicada para desarrollo/aprendizaje. No ejecutes estos scripts en cuentas que contengan recursos IoT de producción. Aunque el script de limpieza tiene múltiples mecanismos de seguridad, la mejor práctica es usar entornos aislados para actividades de aprendizaje.
+**⚠️ NOTA IMPORTANTE DE SEGURIDAD**: Usa una cuenta de AWS dedicada para desarrollo/aprendizaje. No ejecutes estos scripts en cuentas que tengan recursos IoT de producción. Aunque el script de limpieza tiene múltiples mecanismos de seguridad, la mejor práctica es usar entornos aislados para actividades de aprendizaje.
 
 <details>
 <summary>💰 <strong>Detalles de Costos de AWS</strong></summary>
@@ -102,10 +102,10 @@ Este proyecto aprovecha los SDKs oficiales de AWS para proporcionar experiencias
 | **Total Estimado** | **Sesión completa de aprendizaje** | **~$0.17** |
 
 **Gestión de Costos:**
-- ✅ Script de limpieza automática proporcionado
-- ✅ Creación mínima de recursos
-- ✅ Recursos de corta duración (sesión única)
-- ⚠️ **Tu responsabilidad** ejecutar script de limpieza
+- ✅ Te damos un script de limpieza automática
+- ✅ Creamos solo los recursos mínimos necesarios
+- ✅ Los recursos duran poco (solo una sesión)
+- ⚠️ **Es tu responsabilidad** ejecutar el script de limpieza
 
 **📊 Monitorear costos:** [Panel de Facturación de AWS](https://console.aws.amazon.com/billing/)
 
@@ -216,7 +216,7 @@ python scripts/setup_sample_data.py
 - ✅ `iot_rules_explorer.py` - Exploración Rules Engine
 - ✅ `cleanup_sample_data.py` - Limpieza de recursos
 
-**Alternativa:** Usar configuración de AWS CLI o roles de AWS Identity and Access Management (AWS IAM).
+**Alternativa:** También puedes usar la configuración de AWS CLI o roles de AWS Identity and Access Management (AWS IAM).
 
 </details>
 
@@ -226,12 +226,12 @@ python scripts/setup_sample_data.py
 
 ### 1. 📊 Configuración de Datos de Ejemplo
 **Archivo**: `scripts/setup_sample_data.py`
-**Propósito**: Crea recursos IoT realistas para aprendizaje práctico con etiquetado automático
+**Propósito**: Crea recursos IoT realistas para que practiques con etiquetado automático
 **Crea**: 20 Things, 3 Thing Types, 4 Thing Groups, Reglas IoT (con etiquetas de taller)
 
 **Características Clave:**
-- **Etiquetado Automático**: Todos los recursos se etiquetan para identificación segura durante la limpieza
-- **Prefijos Personalizados**: Soporte para prefijos personalizados de nombres de things
+- **Etiquetado Automático**: Todos los recursos se etiquetan para que puedas identificarlos fácilmente durante la limpieza
+- **Prefijos Personalizados**: Puedes usar prefijos personalizados para los nombres de things
 - **Multi-Idioma**: Soporte completo de internacionalización
 
 **Ejemplos de Uso:**
@@ -248,49 +248,49 @@ python scripts/setup_sample_data.py
 ```
 
 **Etiquetado de Recursos:**
-Todos los recursos creados reciben estas etiquetas para identificación segura:
-- `workshop-resource: true` - Marca como creado por el taller
-- `created-by: setup-script` - Identifica el script creador
+Todos los recursos creados reciben estas etiquetas para que puedas identificarlos fácilmente:
+- `workshop-resource: true` - Marca que fue creado por el taller
+- `created-by: setup-script` - Identifica qué script lo creó
 - `workshop-name: iot-core-basics` - Agrupa por nombre del taller
 
 Estas etiquetas permiten que el script de limpieza identifique y elimine de forma segura solo los recursos del taller, protegiendo tu infraestructura IoT de producción.
 
 ### 2. 🔍 Explorador de API del Registro IoT
 **Archivo**: `scripts/iot_registry_explorer.py`
-**Propósito**: Herramienta interactiva para aprender APIs del Registro AWS IoT
+**Propósito**: Herramienta interactiva para que aprendas las APIs del Registro AWS IoT
 **Características**: 8 APIs principales con explicaciones detalladas y llamadas de API reales
 
 ### 3. 🔐 Gerenciador de Certificados y Políticas
 **Archivo**: `scripts/certificate_manager.py`
-**Propósito**: Aprender seguridad AWS IoT a través del gerenciamiento de certificados y políticas
+**Propósito**: Aprende sobre seguridad AWS IoT a través del gerenciamiento de certificados y políticas
 **Características**: Creación de certificados, anexación de políticas, registro de certificados externos
 
 ### 4. 📡 Comunicación MQTT
 **Archivos**: 
-- `scripts/mqtt_client_explorer.py` (Basado en certificados, recomendado)
+- `scripts/mqtt_client_explorer.py` (Basado en certificados, te lo recomendamos)
 - `scripts/mqtt_websocket_explorer.py` (Alternativa basada en WebSocket)
 
-**Propósito**: Experimentar comunicación IoT en tiempo real usando protocolo MQTT
+**Propósito**: Experimenta comunicación IoT en tiempo real usando el protocolo MQTT
 **Características**: Interfaz de línea de comandos interactiva, suscripción de tópicos, publicación de mensajes
 
 ### 5. 🌟 Explorador de AWS IoT Device Shadow service
 **Archivo**: `scripts/device_shadow_explorer.py`
-**Propósito**: Aprender sincronización de estado de dispositivos con AWS IoT Device Shadow
+**Propósito**: Aprende sobre sincronización de estado de dispositivos con AWS IoT Device Shadow
 **Características**: Gerenciamiento interactivo de shadow, actualizaciones de estado, procesamiento de delta
 
 ### 6. ⚙️ Explorador del IoT Rules Engine
 **Archivo**: `scripts/iot_rules_explorer.py`
-**Propósito**: Aprender enrutamiento y procesamiento de mensajes con IoT Rules Engine
+**Propósito**: Aprende sobre enrutamiento y procesamiento de mensajes con IoT Rules Engine
 **Características**: Creación de reglas, filtrado SQL, configuración automática de AWS IAM
 
 ### 7. 🧹 Limpieza de Datos de Ejemplo
 **Archivo**: `scripts/cleanup_sample_data.py`
-**Propósito**: Limpiar todos los recursos de aprendizaje para evitar costos
+**Propósito**: Limpia todos los recursos de aprendizaje para que no sigas pagando
 **Características**: Limpieza segura con tratamiento de dependencias
 
 ## 🧹 Limpieza de Recursos
 
-**⚠️ IMPORTANTE**: Siempre ejecuta la limpieza cuando termines de aprender para evitar cargos continuos de AWS.
+**⚠️ IMPORTANTE**: Siempre ejecuta la limpieza cuando termines de aprender para que no sigas pagando por los recursos de AWS.
 
 ### Uso Básico
 
@@ -298,13 +298,13 @@ Estas etiquetas permiten que el script de limpieza identifique y elimine de form
 # Limpieza estándar - elimina todos los recursos del taller
 python scripts/cleanup_sample_data.py
 
-# Vista previa de lo que se eliminará (paso recomendado primero)
+# Vista previa de lo que se eliminará (te recomendamos hacer esto primero)
 python scripts/cleanup_sample_data.py --dry-run
 
 # Limpieza con prefijo personalizado
 python scripts/cleanup_sample_data.py --things-prefix "MiDispositivo-"
 
-# Habilitar modo debug para registro detallado de API
+# Habilita el modo debug para ver el registro detallado de API
 python scripts/cleanup_sample_data.py --debug
 ```
 
@@ -313,12 +313,12 @@ python scripts/cleanup_sample_data.py --debug
 | Parámetro | Descripción | Predeterminado | Ejemplo |
 |-----------|-------------|---------|---------|
 | `--things-prefix` | Prefijo personalizado para nombres de things | `Vehicle-VIN-` | `--things-prefix "DispositivoPrueba-"` |
-| `--dry-run` | Vista previa de limpieza sin eliminar | `False` | `--dry-run` |
-| `--debug` | Habilitar registro detallado de API | `False` | `--debug` |
+| `--dry-run` | Vista previa de limpieza sin eliminar nada | `False` | `--dry-run` |
+| `--debug` | Habilita el registro detallado de API | `False` | `--debug` |
 
 ### Cómo Funciona la Identificación de Recursos
 
-El script de limpieza utiliza un **sistema de identificación dual** para identificar de forma segura los recursos del taller:
+El script de limpieza usa un **sistema de identificación dual** para identificar de forma segura los recursos del taller:
 
 **1. Identificación Basada en Etiquetas (Método Principal)**
 - Los recursos creados por los scripts de configuración se etiquetan automáticamente con:
@@ -345,8 +345,8 @@ python scripts/cleanup_sample_data.py --dry-run
 
 **El modo dry-run:**
 - ✅ Identifica todos los recursos del taller que se eliminarían
-- ✅ Muestra una lista detallada de recursos por tipo
-- ✅ Muestra el orden de eliminación (respeta dependencias)
+- ✅ Te muestra una lista detallada de recursos por tipo
+- ✅ Te muestra el orden de eliminación (respeta dependencias)
 - ✅ Genera un informe resumen
 - ❌ **NO elimina ningún recurso**
 
@@ -379,7 +379,7 @@ python scripts/setup_sample_data.py --things-prefix "MiDispositivo-"
 python scripts/cleanup_sample_data.py --things-prefix "MiDispositivo-"
 ```
 
-**Importante**: El prefijo debe coincidir exactamente entre configuración y limpieza para que la identificación basada en nombres funcione correctamente.
+**Importante**: El prefijo debe coincidir exactamente entre configuración y limpieza para que la identificación basada en nombres funcione bien.
 
 ### Qué se Limpia
 
@@ -409,12 +409,12 @@ Thing Shadows → Certificados → Things → Reglas IoT → Thing Groups → Th
 ```
 
 **Por qué importa este orden:**
-- Thing Shadows deben eliminarse antes que los certificados
-- Los certificados deben desconectarse antes de que se puedan eliminar los things
-- Los things deben eliminarse de los grupos antes de que se puedan eliminar los grupos
+- Los Thing Shadows deben eliminarse antes que los certificados
+- Los certificados deben desconectarse antes de que puedas eliminar los things
+- Los things deben eliminarse de los grupos antes de que puedas eliminar los grupos
 - Las políticas deben desconectarse antes de la eliminación
 
-**El script maneja esto automáticamente** - no necesitas preocuparte por conflictos de dependencias.
+**El script maneja esto automáticamente** - no tienes que preocuparte por conflictos de dependencias.
 
 ### Entendiendo el Informe Resumen
 
@@ -452,17 +452,17 @@ Total            |            68 |         68 |        0
   - Verifica que los recursos existan en la Consola de AWS
 
 **Problema: Errores de "Permiso denegado"**
-- **Causa**: Las credenciales de AWS carecen de los permisos IoT necesarios
+- **Causa**: Tus credenciales de AWS no tienen los permisos IoT necesarios
 - **Solución**: Asegúrate de que tu usuario/rol IAM tenga permisos de acceso completo a IoT
 
 **Problema: Errores de "Conflicto de dependencia"**
 - **Causa**: Los recursos tienen dependencias que no se manejaron
-- **Solución**: El script debería manejar esto automáticamente. Si persiste, ejecuta con `--debug` para ver detalles
+- **Solución**: El script debería manejar esto automáticamente. Si persiste, ejecuta con `--debug` para ver los detalles
 
 **Problema: Algunos recursos no se eliminaron**
 - **Causa**: Los recursos pueden estar en uso o tener dependencias externas
 - **Solución**: 
-  - Verifica el informe resumen para recursos fallidos
+  - Verifica el informe resumen para ver qué recursos fallaron
   - Usa la Consola de AWS para inspeccionar y eliminar manualmente los recursos restantes
   - Ejecuta la limpieza nuevamente después de resolver las dependencias
 
@@ -471,22 +471,22 @@ Total            |            68 |         68 |        0
 1. **Siempre usa dry-run primero**: Previsualiza lo que se eliminará antes de ejecutar
 2. **Coincide los prefijos**: Usa el mismo `--things-prefix` para configuración y limpieza
 3. **Revisa el resumen**: Verifica el informe para asegurarte de que todos los recursos se eliminaron
-4. **Ejecuta la limpieza prontamente**: No dejes recursos del taller ejecutándose para evitar cargos
-5. **Mantén las credenciales seguras**: Nunca confirmes credenciales de AWS en control de versiones
+4. **Ejecuta la limpieza pronto**: No dejes recursos del taller ejecutándose para que no sigas pagando
+5. **Mantén las credenciales seguras**: Nunca subas credenciales de AWS a control de versiones
 
 ## ❓ Preguntas Frecuentes (FAQ)
 
 ### Preguntas Generales
 
 **P: ¿Qué recursos eliminará el script de limpieza?**
-R: El script de limpieza identifica y elimina recursos creados por los scripts de configuración del taller. Esto incluye Things, Certificados, Thing Groups, Thing Types, Reglas IoT y Políticas que tienen etiquetas de taller o coinciden con los patrones de nombres. Los recursos de producción están protegidos.
+R: El script de limpieza identifica y elimina recursos creados por los scripts de configuración del taller. Esto incluye Things, Certificados, Thing Groups, Thing Types, Reglas IoT y Políticas que tienen etiquetas de taller o coinciden con los patrones de nombres. Tus recursos de producción están protegidos.
 
 **P: ¿Cómo puedo previsualizar la limpieza sin eliminar nada?**
 R: Usa la bandera `--dry-run`:
 ```bash
 python scripts/cleanup_sample_data.py --dry-run
 ```
-Esto muestra exactamente lo que se eliminaría sin hacer ningún cambio.
+Esto te muestra exactamente lo que se eliminaría sin hacer ningún cambio.
 
 **P: ¿Puedo usar un prefijo personalizado para los nombres de things?**
 R: ¡Sí! Usa el parámetro `--things-prefix` tanto en configuración como en limpieza:
@@ -502,7 +502,7 @@ python scripts/cleanup_sample_data.py --things-prefix "MiDispositivo-"
 R: El script de limpieza tiene un mecanismo de respaldo. Si las etiquetas no están presentes, usa convenciones de nombres para identificar recursos del taller. Los recursos que coincidan con el patrón de prefijo de thing (predeterminado: `Vehicle-VIN-`) o nombres estándar del taller serán identificados.
 
 **P: ¿Cómo cambio el idioma?**
-R: Establece la variable de entorno `AWS_IOT_LANG`:
+R: Configura la variable de entorno `AWS_IOT_LANG`:
 ```bash
 export AWS_IOT_LANG=es  # Español
 export AWS_IOT_LANG=ja  # Japonés
@@ -510,19 +510,19 @@ export AWS_IOT_LANG=zh-CN  # Chino
 export AWS_IOT_LANG=pt-BR  # Portugués
 export AWS_IOT_LANG=ko  # Coreano
 ```
-O ejecuta el script sin establecerla - se te pedirá que selecciones un idioma interactivamente.
+O ejecuta el script sin configurarla - te pedirá que selecciones un idioma de forma interactiva.
 
 **P: ¿Qué pasa si la limpieza falla a mitad de camino?**
 R: El script de limpieza está diseñado para ser idempotente - puedes ejecutarlo múltiples veces de forma segura. Si la limpieza falla:
 1. Verifica el informe resumen para ver qué recursos fallaron
 2. Ejecuta el script nuevamente - omitirá los recursos ya eliminados
 3. Usa el modo `--debug` para ver mensajes de error detallados
-4. Elimina manualmente los recursos restantes a través de la Consola de AWS si es necesario
+4. Si es necesario, elimina manualmente los recursos restantes a través de la Consola de AWS
 
 **P: ¿Cómo verifico que los recursos fueron eliminados?**
 R: Verifica el informe resumen al final de la limpieza. También puedes verificar en la Consola de AWS IoT:
-- Navega a AWS IoT Core → Administrar → Things
-- Verifica que los things del taller (Vehicle-VIN-*) se hayan ido
+- Ve a AWS IoT Core → Administrar → Things
+- Verifica que los things del taller (Vehicle-VIN-*) ya no estén
 - Verifica que Thing Groups, Thing Types y Certificados se hayan eliminado
 
 ### Preguntas Técnicas
@@ -545,13 +545,13 @@ R:
 El script intenta primero basado en etiquetas, luego recurre a patrones de nombres si las etiquetas no están presentes.
 
 **P: ¿Puedo usar esto en una cuenta de AWS de producción?**
-R: Aunque el script de limpieza tiene múltiples mecanismos de seguridad (etiquetas, patrones de nombres, modo dry-run), **recomendamos encarecidamente usar una cuenta de AWS dedicada para desarrollo/aprendizaje**. Esto sigue las mejores prácticas de AWS para aislamiento de entornos.
+R: Aunque el script de limpieza tiene múltiples mecanismos de seguridad (etiquetas, patrones de nombres, modo dry-run), **te recomendamos mucho usar una cuenta de AWS dedicada para desarrollo/aprendizaje**. Esto sigue las mejores prácticas de AWS para aislamiento de entornos.
 
 **P: ¿Qué pasa si interrumpo la limpieza con Ctrl+C?**
 R: El script maneja las interrupciones con gracia. Los recursos eliminados antes de la interrupción permanecen eliminados. Simplemente ejecuta el script de limpieza nuevamente para continuar - omitirá los recursos ya eliminados y completará las eliminaciones restantes.
 
 **P: ¿Cuánto cuesta ejecutar estos scripts de aprendizaje?**
-R: Aproximadamente $0.17 USD por una sesión completa de aprendizaje. Consulta la sección [Información de Costos](#información-de-costos) para un desglose detallado. Siempre ejecuta la limpieza cuando termines para evitar cargos continuos.
+R: Aproximadamente $0.17 USD por una sesión completa de aprendizaje. Consulta la sección [Información de Costos](#información-de-costos) para un desglose detallado. Siempre ejecuta la limpieza cuando termines para que no sigas pagando.
 
 ## 🛠️ Solución de Problemas
 
@@ -559,9 +559,9 @@ R: Aproximadamente $0.17 USD por una sesión completa de aprendizaje. Consulta l
 - **Credenciales**: `aws sts get-caller-identity`
 - **Región**: `export AWS_DEFAULT_REGION=us-east-1`
 - **Dependencias**: `pip install --upgrade -r requirements.txt`
-- **Modo debug**: Agregar bandera `--debug` a cualquier script
+- **Modo debug**: Agrega la bandera `--debug` a cualquier script
 
-**📋 Guía Completa de Solución de Problemas**: Ver [Documentación de Solución de Problemas](docs/es/TROUBLESHOOTING.md) para soluciones detalladas a problemas comunes, problemas de conexión MQTT, errores de certificados y más.
+**📋 Guía Completa de Solución de Problemas**: Ve a [Documentación de Solución de Problemas](docs/es/TROUBLESHOOTING.md) para soluciones detalladas a problemas comunes, problemas de conexión MQTT, errores de certificados y más.
 
 ## 📖 Documentación Avanzada
 

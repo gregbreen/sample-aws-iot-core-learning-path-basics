@@ -4,7 +4,7 @@
   "aws_config": "📍 AWS 配置:",
   "account_id": "账户 ID",
   "region": "区域",
-  "description": "通过详细说明交互式探索 AWS IoT Registry API。",
+  "description": "让我们一起通过详细说明来探索 AWS IoT Registry API 吧！",
   "debug_enabled": "🔍 调试模式已启用",
   "debug_features": [
     "• 完整的 API 请求/响应详细信息",
@@ -16,11 +16,11 @@
     "• 精简模式仅显示关键指标",
     "• 调试模式显示完整的 API 详细信息"
   ],
-  "client_initialized": "✅ AWS IoT 客户端初始化成功",
-  "invalid_credentials": "❌ 无效的 AWS 凭证",
-  "learning_intro_title": "AWS IoT Registry API - 设备管理",
-  "learning_intro_content": "AWS IoT Registry 是存储 IoT 设备（Things）、其组织（Thing Groups）、设备模板（Thing Types）和安全证书信息的中央数据库。这些 API 允许您以编程方式管理整个 IoT 设备车队。理解这些操作是构建可扩展 IoT 解决方案的基础。",
-  "learning_intro_next": "我们将通过详细说明探索 8 个核心 Registry API",
+  "client_initialized": "✅ 太好了！AWS IoT 客户端已准备就绪",
+  "invalid_credentials": "❌ 嗯，这些 AWS 凭证看起来不太对",
+  "learning_intro_title": "AWS IoT Registry API - AWS IoT 设备管理",
+  "learning_intro_content": "AWS IoT Registry 就像一个中央数据库，记录着您所有的 IoT 设备（Things）、它们的组织方式（Thing Groups）、设备模板（Thing Types）以及安全证书。这些 API 让您能够以编程方式管理整个 IoT 设备车队。理解这些操作是构建可扩展 IoT 解决方案的关键！",
+  "learning_intro_next": "让我们通过详细说明来探索 8 个核心 Registry API",
   "press_enter": "按 Enter 继续...",
   "goodbye": "👋 再见！",
   "operations_menu": "📋 可用操作:",
@@ -36,7 +36,7 @@
     "9. 退出"
   ],
   "select_operation": "选择操作 (1-9):",
-  "invalid_choice": "❌ 无效选择。请选择 1-9。",
+  "invalid_choice": "❌ 哎呀！请选择 1-9 之间的数字。",
   "list_things_options": "🔍 List Things 选项:",
   "list_things_menu": [
     "   1. 列出所有 Things（基本）",
@@ -49,8 +49,8 @@
   "thing_type_prompt": "输入 Thing Type 名称（例如：SedanVehicle）:",
   "attribute_name_prompt": "输入属性名称（例如：country）:",
   "attribute_value_prompt": "输入属性值（例如：US）:",
-  "no_thing_type": "❌ 未指定 Thing Type",
-  "attribute_required": "❌ 需要属性名称和值",
+  "no_thing_type": "❌ 哎呀！您需要指定一个 Thing Type",
+  "attribute_required": "❌ 我们需要属性名称和值才能进行过滤",
   "executing": "🔄 执行中:",
   "completed": "已完成",
   "found_things": "📊 找到 {} 个 Things",
@@ -68,94 +68,94 @@
   "enter_thing_selection": "输入编号或 Thing 名称: ",
   "enter_group_selection": "输入编号或 Thing Group 名称: ",
   "enter_type_selection": "输入编号或 Thing Type 名称: ",
-  "no_things_found": "⚠️ 在您的账户中未找到 Things",
-  "no_groups_found": "⚠️ 在您的账户中未找到 Thing Groups",
-  "no_types_found": "⚠️ 在您的账户中未找到 Thing Types",
+  "no_things_found": "⚠️ 看起来您的账户中还没有 Things",
+  "no_groups_found": "⚠️ 看起来您的账户中还没有 Thing Groups",
+  "no_types_found": "⚠️ 看起来您的账户中还没有 Thing Types",
   "could_not_list_things": "⚠️ 无法列出 Things:",
   "could_not_list_groups": "⚠️ 无法列出 Thing Groups:",
   "could_not_list_types": "⚠️ 无法列出 Thing Types:",
-  "invalid_selection": "❌ 无效选择。请选择",
+  "invalid_selection": "❌ 嗯，这不是一个有效的选择。请选择",
   "endpoint_type_prompt": "输入端点类型（iot:Data-ATS, iot:CredentialProvider, iot:Jobs）[默认: iot:Data-ATS]: ",
   "pagination_learning_title": "📚 学习要点: 分页",
-  "pagination_learning_content": "分页允许您以较小的块检索大型数据集。这在管理数百或数千个设备时至关重要，以避免超时和内存问题。",
+  "pagination_learning_content": "分页让您可以将大型数据集分成更小、更易管理的块来获取。当您管理数百或数千个设备时，这非常有用 - 它可以防止超时并保持一切顺利运行！",
   "pagination_listing": "🔄 使用分页列出 Things（每页最多 {}）...",
   "page_summary": "📊 第 {} 页摘要: 检索到 {} 个 Things",
   "continue_next_page": "继续到下一页？ (y/N): ",
   "pagination_complete": "🏁 分页完成: 在 {} 页中找到总共 {} 个 Things",
   "filter_by_type_learning_title": "📚 学习要点: 按 Thing Type 过滤",
-  "filter_by_type_learning_content": "过滤允许您查找特定类别的设备。Thing Types 充当将相似设备分组在一起的模板。",
+  "filter_by_type_learning_content": "过滤让您可以轻松找到特定类别的设备。可以把 Thing Types 想象成将相似设备分组在一起的模板 - 对于组织管理非常方便！",
   "filtering_by_type": "🔄 按 Thing Type 过滤 Things: {}...",
   "filter_type_results": "📊 过滤结果: 找到 {} 个具有 Thing Type '{}' 的 Things",
   "filter_by_attribute_learning_title": "📚 学习要点: 按属性过滤",
-  "filter_by_attribute_learning_content": "属性过滤帮助您查找具有特定特征的设备。这对于按位置、客户或其他元数据定位设备很有用。",
+  "filter_by_attribute_learning_content": "属性过滤帮助您找到具有特定特征的设备。对于按位置、客户或您设置的任何其他元数据来定位设备非常有用！",
   "filtering_by_attribute": "🔄 按属性 {}={} 过滤 Things...",
   "filter_attribute_results": "📊 过滤结果: 找到 {} 个具有 {}='{}' 的 Things",
   "debug_full_error": "🔍 调试: 完整错误响应:",
   "debug_full_traceback": "🔍 调试: 完整堆栈跟踪:",
   "api_error": "❌ API 错误:",
   "error": "❌ 错误:",
-  "no_region_error": "❌ 未配置 AWS 区域",
+  "no_region_error": "❌ 看起来您的 AWS 区域还没有配置",
   "region_setup_instructions": [
-    "请使用以下方法之一配置您的 AWS 区域:",
+    "别担心！您可以使用以下任一方法配置 AWS 区域：",
     "1. 设置环境变量: export AWS_DEFAULT_REGION=us-east-1",
     "2. 配置 AWS CLI: aws configure",
     "3. 在 AWS 凭证文件中设置区域"
   ],
-  "aws_context_error": "⚠️ 无法检索 AWS 上下文:",
-  "aws_credentials_reminder": "   确保已配置 AWS 凭证",
+  "aws_context_error": "⚠️ 无法检索 AWS 上下文：",
+  "aws_credentials_reminder": "   只需确保您的 AWS 凭证设置正确",
   "learning_moments": {
     "list_things": {
       "title": "List Things - 设备发现",
-      "content": "list_things API 检索您账户中的所有 IoT 设备（Things）。这对于设备库存管理、监控车队规模和按属性发现设备至关重要。您可以使用分页和过滤来高效处理设备车队。",
-      "next": "我们将使用不同选项调用 list_things API"
+      "content": "list_things API 从您的账户中获取所有 IoT 设备（Things）。这对于跟踪设备库存、监控车队规模以及按属性查找设备非常有用。您可以使用分页和过滤来高效处理大型设备车队！",
+      "next": "让我们使用不同选项调用 list_things API"
     },
     "list_certificates": {
       "title": "List Certificates - 安全库存",
-      "content": "X.509 证书是 IoT 设备安全的基础。每个证书唯一标识一个设备并启用与 AWS IoT Core 的安全通信。此 API 帮助您审核安全态势、跟踪证书生命周期并识别需要证书轮换的设备。",
-      "next": "我们将检索所有证书并检查其安全属性"
+      "content": "X.509 证书是 IoT 设备安全的基础。每个证书唯一标识一个设备并启用与 AWS IoT Core 的安全通信。此 API 帮助您检查安全设置、跟踪证书生命周期，并发现可能需要证书轮换的设备。",
+      "next": "让我们检索所有证书并查看它们的安全属性"
     },
     "list_thing_groups": {
       "title": "List Thing Groups - 设备组织",
-      "content": "Thing Groups 为您的 IoT 设备提供分层组织，类似于文件的文件夹。它们支持批量操作、策略继承以及按位置、功能或任何业务标准进行逻辑分组。这对于管理大规模 IoT 部署至关重要。",
-      "next": "我们将探索您的 Thing Groups 及其组织结构"
+      "content": "Thing Groups 帮助您分层组织 IoT 设备 - 有点像文件的文件夹！它们让您可以进行批量操作、继承策略，并按位置、功能或任何业务标准对设备进行逻辑分组。这对于管理大规模 IoT 部署非常重要。",
+      "next": "让我们探索您的 Thing Groups 并看看它们是如何组织的"
     },
     "list_thing_types": {
       "title": "List Thing Types - 设备模板",
-      "content": "Thing Types 是定义 IoT 设备类别的模板。它们充当蓝图，指定相似设备的通用属性和行为。例如，'SedanVehicle' 类型可能定义引擎类型和座位容量等属性。Thing Types 帮助组织您的设备车队并启用标准化设备管理。",
-      "next": "我们将检查您的 Thing Types 及其属性架构"
+      "content": "Thing Types 就像定义 IoT 设备类别的模板。它们充当蓝图，指定相似设备的通用属性和行为。例如，'SedanVehicle' 类型可能定义引擎类型和座位容量等属性。Thing Types 帮助您组织设备车队并使设备管理更加标准化！",
+      "next": "让我们查看您的 Thing Types 及其属性架构"
     },
     "describe_thing": {
       "title": "Describe Thing - 设备详细信息",
-      "content": "describe_thing API 提供特定 IoT 设备的完整详细信息，包括其属性、Thing Type 关联和组成员身份。这对于设备故障排除、配置验证和理解设备关系至关重要。",
-      "next": "我们将检查特定 Thing 的详细配置"
+      "content": "describe_thing API 提供特定 IoT 设备的完整信息 - 包括其属性、Thing Type、版本和唯一标识符。这对于设备故障排除、管理配置以及理解设备在 IoT 设置中的相互关系非常有用。",
+      "next": "让我们查看特定 Thing 的详细信息"
     },
     "describe_thing_group": {
-      "title": "Describe Thing Group - 组详细信息",
-      "content": "Thing Groups 可以有属性、策略和层次关系。此 API 显示组配置、成员设备和继承的策略。理解组结构对于有效的设备管理和策略应用至关重要。",
-      "next": "我们将探索 Thing Group 配置和层次结构"
+      "title": "Describe Thing Group - 组管理",
+      "content": "Thing Group 详细信息向您展示 IoT 车队的组织方式。您可以看到组属性、父子层次结构、附加的策略以及哪些设备是成员。这些信息对于理解访问控制、策略继承方式以及设备组织策略非常重要。",
+      "next": "让我们检查特定 Thing Group 的详细属性"
     },
     "describe_thing_type": {
-      "title": "Describe Thing Type - 类型定义",
-      "content": "Thing Types 定义设备类别的属性架构和描述。此 API 显示类型配置、属性定义和使用统计。这对于理解设备标准化和确保一致的设备配置很重要。",
-      "next": "我们将检查 Thing Type 定义和属性"
+      "title": "Describe Thing Type - 模板分析",
+      "content": "Thing Type 详细信息向您展示设备类别的蓝图定义。您可以查看可搜索属性、属性约束以及定义此类型设备应如何构建的元数据。这有助于确保设备注册的一致性并让您高效查询车队！",
+      "next": "让我们分析特定 Thing Type 的架构和属性"
     },
     "describe_endpoint": {
-      "title": "Describe Endpoint - 连接信息",
-      "content": "IoT 端点是设备用于连接到 AWS IoT Core 的网关 URL。不同的端点类型服务于不同的目的：Data-ATS 用于设备通信，CredentialProvider 用于身份验证，AWS IoT Jobs 用于设备管理。理解端点对于设备连接配置至关重要。",
-      "next": "我们将发现设备连接的端点 URL"
+      "title": "Describe Endpoint - 连接发现",
+      "content": "IoT 端点是设备用于连接到 AWS IoT Core 的网关 URL。不同的端点类型服务于不同的目的：Data-ATS 用于设备通信，CredentialProvider 用于身份验证，AWS IoT Jobs 用于设备管理。理解端点是正确配置设备连接的关键！",
+      "next": "让我们发现用于设备连接的端点 URL"
     }
   },
   "api_desc_list_things_paginated": "第 {} 页 - 检索最多 {} 个 Things",
   "api_desc_list_things_by_type": "检索按 Thing Type '{}' 过滤的 Things",
   "api_desc_list_things_by_attribute": "检索按属性 '{}={}' 过滤的 Things",
-  "api_desc_list_things": "检索 AWS 账户中所有 IoT Things 的分页列表",
-  "api_desc_list_certificates": "检索在 AWS IoT 账户中注册的 X.509 证书列表",
+  "api_desc_list_things": "获取您 AWS 账户中所有 IoT Things 的分页列表",
+  "api_desc_list_certificates": "获取在您的 AWS IoT 账户中注册的 X.509 证书列表",
   "api_desc_list_thing_groups": "检索用于组织和管理 IoT 设备的 Thing Groups 列表",
-  "api_desc_list_thing_types": "检索定义设备模板和属性的 Thing Types 列表",
-  "api_desc_describe_thing": "检索特定 IoT Thing 的详细信息",
-  "api_desc_describe_thing_group": "检索特定 Thing Group 的详细信息",
+  "api_desc_list_thing_types": "获取定义设备模板和属性的 Thing Types 列表",
+  "api_desc_describe_thing": "获取特定 IoT Thing 的详细信息",
+  "api_desc_describe_thing_group": "获取特定 Thing Group 的详细信息",
   "api_desc_describe_thing_type": "检索特定 Thing Type 的详细信息",
-  "api_desc_describe_endpoint": "检索 AWS 账户和区域的 IoT 端点 URL",
+  "api_desc_describe_endpoint": "获取您的 AWS 账户和区域的 IoT 端点 URL",
   "api_explain_list_things": "显示包含名称、类型、属性和创建日期的设备清单",
   "api_explain_list_certificates": "显示包含 ID、ARN、状态和到期日期的安全证书",
   "api_explain_list_thing_groups": "显示包含组层次结构和属性的设备组织结构",

@@ -1,0 +1,28 @@
+{
+  "debug": {
+    "processing_resources": "========== Elaborazione di {0} risorse {1} ==========",
+    "processing_item": "--- Elaborazione {0}/{1}: {2} ---",
+    "resource_name": "Risorsa: {0}",
+    "is_workshop_resource": "È una risorsa del workshop: {0}",
+    "identification_method": "Metodo di identificazione: {0}",
+    "skipping_non_workshop": "Salto risorsa non del workshop: {0}",
+    "proceeding_to_delete": "Procedo con l'eliminazione della risorsa del workshop: {0}",
+    "deleting_with_dependencies": "Eliminazione con gestore delle dipendenze...",
+    "dependency_handler_result": "Risultato gestore dipendenze: successo={0}, elementi_eliminati={1}",
+    "deleting_single_resource": "Eliminazione singola risorsa (senza dipendenze)...",
+    "single_resource_result": "Risultato eliminazione singola risorsa: successo={0}",
+    "successfully_deleted": "✓ Eliminato con successo: {0}",
+    "failed_to_delete": "✗ Eliminazione fallita: {0}",
+    "completed_processing": "========== Elaborazione {0} completata ==========",
+    "processing_stats": "Totale: {0}, Eliminati: {1}, Saltati: {2}, Falliti: {3}",
+    "rate_limiting": "Limitazione velocità: attesa di {0:.3f}s per {1}"
+  },
+  "warning": {
+    "unknown_resource_type": "Tipo di risorsa sconosciuto: {0}"
+  },
+  "error": {
+    "processing_error": "Errore nell'elaborazione di {0}: {1}",
+    "aws_api_error": "Errore API AWS nell'eliminazione di {0}: {1}",
+    "unexpected_error": "Errore imprevisto nell'eliminazione della risorsa: {0}"
+  }
+}

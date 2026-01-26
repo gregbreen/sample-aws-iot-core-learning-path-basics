@@ -37,7 +37,7 @@ ENV/
 
 # Kiro AI Assistant Configuration
 .kiro/
-
+.flake8
 # OS
 .DS_Store
 .DS_Store?

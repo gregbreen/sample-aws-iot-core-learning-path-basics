@@ -21,12 +21,21 @@ from awsiot import mqtt_connection_builder
 from botocore.exceptions import ClientError
 from iot_helpers.utils.resource_tagger import apply_workshop_tags
 
+# Import centralized language selector
+from i18n.language_selector import get_language
+
 # Internationalization support
 def load_messages(lang="en"):
     """Load messages from i18n files"""
     try:
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        i18n_path = os.path.join(script_dir, "..", "i18n", lang, "iot_rules_explorer.json")
+        # Map short codes to directory names
+        lang_map = {
+            "zh": "zh-CN",
+            "pt": "pt-BR"
+        }
+        lang_dir = lang_map.get(lang, lang)
+        i18n_path = os.path.join(script_dir, "..", "i18n", lang_dir, "iot_rules_explorer.json")
         with open(i18n_path, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
@@ -34,54 +43,6 @@ def load_messages(lang="en"):
         if lang != "en":
             return load_messages("en")
         return {}
-
-
-def get_language():
-    """Get user's preferred language"""
-    env_lang = os.getenv("AWS_IOT_LANG", "").lower()
-    if env_lang in ["es", "spanish", "español"]:
-        return "es"
-    elif env_lang in ["ja", "japanese", "日本語", "jp"]:
-        return "ja"
-    elif env_lang in ["zh-cn", "chinese", "中文", "zh"]:
-        return "zh-CN"
-    elif env_lang in ["pt-br", "portuguese", "português", "pt"]:
-        return "pt-BR"
-    elif env_lang in ["ko", "korean", "한국어", "kr"]:
-        return "ko"
-    elif env_lang in ["en", "english"]:
-        return "en"
-
-    # Interactive selection
-    print("🌍 Language Selection / Selección de Idioma / 言語選択 / 语言选择 / Seleção de Idioma / 언어 선택")
-    print("=" * 80)
-    print("1. English")
-    print("2. Español (Spanish)")
-    print("3. 日本語 (Japanese)")
-    print("4. 中文 (Chinese)")
-    print("5. Português (Portuguese)")
-    print("6. 한국어 (Korean)")
-
-    while True:
-        try:
-            choice = input("Select language (1-6): ").strip()
-            if choice == "1":
-                return "en"
-            elif choice == "2":
-                return "es"
-            elif choice == "3":
-                return "ja"
-            elif choice == "4":
-                return "zh-CN"
-            elif choice == "5":
-                return "pt-BR"
-            elif choice == "6":
-                return "ko"
-            else:
-                print("Invalid choice. Please select 1-6.")
-        except KeyboardInterrupt:
-            print("\nGoodbye!")
-            sys.exit(0)
 
 
 # Global variables

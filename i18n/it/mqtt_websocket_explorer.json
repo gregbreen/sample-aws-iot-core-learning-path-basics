@@ -145,7 +145,7 @@
   "qos_level_prompt": "Livello QoS (0=Al massimo una volta, 1=Almeno una volta) [0]: ",
   "invalid_qos": "❌ Per favore inserisci 0 o 1",
   "subscription_failed_retry": "❌ Sottoscrizione fallita, riprova",
-  "run_diagnostics": "Vuoi eseguire la diagnostica della connessione? (y/N): ",
+  "run_diagnostics": "Vuoi eseguire la diagnostica della connessione? (s/N): ",
   "topic_cannot_be_empty": "❌ Il topic non può essere vuoto",
   "interactive_websocket_mode": "🎮 Modalità Messaggistica MQTT WebSocket Interattiva",
   "messages_appear_immediately": "💡 I messaggi appariranno immediatamente quando ricevuti sui topic sottoscritti!",

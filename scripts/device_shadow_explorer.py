@@ -23,6 +23,7 @@ from awscrt import mqtt
 from awsiot import mqtt_connection_builder
 from language_selector import get_language
 from loader import load_messages
+from confirm_input import is_yes
 
 # Global variables
 USER_LANG = "en"
@@ -559,7 +560,7 @@ class DeviceShadowExplorer:
                     )
 
             apply_changes = input(f"\n{get_message('apply_changes_prompt')}").strip().lower()
-            if apply_changes == "y":
+            if is_yes(apply_changes, USER_LANG):
                 time.sleep(0.1)  # nosemgrep: arbitrary-sleep
                 # Update local state
                 for key, desired_value in desired_state.items():
@@ -1250,7 +1251,7 @@ class DeviceShadowExplorer:
 
         # Ask if user wants to clear history
         clear_choice = input(f"\n{get_message('clear_history_prompt')}").strip().lower()
-        if clear_choice == "y":
+        if is_yes(clear_choice, USER_LANG):
             with self.message_lock:
                 self.received_messages.clear()
             print(get_message("history_cleared"))
@@ -1568,7 +1569,7 @@ class DeviceShadowExplorer:
 
             # Ask if user wants to report to shadow
             report = input(f"\n{get_message('report_updated_state')}").strip().lower()
-            if report == "y":
+            if is_yes(report, USER_LANG):
                 self.update_shadow_reported(local_state, debug=self.debug_mode)
         else:
             print(get_message("failed_update_local"))

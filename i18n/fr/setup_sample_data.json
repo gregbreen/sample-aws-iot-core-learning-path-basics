@@ -12,7 +12,7 @@
         "• Exécution plus lente avec des pauses étendues",
         "• Détails complets des erreurs et traces"
     ],
-    "continue_prompt": "Continuer ? (y/N) : ",
+    "continue_prompt": "Continuer ? (o/N) : ",
     "setup_cancelled": "Configuration annulée",
     "client_initialized": "✅ Client AWS IoT initialisé",
     "client_error": "❌ Erreur lors de l'initialisation du client AWS IoT :",

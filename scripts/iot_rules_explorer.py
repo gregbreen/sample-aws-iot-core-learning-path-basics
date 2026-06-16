@@ -23,6 +23,7 @@ from iot_helpers.utils.resource_tagger import apply_workshop_tags
 
 # Import centralized language selector
 from i18n.language_selector import get_language
+from i18n.confirm_input import is_yes
 
 # Internationalization support
 def load_messages(lang="en"):
@@ -513,7 +514,7 @@ class IoTRulesExplorer:
         add_where = input(f"\n{get_message('add_where_condition')}").strip().lower()
         where_clause = ""
 
-        if add_where == "y":
+        if is_yes(add_where, USER_LANG):
             where_clause = input(get_message("enter_where_condition")).strip()
             if where_clause:
                 print(get_message("where_clause_confirmed", clause=where_clause))
@@ -875,7 +876,7 @@ class IoTRulesExplorer:
             # Delete rule
             confirm = input(get_message("confirm_delete_rule", name=rule_name)).strip().lower()
 
-            if confirm == "y":
+            if is_yes(confirm, USER_LANG):
                 response, success = self.safe_operation(
                     self.iot.delete_topic_rule,
                     get_message("delete_rule_operation", name=rule_name),
@@ -1154,7 +1155,7 @@ class IoTRulesExplorer:
 
                 test_topic = (
                     self.generate_matching_topic(topic_pattern)
-                    if topic_should_match == "y"
+                    if is_yes(topic_should_match, USER_LANG)
                     else self.generate_non_matching_topic(topic_pattern)
                 )
                 print(get_message("generated_topic", topic=test_topic))
@@ -1164,13 +1165,13 @@ class IoTRulesExplorer:
                     print(f"\n{get_message('where_condition_label', condition=where_condition)}")
                     where_should_match = input(get_message("should_match_where")).strip().lower()
 
-                test_message = self.generate_test_message(where_condition, where_should_match == "y")
+                test_message = self.generate_test_message(where_condition, is_yes(where_should_match, USER_LANG))
 
                 print(f"\n{get_message('test_message_display')}")
                 print(get_message("topic_label", topic=test_topic))
                 print(get_message("payload_label", payload=json.dumps(test_message, indent=2)))
 
-                should_trigger = (topic_should_match == "y") and (where_should_match == "y")
+                should_trigger = is_yes(topic_should_match, USER_LANG) and is_yes(where_should_match, USER_LANG)
                 prediction_msg = (
                     get_message("prediction_should_trigger")
                     if should_trigger

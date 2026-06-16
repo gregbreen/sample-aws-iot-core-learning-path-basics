@@ -14,6 +14,7 @@ from botocore.exceptions import ClientError, NoCredentialsError, NoRegionError
 
 from language_selector import get_language
 from loader import load_messages
+from confirm_input import is_yes
 
 # Global variables
 USER_LANG = "en"
@@ -140,10 +141,7 @@ def list_things_paginated(iot, max_results, debug=False):
 
         page += 1
         continue_paging = input(f"\n{get_message('continue_next_page')}").strip().lower()
-        if continue_paging not in [
-            "y",
-            "s",
-        ]:  # Accept both 'y' (yes) and 's' (sí) for Spanish
+        if not is_yes(continue_paging, USER_LANG):
             break
 
     print(f"\n{get_message('pagination_complete').format(total_things, page)}")

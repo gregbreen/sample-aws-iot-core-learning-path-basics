@@ -20,6 +20,7 @@ import boto3
 from botocore.exceptions import ClientError
 from language_selector import get_language
 from loader import load_messages
+from confirm_input import is_yes
 
 # Import iot_helpers modules
 from iot_helpers.cleanup.resource_identifier import ResourceIdentifier
@@ -1174,19 +1175,7 @@ def main():
     # Confirmation
     if not args.dry_run:
         response = input(f"\n{get_message('continue_cleanup')}").strip().lower()
-        if response not in [
-            "y",
-            "yes",
-            "si",
-            "sí",
-            "はい",
-            "hai",
-            "是",
-            "是的",
-            "sim",
-            "네",
-            "yes",
-        ]:
+        if not is_yes(response, USER_LANG):
             print(get_message("cleanup_cancelled"))
             return
 

@@ -22,6 +22,7 @@ from botocore.exceptions import ClientError, NoCredentialsError, NoRegionError
 
 from language_selector import get_language
 from loader import load_messages
+from confirm_input import is_yes
 from iot_helpers.utils.resource_tagger import apply_workshop_tags
 from iot_helpers.utils.naming_conventions import (
     generate_thing_name,
@@ -402,10 +403,7 @@ def main():
         print(get_message("separator"))
 
         confirm = input(get_message("continue_prompt")).strip().lower()
-        if confirm not in [
-            "y",
-            "s",
-        ]:  # Accept 'y' (yes), 's' (sí/sim) for Spanish/Portuguese
+        if not is_yes(confirm, USER_LANG):
             print(get_message("setup_cancelled"))
             return
 

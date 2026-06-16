@@ -18,6 +18,7 @@ import boto3
 from botocore.exceptions import ClientError, NoCredentialsError, NoRegionError
 from language_selector import get_language
 from loader import load_messages
+from confirm_input import is_yes
 from iot_helpers.utils.resource_tagger import apply_workshop_tags
 
 # Global variables
@@ -465,7 +466,7 @@ def attach_certificate_to_thing(iot, cert_arn, target_thing_name):
     existing_certs = check_existing_certificates(iot, target_thing_name)
     if existing_certs:
         cleanup_choice = input(f"\n{get_message('remove_existing_certificates')}").strip().lower()
-        if cleanup_choice == "y":
+        if is_yes(cleanup_choice, USER_LANG):
             for cert_arn_existing in existing_certs:
                 cleanup_certificate(iot, cert_arn_existing, target_thing_name)
         else:
@@ -556,7 +557,7 @@ def create_policy_interactive(iot):
             iot.get_policy(policyName=policy_name)
             print(get_message("policy_already_exists").format(policy_name))
             choice = input(get_message("use_different_name")).strip().lower()
-            if choice == "y":
+            if is_yes(choice, USER_LANG):
                 continue
             else:
                 print(get_message("using_existing_policy").format(policy_name))
@@ -600,7 +601,7 @@ def create_policy_interactive(iot):
             # Ask for confirmation if there are security warnings
             if validation_warnings:
                 confirm = input(get_message("proceed_despite_warnings")).strip().lower()
-                if confirm != "y":
+                if not is_yes(confirm, USER_LANG):
                     print(get_message("policy_creation_cancelled"))
                     return None
             break
@@ -623,7 +624,7 @@ def create_policy_interactive(iot):
             # Ask for confirmation if there are security warnings
             if validation_warnings:
                 confirm = input(get_message("proceed_despite_warnings")).strip().lower()
-                if confirm != "y":
+                if not is_yes(confirm, USER_LANG):
                     print(get_message("policy_creation_cancelled"))
                     return None
             break
@@ -865,10 +866,16 @@ def certificate_status_workflow(iot):
     if current_status == "ACTIVE":
         new_status = "INACTIVE"
         action = "disable"
+        action_label = get_message("action_disable_verb")
+        action_gerund = get_message("action_disabling_verb")
+        action_past = get_message("action_disabled_past")
         icon = "🔴"
     else:
         new_status = "ACTIVE"
         action = "enable"
+        action_label = get_message("action_enable_verb")
+        action_gerund = get_message("action_enabling_verb")
+        action_past = get_message("action_enabled_past")
         icon = "🟢"
 
     print(f"\n{get_message('available_action')}")
@@ -877,9 +884,9 @@ def certificate_status_workflow(iot):
     else:
         print(f"   {icon} {get_message('disable_certificate')}")
 
-    confirm = input(f"\n{get_message('do_you_want_to_action_cert').format(action)}").strip().lower()
+    confirm = input(f"\n{get_message('do_you_want_to_action_cert').format(action_label)}").strip().lower()
 
-    if confirm != "y":
+    if not is_yes(confirm, USER_LANG):
         print(get_message("operation_cancelled_simple"))
         return
 
@@ -895,14 +902,14 @@ def certificate_status_workflow(iot):
 
     response = safe_operation(
         iot.update_certificate,
-        f"{action.title()}ing certificate",
+        f"{action_gerund}",
         api_details,
         certificateId=cert_id,
         newStatus=new_status,
     )
 
     if response is not None:
-        print(f"\n{get_message('certificate_action_success').format(action)}")
+        print(f"\n{get_message('certificate_action_success').format(action_past)}")
         print(f"\n{get_message('status_change_summary')}")
         print(f"   {get_message('certificate_id_simple')}: {cert_id}")
         print(f"   {get_message('attached_to_thing')}: {thing_name or get_message('none_label')}")
@@ -925,7 +932,7 @@ def certificate_status_workflow(iot):
         if new_status == "INACTIVE":
             print(get_message("reenable_when_ready_simple"))
     else:
-        print(get_message("failed_to_action_certificate").format(action))
+        print(get_message("failed_to_action_certificate").format(action_label))
 
 
 def attach_policy_workflow(iot):
@@ -1104,7 +1111,7 @@ def detach_policy_workflow(iot):
     # Step 6: Confirm detachment
     confirm = input(f"\n{get_message('detach_policy_from_cert').format(selected_policy)}").strip().lower()
 
-    if confirm != "y":
+    if not is_yes(confirm, USER_LANG):
         print(get_message("operation_cancelled_simple"))
         return
 
@@ -1181,13 +1188,13 @@ def certificate_creation_workflow(iot):
     create_policy = input(f"\n{get_message('would_like_create_policy')}").strip().lower()
     policy_name = None
 
-    if create_policy == "y":
+    if is_yes(create_policy, USER_LANG):
         policy_name = create_policy_interactive(iot)
         if policy_name:
             attach_policy_to_certificate(iot, cert_arn, policy_name)
     else:
         attach_existing = input(get_message("attach_existing_policy")).strip().lower()
-        if attach_existing == "y":
+        if is_yes(attach_existing, USER_LANG):
             if attach_policy_to_certificate(iot, cert_arn):
                 policy_name = "Existing Policy"
 
@@ -1322,7 +1329,7 @@ def get_existing_certificate_path():
         if not cert_path.lower().endswith((".crt", ".pem")):
             print(get_message("warning_no_crt_pem"))
             confirm = input(get_message("continue_anyway")).strip().lower()
-            if confirm != "y":
+            if not is_yes(confirm, USER_LANG):
                 continue
 
         return cert_path
@@ -1551,13 +1558,13 @@ def register_external_certificate_workflow(iot):
     create_policy = input(f"\n{get_message('would_like_create_policy')}").strip().lower()
     policy_name = None
 
-    if create_policy == "y":
+    if is_yes(create_policy, USER_LANG):
         policy_name = create_policy_interactive(iot)
         if policy_name:
             attach_policy_to_certificate(iot, cert_arn, policy_name)
     else:
         attach_existing = input(get_message("attach_existing_policy")).strip().lower()
-        if attach_existing == "y":
+        if is_yes(attach_existing, USER_LANG):
             if attach_policy_to_certificate(iot, cert_arn):
                 policy_name = "Existing Policy"
 

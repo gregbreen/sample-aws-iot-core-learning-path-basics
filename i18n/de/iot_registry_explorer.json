@@ -80,7 +80,7 @@
     "pagination_learning_content": "Paginierung ermöglicht dir große Datensätze in kleineren Blöcken abzurufen. Dies ist essentiell beim Verwalten von Hunderten oder Tausenden von Geräten um Timeouts und Speicherprobleme zu vermeiden.",
     "pagination_listing": "🔄 Liste Things mit Paginierung auf (max {} pro Seite)...",
     "page_summary": "📊 Seite {} Zusammenfassung: {} Things abgerufen",
-    "continue_next_page": "Zur nächsten Seite fortfahren? (y/N): ",
+    "continue_next_page": "Zur nächsten Seite fortfahren? (j/N): ",
     "pagination_complete": "🏁 Paginierung abgeschlossen: {} Things insgesamt über {} Seite(n) gefunden",
     "filter_by_type_learning_title": "📚 LERNMOMENT: Filtern nach Thing Type",
     "filter_by_type_learning_content": "Filtern ermöglicht dir spezifische Gerätekategorien zu finden. Thing Types fungieren als Vorlagen die ähnliche Geräte zusammengruppieren.",

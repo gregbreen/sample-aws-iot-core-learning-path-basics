@@ -145,7 +145,7 @@
   "qos_level_prompt": "Nivel QoS (0=A lo sumo una vez, 1=Al menos una vez) [0]: ",
   "invalid_qos": "❌ Por favor ingresa 0 o 1",
   "subscription_failed_retry": "❌ La suscripción no funcionó, intentemos de nuevo",
-  "run_diagnostics": "¿Te gustaría ejecutar diagnósticos de conexión? (y/N): ",
+  "run_diagnostics": "¿Te gustaría ejecutar diagnósticos de conexión? (s/N): ",
   "topic_cannot_be_empty": "❌ El tema no puede estar vacío",
   "interactive_websocket_mode": "🎮 Modo de Mensajería MQTT WebSocket Interactivo",
   "messages_appear_immediately": "💡 ¡Los mensajes aparecerán inmediatamente cuando se reciban en temas suscritos!",

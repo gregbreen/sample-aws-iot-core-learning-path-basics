@@ -410,7 +410,7 @@ class MQTTWebSocketExplorer:
                     topic = parts[1]
                     # Parse key=value pairs into JSON
                     json_data = {}
-                    for pair in parts[2:]:
+                    for pair in parts[2].split():
                         if "=" in pair:
                             key, value = pair.split("=", 1)
                             # Try to parse as number or boolean

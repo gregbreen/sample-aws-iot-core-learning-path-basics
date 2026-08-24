@@ -454,7 +454,15 @@ class DeviceShadowExplorer:
             if self.debug_mode:
                 print(get_message("debug_comparing_desired"))
                 print(get_message("debug_desired_keys").format(list(desired.keys())))
-            self.compare_and_prompt_update(desired)
+            # Dispatch to a worker thread: this runs on the MQTT event-loop
+            # thread, and compare_and_prompt_update() blocks on input() and
+            # re-enters the client via publish(). Doing that here causes
+            # AWS_IO_TLS_ERROR_WRITE_FAILURE and a disconnect. See issue #4.
+            threading.Thread(
+                target=self.compare_and_prompt_update,
+                args=(desired,),
+                daemon=True,
+            ).start()
         elif self.debug_mode:
             print(get_message("debug_no_desired_state"))
 
@@ -527,7 +535,16 @@ class DeviceShadowExplorer:
         if self.debug_mode:
             print(get_message("debug_processing_delta").format(len(state)))
             print(get_message("debug_delta_keys").format(list(state.keys())))
-        self.compare_and_prompt_update(state, is_delta=True)
+        # Dispatch to a worker thread: this runs on the MQTT event-loop thread,
+        # and compare_and_prompt_update() blocks on input() and re-enters the
+        # client via publish(). Doing that here causes
+        # AWS_IO_TLS_ERROR_WRITE_FAILURE and a disconnect. See issue #4.
+        threading.Thread(
+            target=self.compare_and_prompt_update,
+            args=(state,),
+            kwargs={"is_delta": True},
+            daemon=True,
+        ).start()
 
     def compare_and_prompt_update(self, desired_state, is_delta=False):
         """Compare desired state with local state and prompt for updates"""

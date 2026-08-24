@@ -7,6 +7,8 @@
 
 Une boîte à outils Python complète pour apprendre les concepts de base d'AWS IoT Core à travers une exploration pratique. Des scripts interactifs démontrent la gestion des appareils, la sécurité, les opérations API et la communication MQTT avec des explications détaillées.
 
+Ces mêmes scripts servent de base à l'[atelier AWS IoT Core - Bases](https://catalog.workshops.aws/workshops/a007780e-1086-421b-a7e3-b7ac63e37089), accessible au public. Au-delà de la boîte à outils elle-même, l'atelier est un excellent moyen de mieux comprendre les différents cas d'usage d'AWS IoT Core grâce à une expérience pratique et guidée.
+
 ## 🚀 Démarrage Rapide - Parcours d'Apprentissage Complet
 
 ```bash

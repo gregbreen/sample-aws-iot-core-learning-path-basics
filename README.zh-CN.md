@@ -7,6 +7,8 @@
 
 一个友好的 Python 工具包，帮助你通过动手实践学习 Amazon Web Services (AWS) AWS IoT Core 基础知识。交互式脚本会带你了解设备管理、安全性、API 操作和 MQTT 通信，并在过程中提供清晰的解释。
 
+这些脚本同样是公开的 [AWS IoT Core 基础实战工作坊](https://catalog.workshops.aws/workshops/a007780e-1086-421b-a7e3-b7ac63e37089) 的脚本基础。除了工具包本身之外，该工作坊通过引导式的动手实践，是深入理解 AWS IoT Core 各类使用场景的绝佳途径。
+
 ## 🚀 快速开始 - 完整学习路径
 
 ```bash

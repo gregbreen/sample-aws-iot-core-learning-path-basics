@@ -7,6 +7,8 @@
 
 실습을 통해 Amazon Web Services (AWS) AWS IoT Core의 기본 개념을 배울 수 있는 Python 툴킷이에요. 대화형 스크립트로 디바이스 관리, 보안, API 작업, MQTT 통신을 자세한 설명과 함께 직접 체험해볼 수 있어요.
 
+이 스크립트들은 공개된 [AWS IoT Core 기초 워크숍](https://catalog.workshops.aws/workshops/a007780e-1086-421b-a7e3-b7ac63e37089)의 기반으로도 사용돼요. 툴킷 자체뿐만 아니라, 이 워크숍은 가이드가 제공되는 실습 경험을 통해 다양한 AWS IoT Core 사용 사례를 더 잘 이해할 수 있는 훌륭한 방법이에요.
+
 ## 🚀 빠른 시작 - 완전한 학습 경로
 
 ```bash

@@ -7,6 +7,8 @@
 
 Ein umfassendes Python-Toolkit zum Erlernen der grundlegenden Konzepte von Amazon Web Services (AWS) AWS IoT Core durch praktische Erkundung. Interaktive Skripte demonstrieren Geräteverwaltung, Sicherheit, API-Operationen und MQTT-Kommunikation mit detaillierten Erklärungen.
 
+Dieselben Skripte dienen als Grundlage für den öffentlich verfügbaren [AWS IoT Core Grundlagen-Workshop](https://catalog.workshops.aws/workshops/a007780e-1086-421b-a7e3-b7ac63e37089). Über das Toolkit selbst hinaus ist der Workshop eine hervorragende Möglichkeit, die verschiedenen Anwendungsfälle von AWS IoT Core durch eine geführte, praxisorientierte Erfahrung besser zu verstehen.
+
 ## 🚀 Schnellstart - Kompletter Lernpfad
 
 ```bash

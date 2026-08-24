@@ -7,6 +7,8 @@
 
 Un conjunto completo de herramientas en Python para que aprendas los conceptos básicos de Amazon Web Services (AWS) AWS IoT Core de forma práctica. Los scripts interactivos te muestran cómo funciona la gestión de dispositivos, seguridad, operaciones de API y comunicación MQTT con explicaciones detalladas.
 
+Estos mismos scripts sirven como base para el [Taller de Conceptos Básicos de AWS IoT Core](https://catalog.workshops.aws/workshops/a007780e-1086-421b-a7e3-b7ac63e37089), de acceso público. Más allá del propio conjunto de herramientas, el taller es una excelente forma de comprender mejor los distintos casos de uso de AWS IoT Core a través de una experiencia práctica y guiada.
+
 ## 🚀 Resumen Rápido - Ruta de Aprendizaje Completa
 
 ```bash

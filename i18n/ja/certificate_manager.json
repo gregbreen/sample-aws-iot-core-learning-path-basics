@@ -527,5 +527,18 @@
   "api_error": "❌ AWS APIエラー在",
   "missing_param_error": "❌ 必要なパラメータが不足在",
   "invalid_value_error": "❌ 無効な値在",
-  "unexpected_error": "❌ 予期しないエラー在"
+  "unexpected_error": "❌ 予期しないエラー在",
+  "not_set": "未設定",
+  "policy_arn_mismatch_header": "⚠️  リージョン／アカウント ID チェック: このポリシーには、現在の AWS コンテキストと一致しない値が参照されています:",
+  "policy_arn_region_mismatch": "ポリシー内のリージョン: {0}  |  現在のリージョン: {1}",
+  "policy_arn_account_mismatch": "ポリシー内のアカウント ID: {0}  |  現在のアカウント ID: {1}",
+  "policy_arn_mismatch_consequence": "ポリシー ARN のリージョンまたはアカウント ID がご利用のアカウントと一致しない場合、ポリシーが承認しないため、AWS IoT はデバイスの接続を拒否します。",
+  "policy_arn_mismatch_kept": "➡️  ポリシーを記載どおりに維持します。後でデバイスが接続できない場合は、これらの値を見直してください。",
+  "policy_arn_mismatch_options": [
+    "1. ご自身のリージョン／アカウント ID に置き換えて続行する（推奨）",
+    "2. ポリシーをそのまま維持して続行する",
+    "3. キャンセルする（ポリシーを編集して再試行できます）"
+  ],
+  "policy_arn_mismatch_select_prompt": "オプションを選択してください (1-3) [1]: ",
+  "policy_arn_mismatch_replaced": "✅ ポリシーを更新し、リージョン ({0}) とアカウント ID ({1}) を使用するようにしました。"
 }

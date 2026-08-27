@@ -123,8 +123,7 @@
   "certificate_id_item": "   {}. Zertifikat-ID: {}",
   "remove_existing_certificates": "Möchtest du bestehende Zertifikate entfernen? (j/N): ",
   "proceeding_with_multiple": "Fahre mit mehreren an dasselbe Thing angehängten Zertifikaten fort...",
-  "attaching_certificate_to_thing": "🔗 Hänge Zertifikat an Thing an: {}"
-,
+  "attaching_certificate_to_thing": "🔗 Hänge Zertifikat an Thing an: {}",
   "policy_options": "📝 Richtlinienoptionen:",
   "use_existing_policy": "1. Bestehende Richtlinie verwenden",
   "create_new_policy": "2. Neue Richtlinie erstellen",
@@ -167,8 +166,7 @@
   "skipping_file_cleanup": "⚠️ Überspringe Dateiaufräumung - ungültiger thing_name:",
   "fetching_things": "ℹ️ Rufe verfügbare Things ab...",
   "available_things": "📱 Verfügbare Things ({} gefunden):",
-  "and_more": "... und {} weitere"
-,
+  "and_more": "... und {} weitere",
   "options_header": "📋 Optionen:",
   "select_thing_options": [
     "• Nummer eingeben (1-{}) um Thing auszuwählen",
@@ -211,8 +209,7 @@
   "type_all_see_things": "• 'all' eingeben um alle Things zu sehen",
   "type_manual_enter_name": "• 'manual' eingeben um Namen manuell einzugeben",
   "all_things_header": "📱 Alle Things:",
-  "invalid_thing_name_chars": "❌ Ungültiger Thing-Name. Nur alphanumerische Zeichen, Bindestriche und Unterstriche erlaubt."
-,
+  "invalid_thing_name_chars": "❌ Ungültiger Thing-Name. Nur alphanumerische Zeichen, Bindestriche und Unterstriche erlaubt.",
   "thing_name_cannot_be_empty": "❌ Thing-Name darf nicht leer sein",
   "policy_creation_cancelled": "Richtlinienerstellung aus Sicherheitsgründen abgebrochen",
   "enter_policy_json": "Gib dein Richtlinien-JSON ein (drücke zweimal Enter wenn fertig):",
@@ -265,8 +262,7 @@
     "• Zertifikat ist jetzt für Authentifizierung deaktiviert",
     "• Geräte mit diesem Zertifikat können sich nicht mit AWS IoT verbinden",
     "• MQTT-Verbindungen mit diesem Zertifikat werden fehlschlagen"
-  ]
-,
+  ],
   "next_steps": "🔍 Nächste Schritte:",
   "next_steps_list": [
     "• Verwende iot_registry_explorer.py um die Statusänderung zu überprüfen",
@@ -303,8 +299,7 @@
   "no_certificates_for_thing_msg": "❌ Keine Zertifikate für Thing '{}' gefunden",
   "tip_run_option_1_msg": "💡 Tipp: Führe zuerst Option 1 aus, um ein Zertifikat zu erstellen und anzuhängen",
   "using_certificate_msg": "✅ Verwende Zertifikat: {}",
-  "multiple_certificates_found_msg": "📋 Mehrere Zertifikate gefunden:"
-,
+  "multiple_certificates_found_msg": "📋 Mehrere Zertifikate gefunden:",
   "no_policies_found_account": "📋 Keine Richtlinien in deinem Konto gefunden",
   "create_policies_first": "💡 Erstelle zuerst Richtlinien mit Option 1, 2 oder 3",
   "found_policies_count": "📋 {} Richtlinie(n) gefunden:",
@@ -336,8 +331,7 @@
   "cert_contains_keypair": "Jedes Zertifikat enthält ein öffentliches/privates Schlüsselpaar",
   "api_description_create_cert": "Erstellt ein neues X.509-Zertifikat mit öffentlichem/privatem Schlüsselpaar",
   "input_params_set_active": "setAsActive: true (aktiviert Zertifikat sofort)",
-  "expected_output_cert": "certificateArn, certificateId, certificatePem, keyPair (öffentliche/private Schlüssel)"
-,
+  "expected_output_cert": "certificateArn, certificateId, certificatePem, keyPair (öffentliche/private Schlüssel)",
   "learning_moment_cert_attachment": "📚 LERNMOMENT: Zertifikat-Thing-Zuordnung",
   "cert_attachment_explanation": "Jetzt werden wir das Zertifikat an dein ausgewähltes Thing anhängen. Dies erstellt die sichere Bindung zwischen der Zertifikatsidentität und der logischen Gerätedarstellung in AWS IoT. Sobald angehängt, kann das Gerät dieses Zertifikat zur Authentifizierung bei AWS IoT Core verwenden.",
   "next_attaching_cert": "🔄 NÄCHSTER SCHRITT: Hänge Zertifikat an Thing an",
@@ -370,8 +364,7 @@
   "production_use_trusted_ca": "In der Produktion verwende Zertifikate von einer vertrauenswürdigen Zertifizierungsstelle",
   "registering_external_cert": "Registriere externes Zertifikat bei AWS IoT...",
   "registers_without_new_keys": "Dies registriert dein Zertifikat, ohne dass AWS neue Schlüssel generiert",
-  "private_key_stays_with_you": "Dein privater Schlüssel bleibt bei dir - AWS erhält nur das öffentliche Zertifikat"
-,
+  "private_key_stays_with_you": "Dein privater Schlüssel bleibt bei dir - AWS erhält nur das öffentliche Zertifikat",
   "proceed_despite_warnings": "Trotz Sicherheitswarnungen mit dieser Richtlinie fortfahren? (j/N): ",
   "do_you_want_to_action_cert": "Möchtest du dieses Zertifikat {}? (j/N): ",
   "detach_policy_from_cert": "Richtlinie '{}' von diesem Zertifikat trennen? (j/N): ",
@@ -408,8 +401,7 @@
   "mqtt_connections_succeed": "• MQTT-Verbindungen mit diesem Zertifikat werden erfolgreich sein",
   "cert_disabled_auth": "• Zertifikat ist jetzt für Authentifizierung deaktiviert",
   "devices_cannot_connect": "• Geräte mit diesem Zertifikat können sich nicht mit AWS IoT verbinden",
-  "mqtt_connections_fail": "• MQTT-Verbindungen mit diesem Zertifikat werden fehlschlagen"
-,
+  "mqtt_connections_fail": "• MQTT-Verbindungen mit diesem Zertifikat werden fehlschlagen",
   "next_steps_simple": "🔍 Nächste Schritte:",
   "use_registry_explorer": "• Verwende iot_registry_explorer.py um die Statusänderung zu überprüfen",
   "test_mqtt_connection": "• Teste MQTT-Verbindung um den Effekt zu sehen",
@@ -438,8 +430,7 @@
   "cert_registration_failed": "❌ Zertifikatsregistrierung fehlgeschlagen. Beende Workflow.",
   "skipping_file_save_invalid_name": "⚠️ Überspringe Dateispeicherung aufgrund ungültigen Thing-Namens: {}",
   "cert_registered_files_not_saved": "❌ Zertifikat registriert, aber lokale Dateien nicht gespeichert aufgrund Sicherheitsvalidierung.",
-  "cert_attachment_failed": "❌ Zertifikatsanhängung fehlgeschlagen. Beende Workflow."
-,
+  "cert_attachment_failed": "❌ Zertifikatsanhängung fehlgeschlagen. Beende Workflow.",
   "policy_detachment_workflow": "🔓 Richtlinientrennungs-Workflow",
   "learning_objectives_header_simple": "🎓 Lernziele:",
   "understand_policy_detachment": "• Richtlinientrennungsprozess verstehen",
@@ -477,8 +468,7 @@
   "things_represent_iot_devices": "• Things repräsentieren deine IoT-Geräte in AWS",
   "policies_define_actions": "• Richtlinien definieren, welche Aktionen Zertifikate ausführen können",
   "external_certs_integrate_pki": "• Externe Zertifikate integrieren sich mit bestehender PKI-Infrastruktur",
-  "register_vs_create_api": "• register_certificate vs. create_certificate APIs haben unterschiedliche Anwendungsfälle"
-,
+  "register_vs_create_api": "• register_certificate vs. create_certificate APIs haben unterschiedliche Anwendungsfälle",
   "all_components_work_together": "• Alle Komponenten arbeiten zusammen für sichere IoT-Kommunikation",
   "generating_cert_files": "🔑 Generiere Zertifikatdateien:",
   "private_key_label": "Privater Schlüssel",
@@ -537,5 +527,18 @@
   "api_error": "❌ AWS API-Fehler in",
   "missing_param_error": "❌ Fehlender erforderlicher Parameter in",
   "invalid_value_error": "❌ Ungültiger Wert in",
-  "unexpected_error": "❌ Unerwarteter Fehler in"
+  "unexpected_error": "❌ Unerwarteter Fehler in",
+  "not_set": "Nicht festgelegt",
+  "policy_arn_mismatch_header": "⚠️  Prüfung von Region / Konto-ID: Diese Richtlinie verweist auf Werte, die nicht mit Ihrem aktuellen AWS-Kontext übereinstimmen:",
+  "policy_arn_region_mismatch": "Region in der Richtlinie: {0}  |  Ihre aktuelle Region: {1}",
+  "policy_arn_account_mismatch": "Konto-ID in der Richtlinie: {0}  |  Ihre aktuelle Konto-ID: {1}",
+  "policy_arn_mismatch_consequence": "Wenn die Region oder die Konto-ID in den Richtlinien-ARNs nicht mit Ihrem Konto übereinstimmen, lehnt AWS IoT die Geräteverbindung ab, da die Richtlinie sie nicht autorisiert.",
+  "policy_arn_mismatch_kept": "➡️  Die Richtlinie wird unverändert beibehalten. Falls das Gerät später keine Verbindung herstellen kann, überprüfen Sie diese Werte.",
+  "policy_arn_mismatch_options": [
+    "1. Durch Ihre Region/Konto-ID ersetzen und fortfahren (empfohlen)",
+    "2. Richtlinie unverändert beibehalten und fortfahren",
+    "3. Abbrechen (Sie können die Richtlinie bearbeiten und es erneut versuchen)"
+  ],
+  "policy_arn_mismatch_select_prompt": "Wählen Sie eine Option (1-3) [1]: ",
+  "policy_arn_mismatch_replaced": "✅ Richtlinie aktualisiert und verwendet nun Ihre Region ({0}) und Konto-ID ({1})."
 }

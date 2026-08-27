@@ -527,5 +527,18 @@
   "api_error": "❌ Erreur API AWS dans",
   "missing_param_error": "❌ Paramètre requis manquant dans",
   "invalid_value_error": "❌ Valeur invalide dans",
-  "unexpected_error": "❌ Erreur inattendue dans"
+  "unexpected_error": "❌ Erreur inattendue dans",
+  "not_set": "Non défini",
+  "policy_arn_mismatch_header": "⚠️  Vérification de la région / de l'ID de compte : cette politique référence des valeurs qui ne correspondent pas à votre contexte AWS actuel :",
+  "policy_arn_region_mismatch": "Région dans la politique : {0}  |  Votre région actuelle : {1}",
+  "policy_arn_account_mismatch": "ID de compte dans la politique : {0}  |  Votre ID de compte actuel : {1}",
+  "policy_arn_mismatch_consequence": "Si la région ou l'ID de compte des ARN de la politique ne correspondent pas à votre compte, AWS IoT rejettera la connexion de l'appareil car la politique ne l'autorisera pas.",
+  "policy_arn_mismatch_kept": "➡️  La politique est conservée telle quelle. Si l'appareil ne parvient pas à se connecter par la suite, revoyez ces valeurs.",
+  "policy_arn_mismatch_options": [
+    "1. Les remplacer par votre région/ID de compte et continuer (recommandé)",
+    "2. Conserver la politique telle quelle et continuer",
+    "3. Annuler (vous pourrez modifier la politique et réessayer)"
+  ],
+  "policy_arn_mismatch_select_prompt": "Sélectionnez une option (1-3) [1] : ",
+  "policy_arn_mismatch_replaced": "✅ Politique mise à jour pour utiliser votre région ({0}) et votre ID de compte ({1})."
 }

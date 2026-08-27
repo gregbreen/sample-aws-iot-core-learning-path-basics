@@ -527,5 +527,18 @@
   "api_error": "❌ AWS API 错误在",
   "missing_param_error": "❌ 缺少必需参数在",
   "invalid_value_error": "❌ 无效值在",
-  "unexpected_error": "❌ 意外错误在"
+  "unexpected_error": "❌ 意外错误在",
+  "not_set": "未设置",
+  "policy_arn_mismatch_header": "⚠️  区域/账户 ID 检查：此策略引用的值与您当前的 AWS 上下文不匹配：",
+  "policy_arn_region_mismatch": "策略中的区域：{0}  |  您当前的区域：{1}",
+  "policy_arn_account_mismatch": "策略中的账户 ID：{0}  |  您当前的账户 ID：{1}",
+  "policy_arn_mismatch_consequence": "如果策略 ARN 中的区域或账户 ID 与您的账户不匹配，AWS IoT 将拒绝设备连接，因为该策略不会对其授权。",
+  "policy_arn_mismatch_kept": "➡️  按原样保留该策略。如果设备之后无法连接，请重新检查这些值。",
+  "policy_arn_mismatch_options": [
+    "1. 替换为您的区域/账户 ID 并继续（推荐）",
+    "2. 按原样保留该策略并继续",
+    "3. 取消（您可以编辑该策略后重试）"
+  ],
+  "policy_arn_mismatch_select_prompt": "请选择一个选项 (1-3) [1]: ",
+  "policy_arn_mismatch_replaced": "✅ 策略已更新为使用您的区域 ({0}) 和账户 ID ({1})。"
 }

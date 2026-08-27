@@ -83,8 +83,7 @@
       "content": "Lo stato del certificato controlla se un dispositivo può connettersi ad AWS IoT. I certificati ATTIVI permettono connessioni, mentre quelli INATTIVI le bloccano. Questo fornisce controllo di sicurezza immediato - puoi disabilitare istantaneamente dispositivi compromessi o sospendere temporaneamente l'accesso senza eliminare completamente il certificato.",
       "next": "Gestiremo lo stato del certificato (abilita/disabilita)"
     }
-  }
-,
+  },
   "workflow_titles": {
     "certificate_creation": "🔐 Flusso di Lavoro Creazione Certificato",
     "external_registration": "📜 Flusso di Lavoro Registrazione Certificato Esterno",
@@ -127,8 +126,7 @@
   "attaching_certificate_to_thing": "🔗 Collegamento certificato al Thing: {}",
   "policy_options": "📝 Opzioni Policy:",
   "use_existing_policy": "1. Usa policy esistente",
-  "create_new_policy": "2. Crea nuova policy"
-,
+  "create_new_policy": "2. Crea nuova policy",
   "select_option_1_2": "Seleziona opzione (1-2): ",
   "invalid_selection_generic": "❌ Selezione non valida",
   "enter_valid_number_generic": "❌ Inserisci un numero valido",
@@ -174,8 +172,7 @@
     "• Inserisci numero (1-{}) per selezionare Thing",
     "• Digita 'all' per vedere tutti i Thing",
     "• Digita 'manual' per inserire manualmente il nome Thing"
-  ]
-,
+  ],
   "your_choice": "La tua scelta: ",
   "all_things": "📱 Tutti i Thing:",
   "press_enter_continue": "Premi Invio per continuare...",
@@ -219,8 +216,7 @@
   "policy_to_be_created_header": "📄 Policy da creare:",
   "available_policies": "📋 Policy Disponibili:",
   "invalid_selection_simple": "❌ Selezione non valida",
-  "enter_valid_number_simple": "❌ Inserisci un numero valido"
-,
+  "enter_valid_number_simple": "❌ Inserisci un numero valido",
   "no_policies_found_create": "❌ Nessuna policy trovata. Creane prima una...",
   "api_details_header": "🔍 Dettagli API:",
   "operation_label": "Operazione",
@@ -276,8 +272,7 @@
   "failed_to_action_cert": "❌ Impossibile {} il certificato",
   "policy_attachment_workflow": "🔗 Flusso di Lavoro Collegamento Policy",
   "no_certificates_for_thing": "❌ Nessun certificato trovato per il Thing '{}'",
-  "tip_run_option_1": "💡 Suggerimento: Esegui prima l'opzione 1 per creare e collegare un certificato"
-,
+  "tip_run_option_1": "💡 Suggerimento: Esegui prima l'opzione 1 per creare e collegare un certificato",
   "using_certificate": "✅ Uso certificato: {}",
   "multiple_certificates_found": "📋 Trovati più certificati:",
   "certificate_successfully_attached": "✅ Certificato collegato con successo a {}",
@@ -316,8 +311,7 @@
   "install_openssl_ubuntu": "   Ubuntu: sudo apt-get install openssl",
   "file_not_found": "❌ File non trovato: {}",
   "multiple_certs_warning": "⚠️  Trovati più certificati. Verrà usato solo il primo.",
-  "cert_format_validated": "✅ Formato file certificato validato"
-,
+  "cert_format_validated": "✅ Formato file certificato validato",
   "cert_file_not_found": "❌ File certificato non trovato",
   "found_private_key": "🔍 Trovata chiave privata corrispondente: {}",
   "private_key_saved": "🔑 Chiave privata salvata: {}",
@@ -353,8 +347,7 @@
   "iot_policies_define_actions": "Le Policy IoT definiscono quali azioni può eseguire un certificato",
   "create_new_or_existing": "Puoi creare una nuova policy o usarne una esistente",
   "policy_attachment_explanation": "Il collegamento policy concede permessi specifici ai certificati",
-  "cert_now_has_permissions": "Il certificato ha ora i permessi definiti nella policy"
-,
+  "cert_now_has_permissions": "Il certificato ha ora i permessi definiti nella policy",
   "operation_completed_successfully": "{} completato con successo",
   "operation_completed": "{} completato",
   "output_label": "Output",
@@ -399,8 +392,7 @@
   "enter_valid_number_simple_msg": "❌ Inserisci un numero valido",
   "current_status_label": "Stato Corrente",
   "arn_label": "ARN",
-  "operation_cancelled_simple": "❌ Operazione annullata"
-,
+  "operation_cancelled_simple": "❌ Operazione annullata",
   "previous_status_label": "Stato Precedente",
   "new_status_label_simple": "Nuovo Stato",
   "what_this_means_simple": "💡 Cosa significa:",
@@ -438,8 +430,7 @@
   "cert_registration_failed": "❌ Registrazione certificato fallita. Uscita dal flusso di lavoro.",
   "skipping_file_save_invalid_name": "⚠️ Salto salvataggio file a causa di nome thing non valido: {}",
   "cert_registered_files_not_saved": "❌ Certificato registrato ma file locali non salvati a causa di validazione sicurezza.",
-  "cert_attachment_failed": "❌ Collegamento certificato fallito. Uscita dal flusso di lavoro."
-,
+  "cert_attachment_failed": "❌ Collegamento certificato fallito. Uscita dal flusso di lavoro.",
   "policy_detachment_workflow": "🔓 Flusso di Lavoro Scollegamento Policy",
   "learning_objectives_header_simple": "🎓 Obiettivi di Apprendimento:",
   "understand_policy_detachment": "• Comprendere il processo di scollegamento policy",
@@ -478,8 +469,7 @@
   "policies_define_actions": "• Le policy definiscono quali azioni possono eseguire i certificati",
   "external_certs_integrate_pki": "• I certificati esterni si integrano con l'infrastruttura PKI esistente",
   "register_vs_create_api": "• API register_certificate vs create_keys_and_certificate",
-  "all_components_work_together": "• Tutti i componenti lavorano insieme per la comunicazione IoT sicura"
-,
+  "all_components_work_together": "• Tutti i componenti lavorano insieme per la comunicazione IoT sicura",
   "generating_cert_files": "🔑 Generazione file certificato:",
   "private_key_label": "Chiave Privata",
   "certificate_label": "Certificato",
@@ -525,8 +515,7 @@
   "api_desc_list_targets_for_policy": "Elenca tutti i certificati che hanno una policy specifica collegata",
   "api_input_policy_name": "policyName",
   "api_output_target_arns": "targetArns[] (ARN certificati)",
-  "api_desc_detach_policy": "Scollega una policy IoT da un certificato"
-,
+  "api_desc_detach_policy": "Scollega una policy IoT da un certificato",
   "api_desc_register_cert_without_ca": "Registra un certificato esterno con AWS IoT senza verifica CA",
   "api_input_optional_pagination": "Nessuno (opzionale: pageSize, marker, ascendingOrder)",
   "api_input_cert_pem_active": "certificatePem (il certificato in formato PEM), setAsActive",
@@ -538,5 +527,18 @@
   "api_error": "❌ Errore API AWS in",
   "missing_param_error": "❌ Parametro obbligatorio mancante in",
   "invalid_value_error": "❌ Valore non valido in",
-  "unexpected_error": "❌ Errore imprevisto in"
+  "unexpected_error": "❌ Errore imprevisto in",
+  "not_set": "Non impostato",
+  "policy_arn_mismatch_header": "⚠️  Controllo regione / ID account: questa policy fa riferimento a valori che non corrispondono al tuo contesto AWS attuale:",
+  "policy_arn_region_mismatch": "Regione nella policy: {0}  |  La tua regione attuale: {1}",
+  "policy_arn_account_mismatch": "ID account nella policy: {0}  |  Il tuo ID account attuale: {1}",
+  "policy_arn_mismatch_consequence": "Se la regione o l'ID account negli ARN della policy non corrispondono al tuo account, AWS IoT rifiuterà la connessione del dispositivo perché la policy non la autorizzerà.",
+  "policy_arn_mismatch_kept": "➡️  La policy viene mantenuta così com'è. Se in seguito il dispositivo non riesce a connettersi, rivedi questi valori.",
+  "policy_arn_mismatch_options": [
+    "1. Sostituirli con la tua regione/ID account e continuare (consigliato)",
+    "2. Mantenere la policy così com'è e continuare",
+    "3. Annullare (puoi modificare la policy e riprovare)"
+  ],
+  "policy_arn_mismatch_select_prompt": "Seleziona un'opzione (1-3) [1]: ",
+  "policy_arn_mismatch_replaced": "✅ Policy aggiornata per usare la tua regione ({0}) e l'ID account ({1})."
 }

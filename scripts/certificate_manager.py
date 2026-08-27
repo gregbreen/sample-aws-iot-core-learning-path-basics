@@ -132,6 +132,124 @@ def print_enhanced_security_warning(policy_name, policy_document, validation_war
             print(f"   • {warning}")
 
 
+def _rewrite_iot_arn(resource, known_region, known_account):
+    """Return an IoT ARN with its region/account segments set to the caller's values.
+
+    Non-IoT-ARN strings (e.g. "*") are returned unchanged. The resource portion
+    of the ARN is preserved intact (maxsplit keeps any colons in it).
+    """
+    if not isinstance(resource, str) or not resource.startswith("arn:aws:iot:"):
+        return resource
+
+    parts = resource.split(":", 5)  # arn:aws:iot:<region>:<account>:<resource>
+    if len(parts) < 6:
+        return resource
+
+    if known_region:
+        parts[3] = known_region
+    if known_account:
+        parts[4] = known_account
+    return ":".join(parts)
+
+
+def check_policy_region_account(iot, policy_document):
+    """Check policy ARNs against the caller's region/account and offer to fix mismatches.
+
+    Scans every IoT ARN in the policy's Resource fields and compares the region
+    and account-ID segments against the account/region this script is actually
+    running in. If they differ (a common mistake when the region/account
+    placeholders in a pasted template are not updated), the mismatch is shown to
+    the user, who then explicitly chooses to:
+      1. replace the values with their own region/account and continue,
+      2. keep the policy exactly as written and continue, or
+      3. cancel.
+
+    Replacement only happens when the user selects it - nothing is rewritten
+    silently.
+
+    Returns the policy document to create (unchanged or with values replaced),
+    or None if the user cancels.
+    """
+    # Resolve the account/region this script is operating in
+    try:
+        known_account = boto3.client("sts").get_caller_identity()["Account"]
+    except Exception:
+        known_account = None
+    known_region = iot.meta.region_name
+
+    mismatched_regions = set()
+    mismatched_accounts = set()
+
+    for statement in policy_document.get("Statement", []):
+        resources = statement.get("Resource", [])
+        if isinstance(resources, str):
+            resources = [resources]
+
+        for resource in resources:
+            # Only inspect well-formed AWS IoT ARNs; leave anything else (e.g.
+            # "*") untouched so we never flag non-ARN values.
+            if not isinstance(resource, str) or not resource.startswith("arn:aws:iot:"):
+                continue
+
+            parts = resource.split(":", 5)
+            if len(parts) < 6:
+                continue
+
+            arn_region = parts[3]
+            arn_account = parts[4]
+
+            if arn_region and arn_region != known_region:
+                mismatched_regions.add(arn_region)
+            if arn_account and known_account and arn_account != known_account:
+                mismatched_accounts.add(arn_account)
+
+    # Everything matches (or there were no ARNs to check) - nothing to warn about
+    if not mismatched_regions and not mismatched_accounts:
+        return policy_document
+
+    print(f"\n{get_message('policy_arn_mismatch_header')}")
+    if mismatched_regions:
+        found = ", ".join(sorted(mismatched_regions))
+        print("   " + get_message("policy_arn_region_mismatch").format(found, known_region))
+    if mismatched_accounts:
+        found = ", ".join(sorted(mismatched_accounts))
+        known = known_account or get_message("not_set")
+        print("   " + get_message("policy_arn_account_mismatch").format(found, known))
+    print(f"\n{get_message('policy_arn_mismatch_consequence')}")
+
+    # Offer explicit choices. A numeric menu keeps the input language-independent.
+    for option in get_message("policy_arn_mismatch_options"):
+        print(f"   {option}")
+
+    while True:
+        choice = input(f"\n{get_message('policy_arn_mismatch_select_prompt')}").strip()
+        if choice == "":
+            choice = "1"  # default: replace with the caller's values
+        if choice in ("1", "2", "3"):
+            break
+        print(get_message("select_1_2_or_3"))
+
+    if choice == "3":
+        print(get_message("policy_creation_cancelled"))
+        return None
+
+    if choice == "2":
+        print(get_message("policy_arn_mismatch_kept"))
+        return policy_document
+
+    # choice == "1": replace region/account in every IoT ARN with the caller's values
+    for statement in policy_document.get("Statement", []):
+        resources = statement.get("Resource")
+        if isinstance(resources, str):
+            statement["Resource"] = _rewrite_iot_arn(resources, known_region, known_account)
+        elif isinstance(resources, list):
+            statement["Resource"] = [_rewrite_iot_arn(r, known_region, known_account) for r in resources]
+
+    known = known_account or get_message("not_set")
+    print(get_message("policy_arn_mismatch_replaced").format(known_region, known))
+    return policy_document
+
+
 def safe_operation(func, operation_name, api_details=None, debug=None, **kwargs):
     """Execute operation with error handling and API details"""
     if debug is None:
@@ -647,6 +765,15 @@ def create_policy_interactive(iot):
                 continue
         else:
             print(get_message("select_1_2_or_3"))
+
+    # Warn if the policy ARNs point at a different region/account than the one
+    # this script is running in (covers built-in templates and custom JSON).
+    # The user chooses to replace, keep, or cancel; a returned document may have
+    # its region/account replaced with the caller's values.
+    checked_policy = check_policy_region_account(iot, policy_document)
+    if checked_policy is None:
+        return None
+    policy_document = checked_policy
 
     print(f"\n{get_message('policy_to_be_created_header')}")
     print(f"   {get_message('name_label_simple')}: {policy_name}")
